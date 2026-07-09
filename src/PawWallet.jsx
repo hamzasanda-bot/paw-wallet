@@ -883,19 +883,19 @@ function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeho
     <Field label={label}>
       <div className="flex gap-2">
         <select
-          className={inputCls + " w-[128px] shrink-0 font-mono"}
+          className={inputCls + " w-[92px] shrink-0 font-mono px-2"}
           value={code}
           onChange={(e) => onCodeChange(e.target.value)}
         >
           <option value="">+__</option>
           {COUNTRIES.map((c) => (
-            <option key={c.name + c.dial} value={c.dial}>
-              {c.dial} {c.name}
+            <option key={c.name + c.dial} value={c.dial} title={c.name}>
+              {c.dial}
             </option>
           ))}
         </select>
         <input
-          className={inputCls + " font-mono"}
+          className={inputCls + " font-mono flex-1 min-w-0"}
           value={number}
           onChange={(e) => onNumberChange(e.target.value)}
           placeholder={placeholder || "5xx xxx xx xx"}
