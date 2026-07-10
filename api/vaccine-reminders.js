@@ -3,9 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 // Bu fonksiyon her gün otomatik çalışır (bkz. vercel.json).
 // 1) Supabase'deki tüm köpekleri okur
 // 2) Her aşının "sonraki doz" tarihine göre kalan günü hesaplar
-// 3) Tam olarak 30, 7 veya 1 gün kaldıysa ve daha önce o eşik için mail atılmadıysa
-//    Resend üzerinden sahibine hatırlatma e-postası gönderir
-// 4) Hangi eşiklerin gönderildiğini aşının kaydına işler (tekrar tekrar mail atmamak için)
+//    -> tam olarak 30, 7 veya 1 gün kaldıysa hatırlatma e-postası gönderir
+// 3) Her randevunun tarihine göre kalan günü hesaplar
+//    -> tam olarak 1 gün kaldıysa hatırlatma e-postası gönderir
+// 4) Daha önce gönderilenleri kayda işler (tekrar tekrar mail atmamak için)
 
 export default async function handler(req, res) {
   // Basit bir güvenlik önlemi: sadece doğru "secret" ile çağrılırsa çalışsın.
@@ -29,11 +30,12 @@ export default async function handler(req, res) {
 
   for (const row of rows || []) {
     const dog = row.payload;
-    if (!dog || !dog.ownerEmail || !Array.isArray(dog.vaccines)) continue;
+    if (!dog || !dog.ownerEmail) continue;
 
     let changed = false;
 
-    for (const vaccine of dog.vaccines) {
+    // --- Aşı hatırlatmaları (30 / 7 / 1 gün kala) ---
+    for (const vaccine of dog.vaccines || []) {
       if (!vaccine.nextDate) continue;
       const nextDate = new Date(vaccine.nextDate + "T00:00:00");
       const daysLeft = Math.round((nextDate - today) / 86400000);
@@ -49,12 +51,31 @@ export default async function handler(req, res) {
       if (alreadySent.includes(threshold)) continue;
 
       try {
-        await sendReminderEmail({ dog, vaccine, daysLeft });
+        await sendVaccineReminderEmail({ dog, vaccine, daysLeft });
         vaccine.remindersSent = [...alreadySent, threshold];
         changed = true;
-        sentLog.push(`${dog.name} → ${vaccine.name} (${threshold} gün kala) → ${dog.ownerEmail}`);
+        sentLog.push(`AŞI: ${dog.name} → ${vaccine.name} (${threshold} gün kala) → ${dog.ownerEmail}`);
       } catch (err) {
-        sentLog.push(`HATA: ${dog.name} → ${vaccine.name}: ${err.message}`);
+        sentLog.push(`HATA (aşı): ${dog.name} → ${vaccine.name}: ${err.message}`);
+      }
+    }
+
+    // --- Randevu hatırlatmaları (1 gün kala) ---
+    for (const appt of dog.appointments || []) {
+      if (!appt.date) continue;
+      const apptDate = new Date(appt.date + "T00:00:00");
+      const daysLeft = Math.round((apptDate - today) / 86400000);
+
+      if (daysLeft !== 1) continue;
+      if (appt.reminderSent) continue;
+
+      try {
+        await sendAppointmentReminderEmail({ dog, appt });
+        appt.reminderSent = true;
+        changed = true;
+        sentLog.push(`RANDEVU: ${dog.name} → ${appt.type} (${appt.date}) → ${dog.ownerEmail}`);
+      } catch (err) {
+        sentLog.push(`HATA (randevu): ${dog.name} → ${appt.type}: ${err.message}`);
       }
     }
 
@@ -66,9 +87,7 @@ export default async function handler(req, res) {
   return res.status(200).json({ ok: true, checked: rows?.length || 0, sent: sentLog });
 }
 
-async function sendReminderEmail({ dog, vaccine, daysLeft }) {
-  const label = daysLeft === 30 ? "1 ay" : daysLeft === 7 ? "1 hafta" : "1 gün";
-
+async function sendEmail({ to, subject, html }) {
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -77,17 +96,9 @@ async function sendReminderEmail({ dog, vaccine, daysLeft }) {
     },
     body: JSON.stringify({
       from: process.env.RESEND_FROM_EMAIL || "Paw Wallet <onboarding@resend.dev>",
-      to: dog.ownerEmail,
-      subject: `🐾 ${dog.name} için aşı hatırlatması — ${label} kaldı`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1f2a24;">
-          <h2 style="color: #1B3A2F;">Aşı Hatırlatması</h2>
-          <p><strong>${dog.name}</strong> adlı köpeğinizin <strong>${vaccine.name}</strong> aşısının bir sonraki dozuna
-          <strong>${label}</strong> kaldı.</p>
-          <p>Planlanan tarih: <strong>${vaccine.nextDate}</strong></p>
-          <p style="margin-top: 24px; font-size: 13px; color: #5b6d63;">— Paw Wallet</p>
-        </div>
-      `,
+      to,
+      subject,
+      html,
     }),
   });
 
@@ -96,3 +107,38 @@ async function sendReminderEmail({ dog, vaccine, daysLeft }) {
     throw new Error(`Resend API error: ${response.status} ${text}`);
   }
 }
+
+async function sendVaccineReminderEmail({ dog, vaccine, daysLeft }) {
+  const label = daysLeft === 30 ? "1 ay" : daysLeft === 7 ? "1 hafta" : "1 gün";
+  await sendEmail({
+    to: dog.ownerEmail,
+    subject: `🐾 ${dog.name} için aşı hatırlatması — ${label} kaldı`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1f2a24;">
+        <h2 style="color: #1B3A2F;">Aşı Hatırlatması</h2>
+        <p><strong>${dog.name}</strong> adlı köpeğinizin <strong>${vaccine.name}</strong> aşısının bir sonraki dozuna
+        <strong>${label}</strong> kaldı.</p>
+        <p>Planlanan tarih: <strong>${vaccine.nextDate}</strong></p>
+        <p style="margin-top: 24px; font-size: 13px; color: #5b6d63;">— Paw Wallet</p>
+      </div>
+    `,
+  });
+}
+
+async function sendAppointmentReminderEmail({ dog, appt }) {
+  const typeLabel = appt.type === "Aşı" ? "Aşı" : appt.type === "Kontrol" ? "Kontrol" : "Muayene";
+  await sendEmail({
+    to: dog.ownerEmail,
+    subject: `🐾 ${dog.name} için yarın randevu var`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1f2a24;">
+        <h2 style="color: #1B3A2F;">Randevu Hatırlatması</h2>
+        <p><strong>${dog.name}</strong> adlı köpeğinizin <strong>${typeLabel}</strong> randevusu yarına
+        (<strong>${appt.date}</strong>${appt.time ? `, saat <strong>${appt.time}</strong>` : ""}) planlandı.</p>
+        ${appt.vet ? `<p>Veteriner / klinik: <strong>${appt.vet}</strong></p>` : ""}
+        <p style="margin-top: 24px; font-size: 13px; color: #5b6d63;">— Paw Wallet</p>
+      </div>
+    `,
+  });
+}
+
