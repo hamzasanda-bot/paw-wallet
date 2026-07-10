@@ -24,6 +24,9 @@ import {
   Pill,
   CalendarClock,
   Scale,
+  UserCog,
+  Building2,
+  ShieldAlert,
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
@@ -218,6 +221,56 @@ const TRANSLATIONS = {
     fieldWeightKg: "Ağırlık (kg)",
     weightChartTitle: "Zaman İçinde Ağırlık",
     weightChartIdealLine: "İdeal ağırlık",
+    adminPanelTitle: "Admin Paneli",
+    vetPortalTitle: "Veteriner Portalı",
+    adminStatsUsers: "Toplam Kullanıcı",
+    adminStatsOwners: "Köpek Sahibi",
+    adminStatsVetAccounts: "Veteriner Hesabı",
+    adminStatsVetListings: "Veteriner Kaydı",
+    adminStatsPendingRequests: "Onay Bekleyen Atama",
+    adminStatsServiceProviders: "Hizmet Firması",
+    addVetSectionTitle: "Yeni Veteriner Hesabı Aç",
+    fieldClinicName: "Klinik adı",
+    fieldVetCity: "Şehir",
+    fieldVetCountry: "Ülke",
+    fieldVetSpecialty: "Uzmanlık",
+    fieldVetPhone: "Telefon",
+    fieldVetEmail: "Veterinerin e-postası (davet buraya gider)",
+    createVetAccountBtn: "Hesap Oluştur & Davet Gönder",
+    vetInviteSuccess: (email) => `${email} adresine davet gönderildi.`,
+    addServiceProviderSectionTitle: "Hizmet Firması Ekle",
+    fieldServiceName: "Firma adı",
+    fieldServiceType: "Hizmet türü",
+    serviceTypeGrooming: "Yıkama & Tıraş",
+    serviceTypeWalking: "Köpek Yürüyüşü",
+    serviceTypeTaxi: "Pet Taksi",
+    serviceTypeOther: "Diğer",
+    createServiceProviderBtn: "Firmayı Ekle",
+    serviceProviderAdded: "Firma eklendi.",
+    vetListSectionTitle: "Kayıtlı Veterinerler",
+    vetPortalWelcome: (clinic) => `Hoş geldin, ${clinic}`,
+    pendingRequestsTitle: "Onay Bekleyen Atamalar",
+    noPendingRequests: "Şu an onay bekleyen atama yok.",
+    approveBtn: "Onayla",
+    rejectBtn: "Reddet",
+    requestFrom: (dogName, role) => `${dogName} için ${role} veteriner talebi`,
+    myDoctorsTitle: "Doktorlarım",
+    addDoctorBtn: "Doktor Ekle",
+    fieldDoctorName: "Doktor adı",
+    fieldDoctorTitle: "Unvan",
+    noDoctors: "Henüz doktor eklenmedi.",
+    myServicesTitle: "Verdiğim Hizmetler",
+    addServiceBtn: "Hizmet Ekle",
+    fieldServiceNameShort: "Hizmet adı",
+    fieldServicePrice: "Fiyat",
+    noServices: "Henüz hizmet eklenmedi.",
+    clinicInfoTitle: "Klinik Bilgileri",
+    saveClinicInfoBtn: "Bilgileri Kaydet",
+    approvedByLabel: "Onaylayan",
+    assignedVetsTitle: "Atanmış Veterinerler",
+    pendingApprovalBadge: "ONAY BEKLİYOR",
+    rejectedBadge: "REDDEDİLDİ",
+    cancelRequestBtn: "İptal Et",
   },
   en: {
     tagline: "Your dog's digital passport",
@@ -397,6 +450,56 @@ const TRANSLATIONS = {
     fieldWeightKg: "Weight (kg)",
     weightChartTitle: "Weight Over Time",
     weightChartIdealLine: "Ideal weight",
+    adminPanelTitle: "Admin Panel",
+    vetPortalTitle: "Vet Portal",
+    adminStatsUsers: "Total Users",
+    adminStatsOwners: "Dog Owners",
+    adminStatsVetAccounts: "Vet Accounts",
+    adminStatsVetListings: "Vet Listings",
+    adminStatsPendingRequests: "Pending Assignments",
+    adminStatsServiceProviders: "Service Providers",
+    addVetSectionTitle: "Create New Vet Account",
+    fieldClinicName: "Clinic name",
+    fieldVetCity: "City",
+    fieldVetCountry: "Country",
+    fieldVetSpecialty: "Specialty",
+    fieldVetPhone: "Phone",
+    fieldVetEmail: "Vet's email (invite is sent here)",
+    createVetAccountBtn: "Create Account & Send Invite",
+    vetInviteSuccess: (email) => `Invite sent to ${email}.`,
+    addServiceProviderSectionTitle: "Add Service Provider",
+    fieldServiceName: "Company name",
+    fieldServiceType: "Service type",
+    serviceTypeGrooming: "Grooming",
+    serviceTypeWalking: "Dog Walking",
+    serviceTypeTaxi: "Pet Taxi",
+    serviceTypeOther: "Other",
+    createServiceProviderBtn: "Add Company",
+    serviceProviderAdded: "Company added.",
+    vetListSectionTitle: "Registered Vets",
+    vetPortalWelcome: (clinic) => `Welcome, ${clinic}`,
+    pendingRequestsTitle: "Pending Assignment Requests",
+    noPendingRequests: "No pending requests right now.",
+    approveBtn: "Approve",
+    rejectBtn: "Reject",
+    requestFrom: (dogName, role) => `${role} vet request for ${dogName}`,
+    myDoctorsTitle: "My Doctors",
+    addDoctorBtn: "Add Doctor",
+    fieldDoctorName: "Doctor's name",
+    fieldDoctorTitle: "Title",
+    noDoctors: "No doctors added yet.",
+    myServicesTitle: "Services I Offer",
+    addServiceBtn: "Add Service",
+    fieldServiceNameShort: "Service name",
+    fieldServicePrice: "Price",
+    noServices: "No services added yet.",
+    clinicInfoTitle: "Clinic Info",
+    saveClinicInfoBtn: "Save Info",
+    approvedByLabel: "Approved by",
+    assignedVetsTitle: "Assigned Vets",
+    pendingApprovalBadge: "PENDING APPROVAL",
+    rejectedBadge: "REJECTED",
+    cancelRequestBtn: "Cancel",
   },
   fr: {
     tagline: "Le passeport numérique de votre chien",
@@ -576,6 +679,56 @@ const TRANSLATIONS = {
     fieldWeightKg: "Poids (kg)",
     weightChartTitle: "Évolution du Poids",
     weightChartIdealLine: "Poids idéal",
+    adminPanelTitle: "Panneau Admin",
+    vetPortalTitle: "Portail Vétérinaire",
+    adminStatsUsers: "Utilisateurs Totaux",
+    adminStatsOwners: "Propriétaires",
+    adminStatsVetAccounts: "Comptes Vétérinaires",
+    adminStatsVetListings: "Vétérinaires Inscrits",
+    adminStatsPendingRequests: "Attributions en Attente",
+    adminStatsServiceProviders: "Prestataires de Services",
+    addVetSectionTitle: "Créer un Nouveau Compte Vétérinaire",
+    fieldClinicName: "Nom de la clinique",
+    fieldVetCity: "Ville",
+    fieldVetCountry: "Pays",
+    fieldVetSpecialty: "Spécialité",
+    fieldVetPhone: "Téléphone",
+    fieldVetEmail: "E-mail du vétérinaire (invitation envoyée ici)",
+    createVetAccountBtn: "Créer le Compte & Envoyer l'Invitation",
+    vetInviteSuccess: (email) => `Invitation envoyée à ${email}.`,
+    addServiceProviderSectionTitle: "Ajouter un Prestataire de Services",
+    fieldServiceName: "Nom de l'entreprise",
+    fieldServiceType: "Type de service",
+    serviceTypeGrooming: "Toilettage",
+    serviceTypeWalking: "Promenade de Chiens",
+    serviceTypeTaxi: "Taxi pour Animaux",
+    serviceTypeOther: "Autre",
+    createServiceProviderBtn: "Ajouter l'Entreprise",
+    serviceProviderAdded: "Entreprise ajoutée.",
+    vetListSectionTitle: "Vétérinaires Enregistrés",
+    vetPortalWelcome: (clinic) => `Bienvenue, ${clinic}`,
+    pendingRequestsTitle: "Demandes d'Attribution en Attente",
+    noPendingRequests: "Aucune demande en attente pour le moment.",
+    approveBtn: "Approuver",
+    rejectBtn: "Refuser",
+    requestFrom: (dogName, role) => `Demande de vétérinaire ${role} pour ${dogName}`,
+    myDoctorsTitle: "Mes Médecins",
+    addDoctorBtn: "Ajouter un Médecin",
+    fieldDoctorName: "Nom du médecin",
+    fieldDoctorTitle: "Titre",
+    noDoctors: "Aucun médecin ajouté.",
+    myServicesTitle: "Mes Services",
+    addServiceBtn: "Ajouter un Service",
+    fieldServiceNameShort: "Nom du service",
+    fieldServicePrice: "Prix",
+    noServices: "Aucun service ajouté.",
+    clinicInfoTitle: "Infos de la Clinique",
+    saveClinicInfoBtn: "Enregistrer",
+    approvedByLabel: "Approuvé par",
+    assignedVetsTitle: "Vétérinaires Assignés",
+    pendingApprovalBadge: "EN ATTENTE",
+    rejectedBadge: "REFUSÉ",
+    cancelRequestBtn: "Annuler",
   },
   de: {
     tagline: "Der digitale Pass Ihres Hundes",
@@ -755,6 +908,56 @@ const TRANSLATIONS = {
     fieldWeightKg: "Gewicht (kg)",
     weightChartTitle: "Gewichtsverlauf",
     weightChartIdealLine: "Idealgewicht",
+    adminPanelTitle: "Admin-Panel",
+    vetPortalTitle: "Tierarzt-Portal",
+    adminStatsUsers: "Nutzer Gesamt",
+    adminStatsOwners: "Hundebesitzer",
+    adminStatsVetAccounts: "Tierarztkonten",
+    adminStatsVetListings: "Registrierte Tierärzte",
+    adminStatsPendingRequests: "Ausstehende Zuweisungen",
+    adminStatsServiceProviders: "Dienstleister",
+    addVetSectionTitle: "Neues Tierarztkonto Erstellen",
+    fieldClinicName: "Klinikname",
+    fieldVetCity: "Stadt",
+    fieldVetCountry: "Land",
+    fieldVetSpecialty: "Spezialisierung",
+    fieldVetPhone: "Telefon",
+    fieldVetEmail: "E-Mail des Tierarztes (Einladung geht hierhin)",
+    createVetAccountBtn: "Konto Erstellen & Einladung Senden",
+    vetInviteSuccess: (email) => `Einladung an ${email} gesendet.`,
+    addServiceProviderSectionTitle: "Dienstleister Hinzufügen",
+    fieldServiceName: "Firmenname",
+    fieldServiceType: "Dienstleistungsart",
+    serviceTypeGrooming: "Fellpflege",
+    serviceTypeWalking: "Hundespaziergang",
+    serviceTypeTaxi: "Tiertaxi",
+    serviceTypeOther: "Andere",
+    createServiceProviderBtn: "Firma Hinzufügen",
+    serviceProviderAdded: "Firma hinzugefügt.",
+    vetListSectionTitle: "Registrierte Tierärzte",
+    vetPortalWelcome: (clinic) => `Willkommen, ${clinic}`,
+    pendingRequestsTitle: "Ausstehende Zuweisungsanfragen",
+    noPendingRequests: "Derzeit keine ausstehenden Anfragen.",
+    approveBtn: "Genehmigen",
+    rejectBtn: "Ablehnen",
+    requestFrom: (dogName, role) => `${role} Tierarztanfrage für ${dogName}`,
+    myDoctorsTitle: "Meine Ärzte",
+    addDoctorBtn: "Arzt Hinzufügen",
+    fieldDoctorName: "Name des Arztes",
+    fieldDoctorTitle: "Titel",
+    noDoctors: "Noch keine Ärzte hinzugefügt.",
+    myServicesTitle: "Meine Dienstleistungen",
+    addServiceBtn: "Dienstleistung Hinzufügen",
+    fieldServiceNameShort: "Name der Dienstleistung",
+    fieldServicePrice: "Preis",
+    noServices: "Noch keine Dienstleistungen hinzugefügt.",
+    clinicInfoTitle: "Klinikinformationen",
+    saveClinicInfoBtn: "Informationen Speichern",
+    approvedByLabel: "Genehmigt von",
+    assignedVetsTitle: "Zugewiesene Tierärzte",
+    pendingApprovalBadge: "GENEHMIGUNG AUSSTEHEND",
+    rejectedBadge: "ABGELEHNT",
+    cancelRequestBtn: "Abbrechen",
   },
   es: {
     tagline: "El pasaporte digital de tu perro",
@@ -934,6 +1137,56 @@ const TRANSLATIONS = {
     fieldWeightKg: "Peso (kg)",
     weightChartTitle: "Peso a lo Largo del Tiempo",
     weightChartIdealLine: "Peso ideal",
+    adminPanelTitle: "Panel de Administración",
+    vetPortalTitle: "Portal Veterinario",
+    adminStatsUsers: "Usuarios Totales",
+    adminStatsOwners: "Dueños de Perros",
+    adminStatsVetAccounts: "Cuentas Veterinarias",
+    adminStatsVetListings: "Veterinarios Registrados",
+    adminStatsPendingRequests: "Asignaciones Pendientes",
+    adminStatsServiceProviders: "Proveedores de Servicios",
+    addVetSectionTitle: "Crear Nueva Cuenta Veterinaria",
+    fieldClinicName: "Nombre de la clínica",
+    fieldVetCity: "Ciudad",
+    fieldVetCountry: "País",
+    fieldVetSpecialty: "Especialidad",
+    fieldVetPhone: "Teléfono",
+    fieldVetEmail: "Correo del veterinario (la invitación se envía aquí)",
+    createVetAccountBtn: "Crear Cuenta y Enviar Invitación",
+    vetInviteSuccess: (email) => `Invitación enviada a ${email}.`,
+    addServiceProviderSectionTitle: "Añadir Proveedor de Servicios",
+    fieldServiceName: "Nombre de la empresa",
+    fieldServiceType: "Tipo de servicio",
+    serviceTypeGrooming: "Peluquería",
+    serviceTypeWalking: "Paseo de Perros",
+    serviceTypeTaxi: "Taxi para Mascotas",
+    serviceTypeOther: "Otro",
+    createServiceProviderBtn: "Añadir Empresa",
+    serviceProviderAdded: "Empresa añadida.",
+    vetListSectionTitle: "Veterinarios Registrados",
+    vetPortalWelcome: (clinic) => `Bienvenido, ${clinic}`,
+    pendingRequestsTitle: "Solicitudes de Asignación Pendientes",
+    noPendingRequests: "No hay solicitudes pendientes por ahora.",
+    approveBtn: "Aprobar",
+    rejectBtn: "Rechazar",
+    requestFrom: (dogName, role) => `Solicitud de veterinario ${role} para ${dogName}`,
+    myDoctorsTitle: "Mis Doctores",
+    addDoctorBtn: "Añadir Doctor",
+    fieldDoctorName: "Nombre del doctor",
+    fieldDoctorTitle: "Título",
+    noDoctors: "Aún no hay doctores añadidos.",
+    myServicesTitle: "Mis Servicios",
+    addServiceBtn: "Añadir Servicio",
+    fieldServiceNameShort: "Nombre del servicio",
+    fieldServicePrice: "Precio",
+    noServices: "Aún no hay servicios añadidos.",
+    clinicInfoTitle: "Información de la Clínica",
+    saveClinicInfoBtn: "Guardar Información",
+    approvedByLabel: "Aprobado por",
+    assignedVetsTitle: "Veterinarios Asignados",
+    pendingApprovalBadge: "PENDIENTE DE APROBACIÓN",
+    rejectedBadge: "RECHAZADO",
+    cancelRequestBtn: "Cancelar",
   },
 };
 
@@ -2590,10 +2843,103 @@ function WeightTab({ dog, onSaveIdeal, onAdd, onDelete }) {
   );
 }
 
-function VetTab({ dog, onAssign, onRemove }) {
+function VetTab({ dog, session }) {
   const { t } = useI18n();
-  const assignedIds = dog.vets.map((v) => v.vetId);
-  const primary = dog.vets.find((v) => v.role === "Birincil");
+  const [vetsList, setVetsList] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+
+  const load = useCallback(async () => {
+    const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).order("clinic_name");
+    if (vetsData) setVetsList(vetsData);
+    const { data: reqData } = await supabase
+      .from("vet_assignment_requests")
+      .select("*")
+      .eq("dog_id", dog.id)
+      .order("created_at", { ascending: false });
+    if (reqData) setRequests(reqData);
+    setLoaded(true);
+  }, [dog.id]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  // en son isteği her rol için al (pending veya approved olan aktif kabul edilir)
+  const latestByRole = (role) =>
+    requests.filter((r) => r.role === role && r.status !== "rejected").sort((a, b) => (a.created_at < b.created_at ? 1 : -1))[0];
+
+  const primaryReq = latestByRole("Birincil");
+  const secondaryReq = latestByRole("İkincil");
+  const activeVetIds = [primaryReq, secondaryReq].filter(Boolean).map((r) => r.vet_id);
+
+  const requestVet = async (vetId, role) => {
+    // aynı rol için varsa eski isteği kaldır
+    const existing = latestByRole(role);
+    if (existing) {
+      await supabase.from("vet_assignment_requests").delete().eq("id", existing.id);
+    }
+    await supabase.from("vet_assignment_requests").insert({
+      dog_id: dog.id,
+      dog_name: dog.name,
+      owner_user_id: session.user.id,
+      vet_id: vetId,
+      role,
+      status: "pending",
+    });
+    load();
+  };
+
+  const cancelRequest = async (id) => {
+    await supabase.from("vet_assignment_requests").delete().eq("id", id);
+    load();
+  };
+
+  const AssignmentRow = ({ req }) => {
+    const vet = vetsList.find((v) => v.id === req.vet_id);
+    if (!vet) return null;
+    return (
+      <div className="flex items-center justify-between rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] px-4 py-3">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-[#1B3A2F] text-[#F7F3E8] grid place-items-center font-display text-[15px]">
+            {vet.clinic_name[0]}
+          </div>
+          <div>
+            <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.clinic_name}</p>
+            <p className="text-[12px] text-[#5b6d63]">
+              {vet.city}
+              {vet.city && vet.country ? ", " : ""}
+              {vet.country}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className={`text-[10.5px] font-bold tracking-wider px-2.5 py-1 rounded-full ${
+              req.status === "approved"
+                ? req.role === "Birincil"
+                  ? "bg-[#1B3A2F] text-[#F7F3E8]"
+                  : "bg-[#C9A227] text-white"
+                : "bg-[#8d8560] text-white"
+            }`}
+          >
+            {req.status === "approved" ? req.role.toUpperCase() : t.pendingApprovalBadge}
+          </span>
+          <button onClick={() => cancelRequest(req.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  if (!loaded) {
+    return (
+      <div className="py-16 grid place-items-center text-[#5b6d63]">
+        <Loader2 className="animate-spin" size={20} />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -2602,75 +2948,57 @@ function VetTab({ dog, onAssign, onRemove }) {
         <p className="text-[13px] text-[#5b6d63]">{t.vetTabSubtitle(dog.name)}</p>
       </div>
 
-      {dog.vets.length > 0 && (
+      {(primaryReq || secondaryReq) && (
         <div className="mb-5 space-y-2">
-          {dog.vets.map((assignment) => {
-            const vet = PLATFORM_VETS.find((v) => v.id === assignment.vetId);
-            if (!vet) return null;
-            return (
-              <div key={assignment.vetId} className="flex items-center justify-between rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-[#1B3A2F] text-[#F7F3E8] grid place-items-center font-display text-[15px]">
-                    {vet.name.split(" ").slice(-1)[0][0]}
-                  </div>
-                  <div>
-                    <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.name}</p>
-                    <p className="text-[12px] text-[#5b6d63]">{vet.clinic} · {vet.city}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`text-[10.5px] font-bold tracking-wider px-2.5 py-1 rounded-full ${
-                      assignment.role === "Birincil" ? "bg-[#1B3A2F] text-[#F7F3E8]" : "bg-[#C9A227] text-white"
-                    }`}
-                  >
-                    {assignment.role.toUpperCase()}
-                  </span>
-                  <button onClick={() => onRemove(assignment.vetId)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          {primaryReq && <AssignmentRow req={primaryReq} />}
+          {secondaryReq && <AssignmentRow req={secondaryReq} />}
         </div>
       )}
 
       <p className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#5b6d63] mb-2.5">{t.platformVetsLabel}</p>
       <div className="grid sm:grid-cols-2 gap-3">
-        {PLATFORM_VETS.map((vet) => {
-          const isAssigned = assignedIds.includes(vet.id);
+        {vetsList.map((vet) => {
+          const isPrimary = primaryReq?.vet_id === vet.id;
+          const isSecondary = secondaryReq?.vet_id === vet.id;
           return (
             <div key={vet.id} className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4 flex flex-col gap-2.5">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.name}</p>
-                  <p className="text-[12px] text-[#5b6d63]">{vet.clinic}</p>
+                  <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.clinic_name}</p>
                   <p className="text-[11.5px] text-[#8d8560] flex items-center gap-1 mt-0.5">
-                    <MapPin size={11} /> {vet.city}
+                    <MapPin size={11} />
+                    {vet.city}
+                    {vet.city && vet.country ? ", " : ""}
+                    {vet.country}
                   </p>
                 </div>
-                <span className="flex items-center gap-1 text-[12px] text-[#8a6d16] font-semibold shrink-0">
-                  <Star size={12} className="fill-[#C9A227] text-[#C9A227]" /> {vet.rating}
-                </span>
+                {vet.rating > 0 && (
+                  <span className="flex items-center gap-1 text-[12px] text-[#8a6d16] font-semibold shrink-0">
+                    <Star size={12} className="fill-[#C9A227] text-[#C9A227]" /> {vet.rating}
+                  </span>
+                )}
               </div>
-              <p className="text-[12px] text-[#5b6d63] flex items-center gap-1">
-                <Stethoscope size={12} /> {vet.specialty}
-              </p>
-              <p className="text-[12px] text-[#5b6d63] flex items-center gap-1 font-mono">
-                <Phone size={12} /> {vet.phone}
-              </p>
+              {vet.specialty && (
+                <p className="text-[12px] text-[#5b6d63] flex items-center gap-1">
+                  <Stethoscope size={12} /> {vet.specialty}
+                </p>
+              )}
+              {vet.phone && (
+                <p className="text-[12px] text-[#5b6d63] flex items-center gap-1 font-mono">
+                  <Phone size={12} /> {vet.phone}
+                </p>
+              )}
               <div className="flex gap-2 mt-1">
                 <button
-                  disabled={isAssigned && primary?.vetId === vet.id}
-                  onClick={() => onAssign(vet.id, "Birincil")}
+                  disabled={isPrimary}
+                  onClick={() => requestVet(vet.id, "Birincil")}
                   className="flex-1 rounded-md border border-[#1B3A2F] text-[#1B3A2F] text-[12px] font-semibold py-1.5 hover:bg-[#1B3A2F] hover:text-[#F7F3E8] transition disabled:opacity-40"
                 >
                   {t.makePrimaryBtn}
                 </button>
                 <button
-                  disabled={isAssigned && dog.vets.find((v) => v.vetId === vet.id)?.role === "İkincil"}
-                  onClick={() => onAssign(vet.id, "İkincil")}
+                  disabled={isSecondary}
+                  onClick={() => requestVet(vet.id, "İkincil")}
                   className="flex-1 rounded-md border border-[#C9A227] text-[#8a6d16] text-[12px] font-semibold py-1.5 hover:bg-[#C9A227] hover:text-white transition disabled:opacity-40"
                 >
                   {t.makeSecondaryBtn}
@@ -2851,6 +3179,539 @@ function LandingPage() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Admin Panel                                                         */
+/* ------------------------------------------------------------------ */
+
+function StatCard({ label, value }) {
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4">
+      <p className="text-[11px] uppercase tracking-wider text-[#8d8560] font-semibold mb-1">{label}</p>
+      <p className="font-display text-[26px] text-[#1B3A2F]">{value ?? "—"}</p>
+    </div>
+  );
+}
+
+function AdminPanel({ session }) {
+  const { t } = useI18n();
+  const [stats, setStats] = useState(null);
+  const [vetForm, setVetForm] = useState({ clinicName: "", city: "", country: "", specialty: "", phone: "", email: "" });
+  const [vetBusy, setVetBusy] = useState(false);
+  const [vetMsg, setVetMsg] = useState("");
+  const [svcForm, setSvcForm] = useState({ name: "", service_type: "Yıkama & Tıraş", city: "", country: "", phone: "" });
+  const [svcBusy, setSvcBusy] = useState(false);
+  const [svcMsg, setSvcMsg] = useState("");
+  const [vetsList, setVetsList] = useState([]);
+
+  const loadStats = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin-stats", {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      const data = await res.json();
+      setStats(data);
+    } catch {
+      /* ignore */
+    }
+  }, [session]);
+
+  const loadVets = useCallback(async () => {
+    const { data } = await supabase.from("vets").select("*").order("created_at", { ascending: false });
+    if (data) setVetsList(data);
+  }, []);
+
+  useEffect(() => {
+    loadStats();
+    loadVets();
+  }, [loadStats, loadVets]);
+
+  const submitVet = async () => {
+    if (!vetForm.clinicName.trim() || !vetForm.email.trim()) return;
+    setVetBusy(true);
+    setVetMsg("");
+    try {
+      const res = await fetch("/api/admin-create-vet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify(vetForm),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setVetMsg(t.vetInviteSuccess(vetForm.email));
+        setVetForm({ clinicName: "", city: "", country: "", specialty: "", phone: "", email: "" });
+        loadStats();
+        loadVets();
+      } else {
+        setVetMsg(data.error || t.authError);
+      }
+    } catch {
+      setVetMsg(t.authError);
+    }
+    setVetBusy(false);
+  };
+
+  const submitServiceProvider = async () => {
+    if (!svcForm.name.trim()) return;
+    setSvcBusy(true);
+    setSvcMsg("");
+    const { error } = await supabase.from("service_providers").insert(svcForm);
+    if (!error) {
+      setSvcMsg(t.serviceProviderAdded);
+      setSvcForm({ name: "", service_type: "Yıkama & Tıraş", city: "", country: "", phone: "" });
+      loadStats();
+    } else {
+      setSvcMsg(error.message);
+    }
+    setSvcBusy(false);
+  };
+
+  return (
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+        .font-display { font-family: 'Zilla Slab', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+      `}</style>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+        <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <div className="h-10 w-10 rounded-full bg-[#1B3A2F] grid place-items-center">
+              <ShieldAlert size={19} className="text-[#F7F3E8]" />
+            </div>
+            <h1 className="font-display text-[22px] text-[#1B3A2F] leading-none">{t.adminPanelTitle}</h1>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <LanguageSwitcher />
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="text-[12.5px] font-medium text-[#5b6d63] hover:text-[#a63d40] underline underline-offset-2"
+            >
+              {t.logOut}
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+          <StatCard label={t.adminStatsUsers} value={stats?.totalUsers} />
+          <StatCard label={t.adminStatsOwners} value={stats?.totalOwners} />
+          <StatCard label={t.adminStatsVetAccounts} value={stats?.totalVetAccounts} />
+          <StatCard label={t.adminStatsVetListings} value={stats?.vetListingCount} />
+          <StatCard label={t.adminStatsPendingRequests} value={stats?.pendingRequestCount} />
+          <StatCard label={t.adminStatsServiceProviders} value={stats?.serviceProviderCount} />
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+          <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5">
+            <p className="font-display text-[16px] text-[#1B3A2F] mb-3 flex items-center gap-2">
+              <UserCog size={16} /> {t.addVetSectionTitle}
+            </p>
+            <div className="space-y-3">
+              <Field label={t.fieldClinicName}>
+                <input
+                  className={inputCls}
+                  value={vetForm.clinicName}
+                  onChange={(e) => setVetForm((f) => ({ ...f, clinicName: e.target.value }))}
+                />
+              </Field>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label={t.fieldVetCity}>
+                  <input
+                    className={inputCls}
+                    value={vetForm.city}
+                    onChange={(e) => setVetForm((f) => ({ ...f, city: e.target.value }))}
+                  />
+                </Field>
+                <Field label={t.fieldVetCountry}>
+                  <input
+                    className={inputCls}
+                    value={vetForm.country}
+                    onChange={(e) => setVetForm((f) => ({ ...f, country: e.target.value }))}
+                  />
+                </Field>
+              </div>
+              <Field label={t.fieldVetSpecialty}>
+                <input
+                  className={inputCls}
+                  value={vetForm.specialty}
+                  onChange={(e) => setVetForm((f) => ({ ...f, specialty: e.target.value }))}
+                />
+              </Field>
+              <Field label={t.fieldVetPhone}>
+                <input
+                  className={inputCls}
+                  value={vetForm.phone}
+                  onChange={(e) => setVetForm((f) => ({ ...f, phone: e.target.value }))}
+                />
+              </Field>
+              <Field label={t.fieldVetEmail}>
+                <input
+                  type="email"
+                  className={inputCls}
+                  value={vetForm.email}
+                  onChange={(e) => setVetForm((f) => ({ ...f, email: e.target.value }))}
+                />
+              </Field>
+              {vetMsg && <p className="text-[12.5px] text-[#5b6d63]">{vetMsg}</p>}
+              <PrimaryButton full onClick={submitVet} icon={vetBusy ? Loader2 : Check}>
+                {t.createVetAccountBtn}
+              </PrimaryButton>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5">
+            <p className="font-display text-[16px] text-[#1B3A2F] mb-3 flex items-center gap-2">
+              <Building2 size={16} /> {t.addServiceProviderSectionTitle}
+            </p>
+            <div className="space-y-3">
+              <Field label={t.fieldServiceName}>
+                <input
+                  className={inputCls}
+                  value={svcForm.name}
+                  onChange={(e) => setSvcForm((f) => ({ ...f, name: e.target.value }))}
+                />
+              </Field>
+              <Field label={t.fieldServiceType}>
+                <select
+                  className={inputCls}
+                  value={svcForm.service_type}
+                  onChange={(e) => setSvcForm((f) => ({ ...f, service_type: e.target.value }))}
+                >
+                  <option value="Yıkama & Tıraş">{t.serviceTypeGrooming}</option>
+                  <option value="Köpek Yürüyüşü">{t.serviceTypeWalking}</option>
+                  <option value="Pet Taksi">{t.serviceTypeTaxi}</option>
+                  <option value="Diğer">{t.serviceTypeOther}</option>
+                </select>
+              </Field>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label={t.fieldVetCity}>
+                  <input
+                    className={inputCls}
+                    value={svcForm.city}
+                    onChange={(e) => setSvcForm((f) => ({ ...f, city: e.target.value }))}
+                  />
+                </Field>
+                <Field label={t.fieldVetCountry}>
+                  <input
+                    className={inputCls}
+                    value={svcForm.country}
+                    onChange={(e) => setSvcForm((f) => ({ ...f, country: e.target.value }))}
+                  />
+                </Field>
+              </div>
+              <Field label={t.fieldVetPhone}>
+                <input
+                  className={inputCls}
+                  value={svcForm.phone}
+                  onChange={(e) => setSvcForm((f) => ({ ...f, phone: e.target.value }))}
+                />
+              </Field>
+              {svcMsg && <p className="text-[12.5px] text-[#5b6d63]">{svcMsg}</p>}
+              <PrimaryButton full onClick={submitServiceProvider} icon={svcBusy ? Loader2 : Check}>
+                {t.createServiceProviderBtn}
+              </PrimaryButton>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#5b6d63] mb-2.5">{t.vetListSectionTitle}</p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {vetsList.map((vet) => (
+            <div key={vet.id} className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4">
+              <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.clinic_name}</p>
+              <p className="text-[12px] text-[#5b6d63]">
+                {vet.city}
+                {vet.city && vet.country ? ", " : ""}
+                {vet.country}
+              </p>
+              <p className="text-[11.5px] text-[#8d8560] mt-1">
+                {vet.user_id ? "✓ " + t.logInBtn : "—"} {vet.phone && `· ${vet.phone}`}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Vet Portal                                                          */
+/* ------------------------------------------------------------------ */
+
+function VetPortal({ session }) {
+  const { t } = useI18n();
+  const vetId = session.user.user_metadata?.vet_id;
+  const [vet, setVet] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [newDoctor, setNewDoctor] = useState({ name: "", title: "" });
+  const [newService, setNewService] = useState({ name: "", price: "" });
+  const [clinicForm, setClinicForm] = useState(null);
+
+  const load = useCallback(async () => {
+    if (!vetId) {
+      setLoaded(true);
+      return;
+    }
+    const { data: vetRow } = await supabase.from("vets").select("*").eq("id", vetId).single();
+    if (vetRow) {
+      setVet(vetRow);
+      setClinicForm({
+        clinic_name: vetRow.clinic_name || "",
+        city: vetRow.city || "",
+        country: vetRow.country || "",
+        specialty: vetRow.specialty || "",
+        phone: vetRow.phone || "",
+      });
+    }
+    const { data: reqRows } = await supabase
+      .from("vet_assignment_requests")
+      .select("*")
+      .eq("vet_id", vetId)
+      .order("created_at", { ascending: false });
+    if (reqRows) setRequests(reqRows);
+    setLoaded(true);
+  }, [vetId]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const respondToRequest = async (id, status) => {
+    await supabase.from("vet_assignment_requests").update({ status }).eq("id", id);
+    load();
+  };
+
+  const saveClinicInfo = async () => {
+    await supabase.from("vets").update(clinicForm).eq("id", vetId);
+    load();
+  };
+
+  const addDoctor = async () => {
+    if (!newDoctor.name.trim()) return;
+    const doctors = [...(vet.doctors || []), { id: uid(), ...newDoctor }];
+    await supabase.from("vets").update({ doctors }).eq("id", vetId);
+    setNewDoctor({ name: "", title: "" });
+    load();
+  };
+
+  const removeDoctor = async (id) => {
+    const doctors = (vet.doctors || []).filter((d) => d.id !== id);
+    await supabase.from("vets").update({ doctors }).eq("id", vetId);
+    load();
+  };
+
+  const addService = async () => {
+    if (!newService.name.trim()) return;
+    const services = [...(vet.services || []), { id: uid(), ...newService }];
+    await supabase.from("vets").update({ services }).eq("id", vetId);
+    setNewService({ name: "", price: "" });
+    load();
+  };
+
+  const removeService = async (id) => {
+    const services = (vet.services || []).filter((s) => s.id !== id);
+    await supabase.from("vets").update({ services }).eq("id", vetId);
+    load();
+  };
+
+  const pendingRequests = requests.filter((r) => r.status === "pending");
+
+  return (
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+        .font-display { font-family: 'Zilla Slab', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+      `}</style>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+        <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <div className="h-10 w-10 rounded-full bg-[#1B3A2F] grid place-items-center">
+              <Stethoscope size={19} className="text-[#F7F3E8]" />
+            </div>
+            <div>
+              <h1 className="font-display text-[22px] text-[#1B3A2F] leading-none">{t.vetPortalTitle}</h1>
+              {vet && <p className="text-[11.5px] text-[#5b6d63]">{t.vetPortalWelcome(vet.clinic_name)}</p>}
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <LanguageSwitcher />
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="text-[12.5px] font-medium text-[#5b6d63] hover:text-[#a63d40] underline underline-offset-2"
+            >
+              {t.logOut}
+            </button>
+          </div>
+        </div>
+
+        {!loaded ? (
+          <div className="py-24 grid place-items-center text-[#5b6d63]">
+            <Loader2 className="animate-spin" size={22} />
+          </div>
+        ) : !vet ? (
+          <EmptyState icon={ShieldAlert} text={t.authError} />
+        ) : (
+          <>
+            <div className="mb-8">
+              <h3 className="font-display text-[18px] text-[#1B3A2F] mb-3">{t.pendingRequestsTitle}</h3>
+              {pendingRequests.length === 0 ? (
+                <EmptyState icon={CalendarClock} text={t.noPendingRequests} />
+              ) : (
+                <div className="space-y-2">
+                  {pendingRequests.map((r) => (
+                    <div
+                      key={r.id}
+                      className="flex items-center justify-between rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] px-4 py-3"
+                    >
+                      <span className="text-[14px] text-[#1f2a24]">{t.requestFrom(r.dog_name, r.role)}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => respondToRequest(r.id, "approved")}
+                          className="rounded-md bg-[#1B3A2F] text-[#F7F3E8] text-[12px] font-semibold px-3 py-1.5 hover:bg-[#234a3b] transition"
+                        >
+                          {t.approveBtn}
+                        </button>
+                        <button
+                          onClick={() => respondToRequest(r.id, "rejected")}
+                          className="rounded-md border border-[#e3c2c2] text-[#a63d40] text-[12px] font-semibold px-3 py-1.5 hover:bg-[#f7e9e9] transition"
+                        >
+                          {t.rejectBtn}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-6 mb-8">
+              <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
+                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myDoctorsTitle}</p>
+                <div className="space-y-2 mb-3">
+                  {(vet.doctors || []).length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noDoctors}</p>
+                  ) : (
+                    (vet.doctors || []).map((d) => (
+                      <div key={d.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
+                        <span>
+                          {d.name} {d.title && <span className="text-[#8d8560]">· {d.title}</span>}
+                        </span>
+                        <button onClick={() => removeDoctor(d.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    className={inputCls}
+                    placeholder={t.fieldDoctorName}
+                    value={newDoctor.name}
+                    onChange={(e) => setNewDoctor((f) => ({ ...f, name: e.target.value }))}
+                  />
+                  <input
+                    className={inputCls}
+                    placeholder={t.fieldDoctorTitle}
+                    value={newDoctor.title}
+                    onChange={(e) => setNewDoctor((f) => ({ ...f, title: e.target.value }))}
+                  />
+                  <GhostButton onClick={addDoctor} icon={Plus} />
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
+                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myServicesTitle}</p>
+                <div className="space-y-2 mb-3">
+                  {(vet.services || []).length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noServices}</p>
+                  ) : (
+                    (vet.services || []).map((s) => (
+                      <div key={s.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
+                        <span>
+                          {s.name} {s.price && <span className="text-[#8d8560]">· {s.price}</span>}
+                        </span>
+                        <button onClick={() => removeService(s.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    className={inputCls}
+                    placeholder={t.fieldServiceNameShort}
+                    value={newService.name}
+                    onChange={(e) => setNewService((f) => ({ ...f, name: e.target.value }))}
+                  />
+                  <input
+                    className={inputCls}
+                    placeholder={t.fieldServicePrice}
+                    value={newService.price}
+                    onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
+                  />
+                  <GhostButton onClick={addService} icon={Plus} />
+                </div>
+              </div>
+            </div>
+
+            {clinicForm && (
+              <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
+                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.clinicInfoTitle}</p>
+                <div className="grid sm:grid-cols-2 gap-3.5 mb-3">
+                  <Field label={t.fieldClinicName}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.clinic_name}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, clinic_name: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldVetSpecialty}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.specialty}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, specialty: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldVetCity}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.city}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, city: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldVetCountry}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.country}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, country: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldVetPhone}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.phone}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, phone: e.target.value }))}
+                    />
+                  </Field>
+                </div>
+                <PrimaryButton onClick={saveClinicInfo} icon={Check}>
+                  {t.saveClinicInfoBtn}
+                </PrimaryButton>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AuthGate() {
   const { t } = useI18n();
   const [session, setSession] = useState(undefined); // undefined = loading
@@ -2873,6 +3734,10 @@ function AuthGate() {
   }
 
   if (!session) return <LandingPage />;
+
+  const role = session.user.user_metadata?.role;
+  if (role === "admin") return <AdminPanel key={session.user.id} session={session} />;
+  if (role === "vet") return <VetPortal key={session.user.id} session={session} />;
 
   return <PawWalletInner key={session.user.id} session={session} />;
 }
@@ -2969,14 +3834,6 @@ function PawWalletInner({ session }) {
 
   const addVaccine = (v) => updateDog(activeDog.id, (d) => ({ ...d, vaccines: [...d.vaccines, v] }));
   const deleteVaccine = (id) => updateDog(activeDog.id, (d) => ({ ...d, vaccines: d.vaccines.filter((v) => v.id !== id) }));
-
-  const assignVet = (vetId, role) =>
-    updateDog(activeDog.id, (d) => {
-      let vets = d.vets.filter((v) => !(v.role === role) && v.vetId !== vetId);
-      vets = [...vets, { vetId, role }];
-      return { ...d, vets };
-    });
-  const removeVet = (vetId) => updateDog(activeDog.id, (d) => ({ ...d, vets: d.vets.filter((v) => v.vetId !== vetId) }));
 
   const saveHealthProfile = (profile) => updateDog(activeDog.id, (d) => ({ ...d, ...profile }));
   const addHealthRecord = (r) =>
@@ -3138,7 +3995,7 @@ function PawWalletInner({ session }) {
             {tab === "weight" && (
               <WeightTab dog={activeDog} onSaveIdeal={saveIdealWeight} onAdd={addWeightEntry} onDelete={deleteWeightEntry} />
             )}
-            {tab === "vets" && <VetTab dog={activeDog} onAssign={assignVet} onRemove={removeVet} />}
+            {tab === "vets" && <VetTab dog={activeDog} session={session} />}
           </>
         )}
 
