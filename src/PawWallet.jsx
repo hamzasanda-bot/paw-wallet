@@ -63,6 +63,7 @@ const TRANSLATIONS = {
     fieldLivingCity: "Yaşadığı şehir",
     fieldMicrochip: "Mikroçip numarası",
     fieldOwnerName: "Sahip adı",
+    fieldOwnerEmail: "Sahip e-postası (aşı hatırlatmaları buraya gider)",
     fieldOwnerPhone: "Sahip telefon",
     fieldOwnerAddress: "Sahip adres",
     fieldEmergencyName: "Acil kişi adı",
@@ -86,6 +87,7 @@ const TRANSLATIONS = {
     rowMicrochip: "Mikroçip No",
     rowPassportNo: "Pasaport No",
     rowOwner: "Sahip",
+    rowEmail: "E-posta",
     rowPhone: "Telefon",
     rowAddress: "Adres",
     rowEmergency: "Acil Kişi",
@@ -125,6 +127,32 @@ const TRANSLATIONS = {
     platformVetsLabel: "Platform Veterinerleri",
     makePrimaryBtn: "Birincil Yap",
     makeSecondaryBtn: "İkincil Yap",
+    landingHeadline: "Köpeğinizin tüm hayatı, tek bir dijital pasaportta.",
+    landingSub: "Kimlik bilgileri, aşı takvimi ve veteriner ataması — hepsi güvenle saklanır, her yerden erişilir.",
+    signIn: "Giriş Yap",
+    signUp: "Kayıt Ol",
+    logOut: "Çıkış Yap",
+    fieldFirstName: "Ad",
+    fieldLastName: "Soyad",
+    fieldEmail: "E-posta adresi",
+    fieldPassword: "Şifre",
+    fieldConfirmPassword: "Şifreni tekrar gir",
+    passwordsDontMatch: "Şifreler eşleşmiyor",
+    passwordTooShort: "Şifre en az 6 karakter olmalı",
+    sendMagicLink: "Giriş Bağlantısı Gönder",
+    createAccountBtn: "Hesap Oluştur",
+    logInBtn: "Giriş Yap",
+    authSignupTitle: "Hesap Oluştur",
+    authLoginTitle: "Giriş Yap",
+    authSwitchToLogin: "Zaten hesabın var mı? Giriş yap",
+    authSwitchToSignup: "Hesabın yok mu? Kayıt ol",
+    checkInboxTitle: "E-postanı onayla",
+    checkInboxDesc: (email) => `${email} adresine bir onay bağlantısı gönderdik. Gelen kutunu (ve spam klasörünü) kontrol et, bağlantıya tıkla — hesabın onaylanınca otomatik olarak pasaport sayfana yönlendirileceksin.`,
+    backToForm: "Geri dön",
+    authError: "Bir şeyler ters gitti, tekrar dener misin?",
+    loginUserNotFound: "E-posta veya şifre hatalı, ya da hesabın henüz onaylanmamış olabilir.",
+    verifyingSession: "Doğrulanıyor…",
+    greeting: (name) => `Merhaba, ${name}`,
   },
   en: {
     tagline: "Your dog's digital passport",
@@ -154,6 +182,7 @@ const TRANSLATIONS = {
     fieldLivingCity: "City of residence",
     fieldMicrochip: "Microchip number",
     fieldOwnerName: "Owner's name",
+    fieldOwnerEmail: "Owner's email (vaccine reminders go here)",
     fieldOwnerPhone: "Owner's phone",
     fieldOwnerAddress: "Owner's address",
     fieldEmergencyName: "Emergency contact name",
@@ -177,6 +206,7 @@ const TRANSLATIONS = {
     rowMicrochip: "Microchip No.",
     rowPassportNo: "Passport No.",
     rowOwner: "Owner",
+    rowEmail: "Email",
     rowPhone: "Phone",
     rowAddress: "Address",
     rowEmergency: "Emergency Contact",
@@ -216,6 +246,32 @@ const TRANSLATIONS = {
     platformVetsLabel: "Platform Vets",
     makePrimaryBtn: "Make Primary",
     makeSecondaryBtn: "Make Secondary",
+    landingHeadline: "Your dog's whole life, in one digital passport.",
+    landingSub: "Identity details, vaccine schedule and vet assignment — securely stored, accessible from anywhere.",
+    signIn: "Log In",
+    signUp: "Sign Up",
+    logOut: "Log Out",
+    fieldFirstName: "First name",
+    fieldLastName: "Last name",
+    fieldEmail: "Email address",
+    fieldPassword: "Password",
+    fieldConfirmPassword: "Confirm password",
+    passwordsDontMatch: "Passwords don't match",
+    passwordTooShort: "Password must be at least 6 characters",
+    sendMagicLink: "Send Login Link",
+    createAccountBtn: "Create Account",
+    logInBtn: "Log In",
+    authSignupTitle: "Create Account",
+    authLoginTitle: "Log In",
+    authSwitchToLogin: "Already have an account? Log in",
+    authSwitchToSignup: "Don't have an account? Sign up",
+    checkInboxTitle: "Confirm your email",
+    checkInboxDesc: (email) => `We sent a confirmation link to ${email}. Check your inbox (and spam folder), click the link — once confirmed you'll be redirected to your passport automatically.`,
+    backToForm: "Go back",
+    authError: "Something went wrong, could you try again?",
+    loginUserNotFound: "Incorrect email or password, or your account may not be confirmed yet.",
+    verifyingSession: "Verifying…",
+    greeting: (name) => `Hi, ${name}`,
   },
   fr: {
     tagline: "Le passeport numérique de votre chien",
@@ -245,6 +301,7 @@ const TRANSLATIONS = {
     fieldLivingCity: "Ville de résidence",
     fieldMicrochip: "Numéro de puce",
     fieldOwnerName: "Nom du propriétaire",
+    fieldOwnerEmail: "E-mail du propriétaire (rappels de vaccins envoyés ici)",
     fieldOwnerPhone: "Téléphone du propriétaire",
     fieldOwnerAddress: "Adresse du propriétaire",
     fieldEmergencyName: "Contact d'urgence",
@@ -268,6 +325,7 @@ const TRANSLATIONS = {
     rowMicrochip: "N° de Puce",
     rowPassportNo: "N° de Passeport",
     rowOwner: "Propriétaire",
+    rowEmail: "E-mail",
     rowPhone: "Téléphone",
     rowAddress: "Adresse",
     rowEmergency: "Contact d'Urgence",
@@ -307,6 +365,32 @@ const TRANSLATIONS = {
     platformVetsLabel: "Vétérinaires de la Plateforme",
     makePrimaryBtn: "Définir Principal",
     makeSecondaryBtn: "Définir Secondaire",
+    landingHeadline: "Toute la vie de votre chien, dans un seul passeport numérique.",
+    landingSub: "Identité, calendrier de vaccination et vétérinaire assigné — stockés en sécurité, accessibles de partout.",
+    signIn: "Connexion",
+    signUp: "S'inscrire",
+    logOut: "Déconnexion",
+    fieldFirstName: "Prénom",
+    fieldLastName: "Nom",
+    fieldEmail: "Adresse e-mail",
+    fieldPassword: "Mot de passe",
+    fieldConfirmPassword: "Confirmer le mot de passe",
+    passwordsDontMatch: "Les mots de passe ne correspondent pas",
+    passwordTooShort: "Le mot de passe doit contenir au moins 6 caractères",
+    sendMagicLink: "Envoyer le Lien de Connexion",
+    createAccountBtn: "Créer un Compte",
+    logInBtn: "Connexion",
+    authSignupTitle: "Créer un Compte",
+    authLoginTitle: "Connexion",
+    authSwitchToLogin: "Déjà un compte ? Connectez-vous",
+    authSwitchToSignup: "Pas de compte ? Inscrivez-vous",
+    checkInboxTitle: "Confirmez votre e-mail",
+    checkInboxDesc: (email) => `Nous avons envoyé un lien de confirmation à ${email}. Vérifiez votre boîte de réception (et vos spams), cliquez sur le lien — une fois confirmé, vous serez redirigé vers votre passeport automatiquement.`,
+    backToForm: "Retour",
+    authError: "Une erreur s'est produite, veuillez réessayer.",
+    loginUserNotFound: "E-mail ou mot de passe incorrect, ou votre compte n'est peut-être pas encore confirmé.",
+    verifyingSession: "Vérification…",
+    greeting: (name) => `Bonjour, ${name}`,
   },
   de: {
     tagline: "Der digitale Pass Ihres Hundes",
@@ -336,6 +420,7 @@ const TRANSLATIONS = {
     fieldLivingCity: "Wohnort",
     fieldMicrochip: "Mikrochip-Nummer",
     fieldOwnerName: "Name des Besitzers",
+    fieldOwnerEmail: "E-Mail des Besitzers (Impferinnerungen gehen hierhin)",
     fieldOwnerPhone: "Telefon des Besitzers",
     fieldOwnerAddress: "Adresse des Besitzers",
     fieldEmergencyName: "Notfallkontakt Name",
@@ -359,6 +444,7 @@ const TRANSLATIONS = {
     rowMicrochip: "Mikrochip-Nr.",
     rowPassportNo: "Pass-Nr.",
     rowOwner: "Besitzer",
+    rowEmail: "E-Mail",
     rowPhone: "Telefon",
     rowAddress: "Adresse",
     rowEmergency: "Notfallkontakt",
@@ -398,6 +484,32 @@ const TRANSLATIONS = {
     platformVetsLabel: "Plattform-Tierärzte",
     makePrimaryBtn: "Als Primär Festlegen",
     makeSecondaryBtn: "Als Sekundär Festlegen",
+    landingHeadline: "Das ganze Leben Ihres Hundes in einem digitalen Pass.",
+    landingSub: "Identitätsdaten, Impfplan und Tierarztzuweisung — sicher gespeichert, von überall zugänglich.",
+    signIn: "Anmelden",
+    signUp: "Registrieren",
+    logOut: "Abmelden",
+    fieldFirstName: "Vorname",
+    fieldLastName: "Nachname",
+    fieldEmail: "E-Mail-Adresse",
+    fieldPassword: "Passwort",
+    fieldConfirmPassword: "Passwort bestätigen",
+    passwordsDontMatch: "Passwörter stimmen nicht überein",
+    passwordTooShort: "Passwort muss mindestens 6 Zeichen haben",
+    sendMagicLink: "Anmeldelink Senden",
+    createAccountBtn: "Konto Erstellen",
+    logInBtn: "Anmelden",
+    authSignupTitle: "Konto Erstellen",
+    authLoginTitle: "Anmelden",
+    authSwitchToLogin: "Bereits ein Konto? Anmelden",
+    authSwitchToSignup: "Noch kein Konto? Registrieren",
+    checkInboxTitle: "Bestätigen Sie Ihre E-Mail",
+    checkInboxDesc: (email) => `Wir haben einen Bestätigungslink an ${email} gesendet. Prüfen Sie Ihr Postfach (und den Spam-Ordner), klicken Sie auf den Link — nach der Bestätigung werden Sie automatisch zu Ihrem Pass weitergeleitet.`,
+    backToForm: "Zurück",
+    authError: "Etwas ist schiefgelaufen, bitte versuchen Sie es erneut.",
+    loginUserNotFound: "E-Mail oder Passwort falsch, oder Ihr Konto ist noch nicht bestätigt.",
+    verifyingSession: "Wird überprüft…",
+    greeting: (name) => `Hallo, ${name}`,
   },
   es: {
     tagline: "El pasaporte digital de tu perro",
@@ -427,6 +539,7 @@ const TRANSLATIONS = {
     fieldLivingCity: "Ciudad de residencia",
     fieldMicrochip: "Número de microchip",
     fieldOwnerName: "Nombre del dueño",
+    fieldOwnerEmail: "Correo del dueño (los recordatorios de vacunas se envían aquí)",
     fieldOwnerPhone: "Teléfono del dueño",
     fieldOwnerAddress: "Dirección del dueño",
     fieldEmergencyName: "Nombre de contacto de emergencia",
@@ -450,6 +563,7 @@ const TRANSLATIONS = {
     rowMicrochip: "N.º de Microchip",
     rowPassportNo: "N.º de Pasaporte",
     rowOwner: "Dueño",
+    rowEmail: "Correo",
     rowPhone: "Teléfono",
     rowAddress: "Dirección",
     rowEmergency: "Contacto de Emergencia",
@@ -489,6 +603,32 @@ const TRANSLATIONS = {
     platformVetsLabel: "Veterinarios de la Plataforma",
     makePrimaryBtn: "Hacer Principal",
     makeSecondaryBtn: "Hacer Secundario",
+    landingHeadline: "Toda la vida de tu perro, en un solo pasaporte digital.",
+    landingSub: "Datos de identidad, calendario de vacunas y veterinario asignado — almacenados con seguridad, accesibles desde cualquier lugar.",
+    signIn: "Iniciar Sesión",
+    signUp: "Registrarse",
+    logOut: "Cerrar Sesión",
+    fieldFirstName: "Nombre",
+    fieldLastName: "Apellido",
+    fieldEmail: "Correo electrónico",
+    fieldPassword: "Contraseña",
+    fieldConfirmPassword: "Confirmar contraseña",
+    passwordsDontMatch: "Las contraseñas no coinciden",
+    passwordTooShort: "La contraseña debe tener al menos 6 caracteres",
+    sendMagicLink: "Enviar Enlace de Acceso",
+    createAccountBtn: "Crear Cuenta",
+    logInBtn: "Iniciar Sesión",
+    authSignupTitle: "Crear Cuenta",
+    authLoginTitle: "Iniciar Sesión",
+    authSwitchToLogin: "¿Ya tienes cuenta? Inicia sesión",
+    authSwitchToSignup: "¿No tienes cuenta? Regístrate",
+    checkInboxTitle: "Confirma tu correo",
+    checkInboxDesc: (email) => `Enviamos un enlace de confirmación a ${email}. Revisa tu bandeja de entrada (y la carpeta de spam), haz clic en el enlace — una vez confirmado serás redirigido automáticamente a tu pasaporte.`,
+    backToForm: "Volver",
+    authError: "Algo salió mal, ¿podrías intentarlo de nuevo?",
+    loginUserNotFound: "Correo o contraseña incorrectos, o tu cuenta aún no está confirmada.",
+    verifyingSession: "Verificando…",
+    greeting: (name) => `Hola, ${name}`,
   },
 };
 
@@ -933,6 +1073,7 @@ function AddDogModal({ onClose, onSave, existingDog }) {
           microchip: "",
           passportNumber: "",
           ownerName: "",
+          ownerEmail: "",
           ownerPhoneCode: "",
           ownerPhoneNumber: "",
           ownerAddress: "",
@@ -1061,6 +1202,9 @@ function AddDogModal({ onClose, onSave, existingDog }) {
       <div className="grid sm:grid-cols-2 gap-3.5">
         <Field label={t.fieldOwnerName}>
           <input className={inputCls} value={form.ownerName} onChange={set("ownerName")} />
+        </Field>
+        <Field label={t.fieldOwnerEmail}>
+          <input type="email" className={inputCls} value={form.ownerEmail} onChange={set("ownerEmail")} placeholder="ornek@eposta.com" />
         </Field>
         <PhoneField
           label={t.fieldOwnerPhone}
@@ -1206,6 +1350,7 @@ function PassportTab({ dog, onEdit, onDelete }) {
         <div className="grid sm:grid-cols-2 gap-x-8">
           <div>
             <Row label={t.rowOwner} value={dog.ownerName} />
+            <Row label={t.rowEmail} value={dog.ownerEmail} />
             <Row label={t.rowPhone} value={ownerPhone} mono />
             <Row label={t.rowAddress} value={dog.ownerAddress} />
           </div>
@@ -1569,6 +1714,184 @@ function EmptyState({ icon: Icon, text }) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Landing page & authentication                                      */
+/* ------------------------------------------------------------------ */
+
+function AuthModal({ mode, onClose, onSwitchMode }) {
+  const { t } = useI18n();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [sentTo, setSentTo] = useState("");
+
+  const submit = async () => {
+    setError("");
+    if (mode === "signup") {
+      if (password.length < 6) {
+        setError(t.passwordTooShort);
+        return;
+      }
+      if (password !== confirmPassword) {
+        setError(t.passwordsDontMatch);
+        return;
+      }
+      setLoading(true);
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { first_name: firstName, last_name: lastName },
+          emailRedirectTo: window.location.origin,
+        },
+      });
+      setLoading(false);
+      if (signUpError) {
+        setError(signUpError.message || t.authError);
+        return;
+      }
+      setSentTo(email);
+    } else {
+      setLoading(true);
+      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+      setLoading(false);
+      if (loginError) {
+        setError(t.loginUserNotFound);
+        return;
+      }
+      onClose();
+    }
+  };
+
+  if (sentTo) {
+    return (
+      <Modal title={t.checkInboxTitle} onClose={onClose}>
+        <p className="text-[14px] text-[#3c473f] leading-relaxed">{t.checkInboxDesc(sentTo)}</p>
+        <div className="mt-6 flex justify-end">
+          <GhostButton onClick={onClose}>{t.backToForm}</GhostButton>
+        </div>
+      </Modal>
+    );
+  }
+
+  return (
+    <Modal title={mode === "signup" ? t.authSignupTitle : t.authLoginTitle} onClose={onClose}>
+      <div className="space-y-3.5">
+        {mode === "signup" && (
+          <div className="grid grid-cols-2 gap-3.5">
+            <Field label={t.fieldFirstName}>
+              <input className={inputCls} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+            </Field>
+            <Field label={t.fieldLastName}>
+              <input className={inputCls} value={lastName} onChange={(e) => setLastName(e.target.value)} />
+            </Field>
+          </div>
+        )}
+        <Field label={t.fieldEmail}>
+          <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} />
+        </Field>
+        <Field label={t.fieldPassword}>
+          <input type="password" className={inputCls} value={password} onChange={(e) => setPassword(e.target.value)} />
+        </Field>
+        {mode === "signup" && (
+          <Field label={t.fieldConfirmPassword}>
+            <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          </Field>
+        )}
+
+        {error && <p className="text-[13px] text-[#a63d40]">{error}</p>}
+
+        <PrimaryButton onClick={submit} full icon={loading ? Loader2 : Check}>
+          {mode === "signup" ? t.createAccountBtn : t.logInBtn}
+        </PrimaryButton>
+
+        <button
+          onClick={() => onSwitchMode(mode === "signup" ? "login" : "signup")}
+          className="w-full text-center text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 mt-1"
+        >
+          {mode === "signup" ? t.authSwitchToLogin : t.authSwitchToSignup}
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function LandingPage() {
+  const { t } = useI18n();
+  const [authMode, setAuthMode] = useState(null); // null | "signup" | "login"
+
+  return (
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body flex flex-col" style={{ colorScheme: "light" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+        .font-display { font-family: 'Zilla Slab', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+      `}</style>
+
+      <div className="max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="h-10 w-10 rounded-full bg-[#1B3A2F] grid place-items-center">
+            <PawPrint size={19} className="text-[#F7F3E8]" />
+          </div>
+          <h1 className="font-display text-[22px] text-[#1B3A2F] leading-none">Paw Wallet</h1>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <LanguageSwitcher />
+          <GhostButton onClick={() => setAuthMode("login")}>{t.signIn}</GhostButton>
+          <PrimaryButton onClick={() => setAuthMode("signup")}>{t.signUp}</PrimaryButton>
+        </div>
+      </div>
+
+      <div className="flex-1 max-w-3xl mx-auto px-6 flex flex-col items-center text-center justify-center py-16 gap-6">
+        <div className="h-16 w-16 rounded-full bg-[#1B3A2F] grid place-items-center mb-2">
+          <PawPrint size={30} className="text-[#F7F3E8]" />
+        </div>
+        <h2 className="font-display text-[32px] sm:text-[42px] leading-tight text-[#1B3A2F]">{t.landingHeadline}</h2>
+        <p className="text-[15px] sm:text-[16px] text-[#5b6d63] max-w-xl">{t.landingSub}</p>
+        <div className="flex items-center gap-3 mt-2">
+          <PrimaryButton onClick={() => setAuthMode("signup")} icon={Plus}>
+            {t.signUp}
+          </PrimaryButton>
+          <GhostButton onClick={() => setAuthMode("login")}>{t.signIn}</GhostButton>
+        </div>
+      </div>
+
+      {authMode && <AuthModal mode={authMode} onClose={() => setAuthMode(null)} onSwitchMode={setAuthMode} />}
+    </div>
+  );
+}
+
+function AuthGate() {
+  const { t } = useI18n();
+  const [session, setSession] = useState(undefined); // undefined = loading
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  if (session === undefined) {
+    return (
+      <div className="min-h-screen w-full bg-[#EFE9D6] grid place-items-center text-[#5b6d63] gap-3 flex-col flex font-body">
+        <Loader2 className="animate-spin" size={22} />
+        <span className="text-[13px]">{t.verifyingSession}</span>
+      </div>
+    );
+  }
+
+  if (!session) return <LandingPage />;
+
+  return <PawWalletInner key={session.user.id} session={session} />;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main App                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -1578,7 +1901,7 @@ const TAB_IDS = [
   { id: "vets", key: "navVets", icon: Stethoscope },
 ];
 
-function PawWalletInner() {
+function PawWalletInner({ session }) {
   const { t } = useI18n();
   const [dogs, setDogs] = useState([]);
   const [activeId, setActiveId] = useState(null);
@@ -1589,23 +1912,33 @@ function PawWalletInner() {
   const [dogMenuOpen, setDogMenuOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  // load
+  const userId = session.user.id;
+  const displayName = session.user.user_metadata?.first_name || session.user.email;
+
+  // load — only this user's dogs
   useEffect(() => {
     (async () => {
-      const { data, error } = await supabase.from("dogs").select("id, payload").order("created_at");
+      const { data, error } = await supabase
+        .from("dogs")
+        .select("id, payload")
+        .eq("user_id", userId)
+        .order("created_at");
       if (!error && data) setDogs(data.map((row) => row.payload));
       const savedActive = localStorage.getItem("paw-wallet-active");
       if (savedActive) setActiveId(savedActive);
       setLoaded(true);
     })();
-  }, []);
+  }, [userId]);
 
-  const persistDogs = useCallback(async (next) => {
-    setDogs(next);
-    for (const dog of next) {
-      await supabase.from("dogs").upsert({ id: dog.id, payload: dog });
-    }
-  }, []);
+  const persistDogs = useCallback(
+    async (next) => {
+      setDogs(next);
+      for (const dog of next) {
+        await supabase.from("dogs").upsert({ id: dog.id, payload: dog, user_id: userId });
+      }
+    },
+    [userId]
+  );
 
   useEffect(() => {
     if (!loaded) return;
@@ -1637,7 +1970,7 @@ function PawWalletInner() {
     const next = dogs.filter((d) => d.id !== id);
     setDogs(next);
     try {
-      await supabase.from("dogs").delete().eq("id", id);
+      await supabase.from("dogs").delete().eq("id", id).eq("user_id", userId);
     } catch {
       /* ignore */
     }
@@ -1678,7 +2011,14 @@ function PawWalletInner() {
           </div>
 
           <div className="flex items-center gap-2.5">
+            <span className="hidden sm:inline text-[12.5px] text-[#5b6d63]">{t.greeting(displayName)}</span>
             <LanguageSwitcher />
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="text-[12.5px] font-medium text-[#5b6d63] hover:text-[#a63d40] underline underline-offset-2 transition"
+            >
+              {t.logOut}
+            </button>
             {dogs.length > 0 && (
               <div className="relative">
                 <button
@@ -1816,7 +2156,7 @@ export default function PawWallet() {
 
   return (
     <I18nContext.Provider value={value}>
-      <PawWalletInner />
+      <AuthGate />
     </I18nContext.Provider>
   );
 }
