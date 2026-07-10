@@ -1031,6 +1031,10 @@ function AddDogModal({ onClose, onSave, existingDog }) {
             </Field>
           )}
 
+          <Field label={t.fieldMicrochip}>
+            <input className={monoInputCls} value={form.microchip} onChange={set("microchip")} placeholder="15 haneli numara" />
+          </Field>
+
           <CountryCityPicker
             t={t}
             countryLabel={t.fieldBirthCountry}
@@ -1049,10 +1053,6 @@ function AddDogModal({ onClose, onSave, existingDog }) {
             onCountryChange={setVal("livingCountry")}
             onCityChange={setVal("livingCity")}
           />
-
-          <Field label={t.fieldMicrochip}>
-            <input className={monoInputCls} value={form.microchip} onChange={set("microchip")} placeholder="15 haneli numara" />
-          </Field>
         </div>
       </div>
 
