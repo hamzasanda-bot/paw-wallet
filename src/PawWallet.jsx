@@ -23,7 +23,9 @@ import {
   ClipboardList,
   Pill,
   CalendarClock,
+  Scale,
 } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 /* ------------------------------------------------------------------ */
 /*  Languages                                                          */
@@ -204,6 +206,18 @@ const TRANSLATIONS = {
     apptReminderNote: "Randevudan 1 gün önce sahibine otomatik e-posta hatırlatması gönderilir.",
     apptStatusUpcoming: "YAKLAŞIYOR",
     apptStatusPast: "GEÇTİ",
+    navWeight: "Ağırlık",
+    weightTitle: "Ağırlık & Büyüme",
+    weightSubtitle: (dogName, count) => `${dogName} için kayıtlı ${count} ölçüm`,
+    fieldIdealWeight: "Veteriner tavsiyeli ideal ağırlık (kg)",
+    saveIdealWeightBtn: "Kaydet",
+    addWeightBtn: "Ölçüm Ekle",
+    weightEmpty: "Henüz ağırlık kaydı yok. İlk ölçümü ekleyerek başlayın.",
+    addWeightModalTitle: "Ağırlık Ölçümü Ekle",
+    fieldWeightDate: "Ölçüm tarihi",
+    fieldWeightKg: "Ağırlık (kg)",
+    weightChartTitle: "Zaman İçinde Ağırlık",
+    weightChartIdealLine: "İdeal ağırlık",
   },
   en: {
     tagline: "Your dog's digital passport",
@@ -371,6 +385,18 @@ const TRANSLATIONS = {
     apptReminderNote: "An automatic email reminder is sent to the owner 1 day before the appointment.",
     apptStatusUpcoming: "UPCOMING",
     apptStatusPast: "PAST",
+    navWeight: "Weight",
+    weightTitle: "Weight & Growth",
+    weightSubtitle: (dogName, count) => `${count} measurements recorded for ${dogName}`,
+    fieldIdealWeight: "Vet-recommended ideal weight (kg)",
+    saveIdealWeightBtn: "Save",
+    addWeightBtn: "Add Measurement",
+    weightEmpty: "No weight records yet. Add the first one to get started.",
+    addWeightModalTitle: "Add Weight Measurement",
+    fieldWeightDate: "Measurement date",
+    fieldWeightKg: "Weight (kg)",
+    weightChartTitle: "Weight Over Time",
+    weightChartIdealLine: "Ideal weight",
   },
   fr: {
     tagline: "Le passeport numérique de votre chien",
@@ -538,6 +564,18 @@ const TRANSLATIONS = {
     apptReminderNote: "Un rappel automatique par e-mail est envoyé au propriétaire 1 jour avant le rendez-vous.",
     apptStatusUpcoming: "À VENIR",
     apptStatusPast: "PASSÉ",
+    navWeight: "Poids",
+    weightTitle: "Poids & Croissance",
+    weightSubtitle: (dogName, count) => `${count} mesures enregistrées pour ${dogName}`,
+    fieldIdealWeight: "Poids idéal recommandé par le vétérinaire (kg)",
+    saveIdealWeightBtn: "Enregistrer",
+    addWeightBtn: "Ajouter une Mesure",
+    weightEmpty: "Aucune mesure de poids. Ajoutez la première pour commencer.",
+    addWeightModalTitle: "Ajouter une Mesure de Poids",
+    fieldWeightDate: "Date de mesure",
+    fieldWeightKg: "Poids (kg)",
+    weightChartTitle: "Évolution du Poids",
+    weightChartIdealLine: "Poids idéal",
   },
   de: {
     tagline: "Der digitale Pass Ihres Hundes",
@@ -705,6 +743,18 @@ const TRANSLATIONS = {
     apptReminderNote: "Eine automatische E-Mail-Erinnerung wird 1 Tag vor dem Termin an den Besitzer gesendet.",
     apptStatusUpcoming: "BEVORSTEHEND",
     apptStatusPast: "VERGANGEN",
+    navWeight: "Gewicht",
+    weightTitle: "Gewicht & Wachstum",
+    weightSubtitle: (dogName, count) => `${count} Messungen für ${dogName}`,
+    fieldIdealWeight: "Vom Tierarzt empfohlenes Idealgewicht (kg)",
+    saveIdealWeightBtn: "Speichern",
+    addWeightBtn: "Messung Hinzufügen",
+    weightEmpty: "Noch keine Gewichtsmessungen. Fügen Sie die erste hinzu.",
+    addWeightModalTitle: "Gewichtsmessung Hinzufügen",
+    fieldWeightDate: "Messdatum",
+    fieldWeightKg: "Gewicht (kg)",
+    weightChartTitle: "Gewichtsverlauf",
+    weightChartIdealLine: "Idealgewicht",
   },
   es: {
     tagline: "El pasaporte digital de tu perro",
@@ -872,6 +922,18 @@ const TRANSLATIONS = {
     apptReminderNote: "Se envía un recordatorio automático por correo al dueño 1 día antes de la cita.",
     apptStatusUpcoming: "PRÓXIMA",
     apptStatusPast: "PASADA",
+    navWeight: "Peso",
+    weightTitle: "Peso y Crecimiento",
+    weightSubtitle: (dogName, count) => `${count} mediciones registradas para ${dogName}`,
+    fieldIdealWeight: "Peso ideal recomendado por el veterinario (kg)",
+    saveIdealWeightBtn: "Guardar",
+    addWeightBtn: "Añadir Medición",
+    weightEmpty: "Aún no hay mediciones de peso. Añade la primera para empezar.",
+    addWeightModalTitle: "Añadir Medición de Peso",
+    fieldWeightDate: "Fecha de medición",
+    fieldWeightKg: "Peso (kg)",
+    weightChartTitle: "Peso a lo Largo del Tiempo",
+    weightChartIdealLine: "Peso ideal",
   },
 };
 
@@ -2378,6 +2440,156 @@ function AppointmentTab({ dog, onAdd, onDelete }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Weight & growth tab                                                 */
+/* ------------------------------------------------------------------ */
+
+function AddWeightModal({ onClose, onSave }) {
+  const { t } = useI18n();
+  const [date, setDate] = useState(todayISO());
+  const [weight, setWeight] = useState("");
+
+  const submit = () => {
+    const w = parseFloat(weight);
+    if (!date || !w || w <= 0) return;
+    onSave({ id: uid(), date, weight: w });
+  };
+
+  return (
+    <Modal title={t.addWeightModalTitle} onClose={onClose}>
+      <div className="space-y-3.5">
+        <Field label={t.fieldWeightDate}>
+          <input type="date" className={inputCls} value={date} onChange={(e) => setDate(e.target.value)} />
+        </Field>
+        <Field label={t.fieldWeightKg}>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            className={inputCls}
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            placeholder="12.5"
+          />
+        </Field>
+      </div>
+      <div className="mt-6 flex justify-end gap-2">
+        <GhostButton onClick={onClose}>{t.cancel}</GhostButton>
+        <PrimaryButton onClick={submit} icon={Check}>
+          {t.saveBtn}
+        </PrimaryButton>
+      </div>
+    </Modal>
+  );
+}
+
+function WeightChart({ entries, idealWeight, t }) {
+  const data = [...entries]
+    .sort((a, b) => (a.date > b.date ? 1 : -1))
+    .map((e) => ({ date: e.date, weight: e.weight, label: e.date.slice(5) }));
+
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4 mb-5" style={{ height: 260 }}>
+      <p className="font-display text-[15px] text-[#1B3A2F] mb-2">{t.weightChartTitle}</p>
+      <ResponsiveContainer width="100%" height="85%">
+        <LineChart data={data} margin={{ top: 8, right: 16, left: -12, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e3d9bd" />
+          <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#5b6d63" }} />
+          <YAxis tick={{ fontSize: 11, fill: "#5b6d63" }} domain={["auto", "auto"]} />
+          <Tooltip
+            contentStyle={{ background: "#FBF8EE", border: "1px solid #d8cfb4", borderRadius: 8, fontSize: 12 }}
+            formatter={(value) => [`${value} kg`, ""]}
+          />
+          {idealWeight > 0 && (
+            <ReferenceLine
+              y={idealWeight}
+              stroke="#C9A227"
+              strokeDasharray="4 4"
+              label={{ value: t.weightChartIdealLine, fontSize: 10, fill: "#8a6d16", position: "insideTopRight" }}
+            />
+          )}
+          <Line type="monotone" dataKey="weight" stroke="#1B3A2F" strokeWidth={2.5} dot={{ r: 3.5, fill: "#1B3A2F" }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+function WeightTab({ dog, onSaveIdeal, onAdd, onDelete }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const [showAdd, setShowAdd] = useState(false);
+  const [idealInput, setIdealInput] = useState(dog.idealWeight || "");
+  const entries = [...(dog.weightEntries || [])];
+  const sorted = [...entries].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  return (
+    <div>
+      <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5 mb-5 flex flex-wrap items-end gap-3">
+        <div className="flex-1 min-w-[220px]">
+          <Field label={t.fieldIdealWeight}>
+            <input
+              type="number"
+              step="0.1"
+              min="0"
+              className={inputCls}
+              value={idealInput}
+              onChange={(e) => setIdealInput(e.target.value)}
+            />
+          </Field>
+        </div>
+        <PrimaryButton onClick={() => onSaveIdeal(parseFloat(idealInput) || 0)}>{t.saveIdealWeightBtn}</PrimaryButton>
+      </div>
+
+      {entries.length > 1 && <WeightChart entries={entries} idealWeight={dog.idealWeight || 0} t={t} />}
+
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.weightTitle}</h3>
+          <p className="text-[13px] text-[#5b6d63]">{t.weightSubtitle(dog.name, entries.length)}</p>
+        </div>
+        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+          {t.addWeightBtn}
+        </PrimaryButton>
+      </div>
+
+      {sorted.length === 0 ? (
+        <EmptyState icon={Scale} text={t.weightEmpty} />
+      ) : (
+        <div className="space-y-2">
+          {sorted.map((entry) => (
+            <div
+              key={entry.id}
+              className="flex items-center justify-between rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] px-4 py-3"
+            >
+              <div className="flex items-center gap-3">
+                <Scale size={16} className="text-[#1B3A2F]" />
+                <span className="text-[14px] text-[#1f2a24]">{fmtDate(entry.date, locale)}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[14px] font-semibold text-[#1B3A2F]">{entry.weight} kg</span>
+                <button onClick={() => onDelete(entry.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showAdd && (
+        <AddWeightModal
+          onClose={() => setShowAdd(false)}
+          onSave={(entry) => {
+            onAdd(entry);
+            setShowAdd(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 function VetTab({ dog, onAssign, onRemove }) {
   const { t } = useI18n();
   const assignedIds = dog.vets.map((v) => v.vetId);
@@ -2675,6 +2887,7 @@ const TAB_IDS = [
   { id: "health", key: "navHealth", icon: ClipboardList },
   { id: "medications", key: "navMedications", icon: Pill },
   { id: "appointments", key: "navAppointments", icon: CalendarClock },
+  { id: "weight", key: "navWeight", icon: Scale },
   { id: "vets", key: "navVets", icon: Stethoscope },
 ];
 
@@ -2778,6 +2991,12 @@ function PawWalletInner({ session }) {
   const addAppointment = (a) => updateDog(activeDog.id, (d) => ({ ...d, appointments: [...(d.appointments || []), a] }));
   const deleteAppointment = (id) =>
     updateDog(activeDog.id, (d) => ({ ...d, appointments: (d.appointments || []).filter((a) => a.id !== id) }));
+
+  const saveIdealWeight = (idealWeight) => updateDog(activeDog.id, (d) => ({ ...d, idealWeight }));
+  const addWeightEntry = (entry) =>
+    updateDog(activeDog.id, (d) => ({ ...d, weightEntries: [...(d.weightEntries || []), entry] }));
+  const deleteWeightEntry = (id) =>
+    updateDog(activeDog.id, (d) => ({ ...d, weightEntries: (d.weightEntries || []).filter((e) => e.id !== id) }));
 
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
@@ -2915,6 +3134,9 @@ function PawWalletInner({ session }) {
             {tab === "medications" && <MedicationTab dog={activeDog} onAdd={addMedication} onDelete={deleteMedication} />}
             {tab === "appointments" && (
               <AppointmentTab dog={activeDog} onAdd={addAppointment} onDelete={deleteAppointment} />
+            )}
+            {tab === "weight" && (
+              <WeightTab dog={activeDog} onSaveIdeal={saveIdealWeight} onAdd={addWeightEntry} onDelete={deleteWeightEntry} />
             )}
             {tab === "vets" && <VetTab dog={activeDog} onAssign={assignVet} onRemove={removeVet} />}
           </>
