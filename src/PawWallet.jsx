@@ -125,6 +125,19 @@ const TRANSLATIONS = {
     fieldBatchNumber: "Parti / seri numarası",
     fieldCertificate: "Sertifika / belge",
     chooseFileText: "Dosya seç (görsel veya belge)",
+    documentsTitle: "Belgeler",
+    documentsSubtitle: (count) => `${count} belge yüklendi`,
+    addDocumentBtn: "Belge Ekle",
+    documentsEmpty: "Henüz belge yüklenmedi.",
+    addDocumentModalTitle: "Belge Ekle",
+    fieldDocumentType: "Belge türü",
+    docTypeTravel: "Seyahat Belgesi (AB Pet Passport)",
+    docTypeInsurance: "Sigorta Poliçesi",
+    docTypeOwnership: "Sahiplik Belgesi",
+    docTypeOther: "Diğer",
+    fieldDocumentLabel: "Belge adı",
+    fieldDocumentFile: "Dosya",
+    viewDocumentBtn: "Görüntüle",
     saveBtn: "Kaydet",
     labelApplication: "Uygulama",
     labelNextDose: "Sonraki Doz",
@@ -358,6 +371,19 @@ const TRANSLATIONS = {
     fieldBatchNumber: "Batch / lot number",
     fieldCertificate: "Certificate / document",
     chooseFileText: "Choose file (image or document)",
+    documentsTitle: "Documents",
+    documentsSubtitle: (count) => `${count} documents uploaded`,
+    addDocumentBtn: "Add Document",
+    documentsEmpty: "No documents uploaded yet.",
+    addDocumentModalTitle: "Add Document",
+    fieldDocumentType: "Document type",
+    docTypeTravel: "Travel Document (EU Pet Passport)",
+    docTypeInsurance: "Insurance Policy",
+    docTypeOwnership: "Ownership Document",
+    docTypeOther: "Other",
+    fieldDocumentLabel: "Document name",
+    fieldDocumentFile: "File",
+    viewDocumentBtn: "View",
     saveBtn: "Save",
     labelApplication: "Given",
     labelNextDose: "Next Dose",
@@ -591,6 +617,19 @@ const TRANSLATIONS = {
     fieldBatchNumber: "Numéro de lot",
     fieldCertificate: "Certificat / document",
     chooseFileText: "Choisir un fichier (image ou document)",
+    documentsTitle: "Documents",
+    documentsSubtitle: (count) => `${count} documents téléversés`,
+    addDocumentBtn: "Ajouter un Document",
+    documentsEmpty: "Aucun document téléversé.",
+    addDocumentModalTitle: "Ajouter un Document",
+    fieldDocumentType: "Type de document",
+    docTypeTravel: "Document de Voyage (Passeport UE)",
+    docTypeInsurance: "Police d'Assurance",
+    docTypeOwnership: "Certificat de Propriété",
+    docTypeOther: "Autre",
+    fieldDocumentLabel: "Nom du document",
+    fieldDocumentFile: "Fichier",
+    viewDocumentBtn: "Voir",
     saveBtn: "Enregistrer",
     labelApplication: "Administré",
     labelNextDose: "Prochaine Dose",
@@ -824,6 +863,19 @@ const TRANSLATIONS = {
     fieldBatchNumber: "Chargennummer",
     fieldCertificate: "Zertifikat / Dokument",
     chooseFileText: "Datei wählen (Bild oder Dokument)",
+    documentsTitle: "Dokumente",
+    documentsSubtitle: (count) => `${count} Dokumente hochgeladen`,
+    addDocumentBtn: "Dokument Hinzufügen",
+    documentsEmpty: "Noch keine Dokumente hochgeladen.",
+    addDocumentModalTitle: "Dokument Hinzufügen",
+    fieldDocumentType: "Dokumenttyp",
+    docTypeTravel: "Reisedokument (EU-Heimtierausweis)",
+    docTypeInsurance: "Versicherungspolice",
+    docTypeOwnership: "Eigentumsnachweis",
+    docTypeOther: "Andere",
+    fieldDocumentLabel: "Dokumentname",
+    fieldDocumentFile: "Datei",
+    viewDocumentBtn: "Ansehen",
     saveBtn: "Speichern",
     labelApplication: "Verabreicht",
     labelNextDose: "Nächste Dosis",
@@ -1057,6 +1109,19 @@ const TRANSLATIONS = {
     fieldBatchNumber: "Número de lote",
     fieldCertificate: "Certificado / documento",
     chooseFileText: "Elegir archivo (imagen o documento)",
+    documentsTitle: "Documentos",
+    documentsSubtitle: (count) => `${count} documentos subidos`,
+    addDocumentBtn: "Añadir Documento",
+    documentsEmpty: "Aún no hay documentos subidos.",
+    addDocumentModalTitle: "Añadir Documento",
+    fieldDocumentType: "Tipo de documento",
+    docTypeTravel: "Documento de Viaje (Pasaporte UE)",
+    docTypeInsurance: "Póliza de Seguro",
+    docTypeOwnership: "Documento de Propiedad",
+    docTypeOther: "Otro",
+    fieldDocumentLabel: "Nombre del documento",
+    fieldDocumentFile: "Archivo",
+    viewDocumentBtn: "Ver",
     saveBtn: "Guardar",
     labelApplication: "Aplicada",
     labelNextDose: "Próxima Dosis",
@@ -1850,7 +1915,7 @@ function StampSeal({ qrUrl }) {
   );
 }
 
-function PassportTab({ dog, onEdit, onDelete }) {
+function PassportTab({ dog, onEdit, onDelete, onAddDocument, onDeleteDocument }) {
   const { t, lang } = useI18n();
   const ownerPhone = fmtPhone(dog.ownerPhoneCode, dog.ownerPhoneNumber);
   const emergencyPhone = fmtPhone(dog.emergencyPhoneCode, dog.emergencyPhoneNumber);
@@ -1878,6 +1943,7 @@ function PassportTab({ dog, onEdit, onDelete }) {
   const locale = LANGS.find((l) => l.code === lang)?.locale;
 
   return (
+    <>
     <div className="grid lg:grid-cols-[1fr_280px] gap-6">
       <div
         className="rounded-2xl border border-[#C9A227]/50 bg-[#FBF8EE] p-6 sm:p-8 relative overflow-hidden"
@@ -1954,12 +2020,174 @@ function PassportTab({ dog, onEdit, onDelete }) {
         </div>
       </div>
     </div>
+
+    <DocumentsSection dog={dog} onAdd={onAddDocument} onDelete={onDeleteDocument} />
+    </>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Vaccination tab                                                     */
+/*  Documents (Belgeler)                                                */
 /* ------------------------------------------------------------------ */
+
+const DOC_TYPE_KEYS = {
+  Seyahat: "docTypeTravel",
+  Sigorta: "docTypeInsurance",
+  Sahiplik: "docTypeOwnership",
+  Diğer: "docTypeOther",
+};
+
+function AddDocumentModal({ onClose, onSave }) {
+  const { t } = useI18n();
+  const [type, setType] = useState("Seyahat");
+  const [label, setLabel] = useState("");
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef(null);
+
+  const handleFile = async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setBusy(true);
+    setFileName(f.name);
+    try {
+      if (f.type.startsWith("image/")) {
+        const dataUrl = await resizeImageFile(f, 900, 0.82);
+        setFile({ dataUrl, isImage: true, mimeType: "image/jpeg" });
+      } else {
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(f);
+        });
+        setFile({ dataUrl, isImage: false, mimeType: f.type });
+      }
+    } catch {
+      /* ignore */
+    }
+    setBusy(false);
+  };
+
+  const submit = () => {
+    if (!file) return;
+    onSave({
+      id: uid(),
+      type,
+      label: type === "Diğer" ? label || t.docTypeOther : "",
+      fileName,
+      mimeType: file.mimeType,
+      isImage: file.isImage,
+      data: file.dataUrl,
+      date: todayISO(),
+    });
+  };
+
+  return (
+    <Modal title={t.addDocumentModalTitle} onClose={onClose}>
+      <div className="space-y-3.5">
+        <Field label={t.fieldDocumentType}>
+          <select className={inputCls} value={type} onChange={(e) => setType(e.target.value)}>
+            {Object.entries(DOC_TYPE_KEYS).map(([key, tKey]) => (
+              <option key={key} value={key}>
+                {t[tKey]}
+              </option>
+            ))}
+          </select>
+        </Field>
+        {type === "Diğer" && (
+          <Field label={t.fieldDocumentLabel}>
+            <input className={inputCls} value={label} onChange={(e) => setLabel(e.target.value)} />
+          </Field>
+        )}
+        <Field label={t.fieldDocumentFile}>
+          <div
+            className="flex items-center gap-3 rounded-md border border-dashed border-[#c7bb95] bg-[#efe8d1] px-3 py-2.5 cursor-pointer"
+            onClick={() => fileRef.current?.click()}
+          >
+            {busy ? <Loader2 size={15} className="animate-spin text-[#5b6d63]" /> : <Upload size={15} className="text-[#5b6d63]" />}
+            <span className="text-[13px] text-[#5b6d63] truncate">{fileName || t.chooseFileText}</span>
+          </div>
+          <input ref={fileRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleFile} />
+        </Field>
+      </div>
+      <div className="mt-6 flex justify-end gap-2">
+        <GhostButton onClick={onClose}>{t.cancel}</GhostButton>
+        <PrimaryButton onClick={submit} icon={Check}>
+          {t.saveBtn}
+        </PrimaryButton>
+      </div>
+    </Modal>
+  );
+}
+
+function DocumentsSection({ dog, onAdd, onDelete }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const [showAdd, setShowAdd] = useState(false);
+  const docs = dog.documents || [];
+
+  return (
+    <div className="rounded-2xl border border-[#d8cfb4] bg-[#FBF8EE] p-6 mt-6">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-display text-[18px] text-[#1B3A2F]">{t.documentsTitle}</h3>
+          <p className="text-[12.5px] text-[#5b6d63]">{t.documentsSubtitle(docs.length)}</p>
+        </div>
+        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+          {t.addDocumentBtn}
+        </PrimaryButton>
+      </div>
+
+      {docs.length === 0 ? (
+        <EmptyState icon={ClipboardList} text={t.documentsEmpty} />
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {docs.map((doc) => (
+            <div key={doc.id} className="rounded-xl border border-[#d8cfb4] bg-white/50 overflow-hidden flex flex-col">
+              <div className="h-28 bg-[#eee6cd] grid place-items-center overflow-hidden">
+                {doc.isImage ? (
+                  <img src={doc.data} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <ClipboardList size={26} className="text-[#a89c6e]" />
+                )}
+              </div>
+              <div className="p-3 flex-1 flex flex-col gap-1.5">
+                <p className="text-[13px] font-semibold text-[#1B3A2F]">
+                  {doc.label || t[DOC_TYPE_KEYS[doc.type]] || doc.type}
+                </p>
+                <p className="text-[11px] text-[#8d8560]">{fmtDate(doc.date, locale)}</p>
+                <div className="mt-auto flex items-center justify-between pt-1.5">
+                  <a
+                    href={doc.data}
+                    download={doc.fileName || "document"}
+                    className="text-[12px] font-medium text-[#1B3A2F] underline underline-offset-2"
+                  >
+                    {t.viewDocumentBtn}
+                  </a>
+                  <button onClick={() => onDelete(doc.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showAdd && (
+        <AddDocumentModal
+          onClose={() => setShowAdd(false)}
+          onSave={(d) => {
+            onAdd(d);
+            setShowAdd(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
 
 function AddVaccineModal({ onClose, onSave }) {
   const { t } = useI18n();
@@ -3940,6 +4168,10 @@ function PawWalletInner({ session }) {
   const deleteVaccine = (id) => updateDog(activeDog.id, (d) => ({ ...d, vaccines: d.vaccines.filter((v) => v.id !== id) }));
 
   const saveHealthProfile = (profile) => updateDog(activeDog.id, (d) => ({ ...d, ...profile }));
+
+  const addDocument = (doc) => updateDog(activeDog.id, (d) => ({ ...d, documents: [...(d.documents || []), doc] }));
+  const deleteDocument = (id) =>
+    updateDog(activeDog.id, (d) => ({ ...d, documents: (d.documents || []).filter((doc) => doc.id !== id) }));
   const addHealthRecord = (r) =>
     updateDog(activeDog.id, (d) => ({ ...d, healthRecords: [...(d.healthRecords || []), r] }));
   const deleteHealthRecord = (id) =>
@@ -4090,7 +4322,13 @@ function PawWalletInner({ session }) {
             </div>
 
             {tab === "passport" && (
-              <PassportTab dog={activeDog} onEdit={() => setEditingDog(activeDog)} onDelete={() => setConfirmDeleteId(activeDog.id)} />
+              <PassportTab
+                dog={activeDog}
+                onEdit={() => setEditingDog(activeDog)}
+                onDelete={() => setConfirmDeleteId(activeDog.id)}
+                onAddDocument={addDocument}
+                onDeleteDocument={deleteDocument}
+              />
             )}
             {tab === "vaccines" && <VaccineTab dog={activeDog} onAdd={addVaccine} onDelete={deleteVaccine} />}
             {tab === "health" && (
