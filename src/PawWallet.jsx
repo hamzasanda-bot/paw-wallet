@@ -877,15 +877,15 @@ function CountryCityPicker({ t, countryLabel, cityLabel, country, city, onCountr
   );
 }
 
-/* Dial-code select + local number input, side by side */
+/* Dial-code select embedded inside the number input — avoids flex/grid overflow issues entirely */
 function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeholder }) {
   return (
     <Field label={label}>
-      <div className="flex gap-2">
+      <div className="relative">
         <select
-          className={inputCls + " w-[92px] shrink-0 font-mono px-2"}
           value={code}
           onChange={(e) => onCodeChange(e.target.value)}
+          className="absolute left-0 top-0 bottom-0 w-[68px] rounded-l-md border-0 border-r border-[#d8cfb4] bg-transparent text-[13px] font-mono text-[#1f2a24] pl-2 pr-0.5 focus:outline-none focus:ring-0 appearance-none"
         >
           <option value="">+__</option>
           {COUNTRIES.map((c) => (
@@ -895,7 +895,7 @@ function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeho
           ))}
         </select>
         <input
-          className={inputCls + " font-mono flex-1 min-w-0"}
+          className={inputCls + " font-mono pl-[76px]"}
           value={number}
           onChange={(e) => onNumberChange(e.target.value)}
           placeholder={placeholder || "5xx xxx xx xx"}
