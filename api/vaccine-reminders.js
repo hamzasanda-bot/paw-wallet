@@ -1,12 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
+import webpush from "web-push";
 
 // Bu fonksiyon her gün otomatik çalışır (bkz. vercel.json).
 // 1) Supabase'deki tüm köpekleri okur
 // 2) Her aşının "sonraki doz" tarihine göre kalan günü hesaplar
-//    -> tam olarak 30, 7 veya 1 gün kaldıysa hatırlatma e-postası gönderir
+//    -> tam olarak 30, 7 veya 1 gün kaldıysa hatırlatma e-postası + push bildirimi gönderir
 // 3) Her randevunun tarihine göre kalan günü hesaplar
-//    -> tam olarak 1 gün kaldıysa hatırlatma e-postası gönderir
-// 4) Daha önce gönderilenleri kayda işler (tekrar tekrar mail atmamak için)
+//    -> tam olarak 1 gün kaldıysa hatırlatma e-postası + push bildirimi gönderir
+// 4) Daha önce gönderilenleri kayda işler (tekrar tekrar göndermemek için)
+
+webpush.setVapidDetails(
+  process.env.VAPID_SUBJECT || "mailto:hello@paw-wallet.app",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
 
 export default async function handler(req, res) {
   // Basit bir güvenlik önlemi: sadece doğru "secret" ile çağrılırsa çalışsın.
@@ -18,7 +25,7 @@ export default async function handler(req, res) {
 
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-  const { data: rows, error } = await supabase.from("dogs").select("id, payload");
+  const { data: rows, error } = await supabase.from("dogs").select("id, payload, user_id");
   if (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -30,7 +37,7 @@ export default async function handler(req, res) {
 
   for (const row of rows || []) {
     const dog = row.payload;
-    if (!dog || !dog.ownerEmail) continue;
+    if (!dog) continue;
 
     let changed = false;
 
@@ -50,11 +57,16 @@ export default async function handler(req, res) {
       const alreadySent = vaccine.remindersSent || [];
       if (alreadySent.includes(threshold)) continue;
 
+      const label = daysLeft === 30 ? "1 ay" : daysLeft === 7 ? "1 hafta" : "1 gün";
+      const title = `🐾 ${dog.name} için aşı hatırlatması`;
+      const body = `${vaccine.name} aşısının bir sonraki dozuna ${label} kaldı.`;
+
       try {
-        await sendVaccineReminderEmail({ dog, vaccine, daysLeft });
+        if (dog.ownerEmail) await sendVaccineReminderEmail({ dog, vaccine, daysLeft });
+        await sendPushToUser(supabase, row.user_id, { title, body });
         vaccine.remindersSent = [...alreadySent, threshold];
         changed = true;
-        sentLog.push(`AŞI: ${dog.name} → ${vaccine.name} (${threshold} gün kala) → ${dog.ownerEmail}`);
+        sentLog.push(`AŞI: ${dog.name} → ${vaccine.name} (${threshold} gün kala)`);
       } catch (err) {
         sentLog.push(`HATA (aşı): ${dog.name} → ${vaccine.name}: ${err.message}`);
       }
@@ -69,11 +81,15 @@ export default async function handler(req, res) {
       if (daysLeft !== 1) continue;
       if (appt.reminderSent) continue;
 
+      const title = `🐾 ${dog.name} için yarın randevu var`;
+      const body = `${appt.type} randevusu yarın${appt.time ? `, saat ${appt.time}` : ""}.`;
+
       try {
-        await sendAppointmentReminderEmail({ dog, appt });
+        if (dog.ownerEmail) await sendAppointmentReminderEmail({ dog, appt });
+        await sendPushToUser(supabase, row.user_id, { title, body });
         appt.reminderSent = true;
         changed = true;
-        sentLog.push(`RANDEVU: ${dog.name} → ${appt.type} (${appt.date}) → ${dog.ownerEmail}`);
+        sentLog.push(`RANDEVU: ${dog.name} → ${appt.type} (${appt.date})`);
       } catch (err) {
         sentLog.push(`HATA (randevu): ${dog.name} → ${appt.type}: ${err.message}`);
       }
@@ -85,6 +101,26 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ ok: true, checked: rows?.length || 0, sent: sentLog });
+}
+
+async function sendPushToUser(supabase, userId, { title, body }) {
+  if (!userId || !process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) return;
+
+  const { data: subs } = await supabase.from("push_subscriptions").select("*").eq("user_id", userId);
+  if (!subs || subs.length === 0) return;
+
+  const payload = JSON.stringify({ title, body, url: "/" });
+
+  for (const sub of subs) {
+    try {
+      await webpush.sendNotification({ endpoint: sub.endpoint, keys: sub.keys }, payload);
+    } catch (err) {
+      // Abonelik artık geçersizse (kullanıcı bildirimleri kapatmış olabilir) sessizce sil
+      if (err.statusCode === 404 || err.statusCode === 410) {
+        await supabase.from("push_subscriptions").delete().eq("id", sub.id);
+      }
+    }
+  }
 }
 
 async function sendEmail({ to, subject, html }) {

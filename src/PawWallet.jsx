@@ -27,7 +27,10 @@ import {
   UserCog,
   Building2,
   ShieldAlert,
+  Bell,
+  BellRing,
 } from "lucide-react";
+import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 /* ------------------------------------------------------------------ */
@@ -271,6 +274,10 @@ const TRANSLATIONS = {
     pendingApprovalBadge: "ONAY BEKLİYOR",
     rejectedBadge: "REDDEDİLDİ",
     cancelRequestBtn: "İptal Et",
+    enableNotificationsBtn: "Bildirimleri Aç",
+    notificationsEnabled: "Bildirimler açık",
+    notificationPermissionDenied: "Bildirim izni reddedildi. Tarayıcı ayarlarından izin verebilirsin.",
+    notificationsUnsupported: "Bu tarayıcı push bildirimlerini desteklemiyor.",
   },
   en: {
     tagline: "Your dog's digital passport",
@@ -500,6 +507,10 @@ const TRANSLATIONS = {
     pendingApprovalBadge: "PENDING APPROVAL",
     rejectedBadge: "REJECTED",
     cancelRequestBtn: "Cancel",
+    enableNotificationsBtn: "Enable Notifications",
+    notificationsEnabled: "Notifications on",
+    notificationPermissionDenied: "Notification permission denied. You can allow it in your browser settings.",
+    notificationsUnsupported: "This browser doesn't support push notifications.",
   },
   fr: {
     tagline: "Le passeport numérique de votre chien",
@@ -729,6 +740,10 @@ const TRANSLATIONS = {
     pendingApprovalBadge: "EN ATTENTE",
     rejectedBadge: "REFUSÉ",
     cancelRequestBtn: "Annuler",
+    enableNotificationsBtn: "Activer les Notifications",
+    notificationsEnabled: "Notifications activées",
+    notificationPermissionDenied: "Autorisation refusée. Vous pouvez l'activer dans les paramètres du navigateur.",
+    notificationsUnsupported: "Ce navigateur ne prend pas en charge les notifications push.",
   },
   de: {
     tagline: "Der digitale Pass Ihres Hundes",
@@ -958,6 +973,10 @@ const TRANSLATIONS = {
     pendingApprovalBadge: "GENEHMIGUNG AUSSTEHEND",
     rejectedBadge: "ABGELEHNT",
     cancelRequestBtn: "Abbrechen",
+    enableNotificationsBtn: "Benachrichtigungen Aktivieren",
+    notificationsEnabled: "Benachrichtigungen aktiv",
+    notificationPermissionDenied: "Berechtigung verweigert. Sie können sie in den Browsereinstellungen aktivieren.",
+    notificationsUnsupported: "Dieser Browser unterstützt keine Push-Benachrichtigungen.",
   },
   es: {
     tagline: "El pasaporte digital de tu perro",
@@ -1187,6 +1206,10 @@ const TRANSLATIONS = {
     pendingApprovalBadge: "PENDIENTE DE APROBACIÓN",
     rejectedBadge: "RECHAZADO",
     cancelRequestBtn: "Cancelar",
+    enableNotificationsBtn: "Activar Notificaciones",
+    notificationsEnabled: "Notificaciones activadas",
+    notificationPermissionDenied: "Permiso denegado. Puedes activarlo en la configuración del navegador.",
+    notificationsUnsupported: "Este navegador no admite notificaciones push.",
   },
 };
 
@@ -3756,6 +3779,53 @@ const TAB_IDS = [
   { id: "vets", key: "navVets", icon: Stethoscope },
 ];
 
+function NotificationButton({ userId }) {
+  const { t } = useI18n();
+  const [state, setState] = useState("checking"); // checking | unsupported | default | granted | denied
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const supported = await isPushSupported();
+      if (!supported) return setState("unsupported");
+      const perm = await getPushPermissionState();
+      setState(perm);
+    })();
+  }, []);
+
+  const enable = async () => {
+    try {
+      await subscribeToPush(userId);
+      setState("granted");
+      setMsg(t.notificationsEnabled);
+    } catch {
+      const perm = await getPushPermissionState();
+      setState(perm);
+      setMsg(perm === "denied" ? t.notificationPermissionDenied : "");
+    }
+  };
+
+  if (state === "checking") return null;
+  if (state === "unsupported") return null;
+  if (state === "granted") {
+    return (
+      <span className="hidden sm:flex items-center gap-1 text-[12px] text-[#1B3A2F]">
+        <BellRing size={13} /> {t.notificationsEnabled}
+      </span>
+    );
+  }
+
+  return (
+    <button
+      onClick={enable}
+      title={msg}
+      className="flex items-center gap-1.5 rounded-full border border-[#d8cfb4] bg-[#FBF8EE] px-3 py-1.5 text-[12.5px] font-medium text-[#3c473f] hover:bg-[#f0e9cd] transition"
+    >
+      <Bell size={13} /> <span className="hidden sm:inline">{t.enableNotificationsBtn}</span>
+    </button>
+  );
+}
+
 function PawWalletInner({ session }) {
   const { t } = useI18n();
   const [dogs, setDogs] = useState([]);
@@ -3879,6 +3949,7 @@ function PawWalletInner({ session }) {
 
           <div className="flex items-center gap-2.5">
             <span className="hidden sm:inline text-[12.5px] text-[#5b6d63]">{t.greeting(displayName)}</span>
+            <NotificationButton userId={userId} />
             <LanguageSwitcher />
             <button
               onClick={() => supabase.auth.signOut()}
