@@ -63,7 +63,7 @@ export default async function handler(req, res) {
 
       try {
         if (dog.ownerEmail) await sendVaccineReminderEmail({ dog, vaccine, daysLeft });
-        await sendPushToUser(supabase, row.user_id, { title, body });
+        await sendPushToUser(supabase, row.user_id, { title, body, url: `/?dog=${row.id}&tab=vaccines` });
         vaccine.remindersSent = [...alreadySent, threshold];
         changed = true;
         sentLog.push(`AŞI: ${dog.name} → ${vaccine.name} (${threshold} gün kala)`);
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
 
       try {
         if (dog.ownerEmail) await sendAppointmentReminderEmail({ dog, appt });
-        await sendPushToUser(supabase, row.user_id, { title, body });
+        await sendPushToUser(supabase, row.user_id, { title, body, url: `/?dog=${row.id}&tab=appointments` });
         appt.reminderSent = true;
         changed = true;
         sentLog.push(`RANDEVU: ${dog.name} → ${appt.type} (${appt.date})`);
@@ -103,13 +103,13 @@ export default async function handler(req, res) {
   return res.status(200).json({ ok: true, checked: rows?.length || 0, sent: sentLog });
 }
 
-async function sendPushToUser(supabase, userId, { title, body }) {
+async function sendPushToUser(supabase, userId, { title, body, url }) {
   if (!userId || !process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) return;
 
   const { data: subs } = await supabase.from("push_subscriptions").select("*").eq("user_id", userId);
   if (!subs || subs.length === 0) return;
 
-  const payload = JSON.stringify({ title, body, url: "/" });
+  const payload = JSON.stringify({ title, body, url: url || "/" });
 
   for (const sub of subs) {
     try {

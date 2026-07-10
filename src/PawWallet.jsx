@@ -1901,9 +1901,9 @@ function PassportTab({ dog, onEdit, onDelete }) {
           </div>
         </div>
 
-        <div className="flex gap-6 flex-wrap sm:flex-nowrap">
+        <div className="flex gap-4 sm:gap-6">
           <div className="shrink-0">
-            <div className="h-40 w-32 rounded-lg overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
+            <div className="h-28 w-24 sm:h-40 sm:w-32 rounded-lg overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
               {dog.photo ? (
                 <img src={dog.photo} alt={dog.name} className="h-full w-full object-cover" />
               ) : (
@@ -1911,19 +1911,20 @@ function PassportTab({ dog, onEdit, onDelete }) {
               )}
             </div>
           </div>
-          <div className="flex-1 min-w-[220px]">
-            <h2 className="font-display text-[30px] leading-tight text-[#1B3A2F]">{dog.name}</h2>
-            <p className="text-[13.5px] text-[#5b6d63] mb-3">{dog.breed}</p>
-            <div>
-              <Row label={t.rowBirthDate} value={fmtDate(dog.birthDate, locale)} />
-              <Row label={t.rowGender} value={dog.gender === "Dişi" ? t.female : t.male} />
-              <Row label={t.rowColor} value={dog.color} />
-              <Row label={t.rowBirthPlace} value={birthPlace} />
-              <Row label={t.rowLivingPlace} value={livingPlace} />
-              <Row label={t.rowMicrochip} value={dog.microchip} mono />
-              <Row label={t.rowPassportNo} value={dog.passportNumber} mono />
-            </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <h2 className="font-display text-[22px] sm:text-[30px] leading-tight text-[#1B3A2F] truncate">{dog.name}</h2>
+            <p className="text-[12.5px] sm:text-[13.5px] text-[#5b6d63]">{dog.breed}</p>
           </div>
+        </div>
+
+        <div className="mt-4">
+          <Row label={t.rowBirthDate} value={fmtDate(dog.birthDate, locale)} />
+          <Row label={t.rowGender} value={dog.gender === "Dişi" ? t.female : t.male} />
+          <Row label={t.rowColor} value={dog.color} />
+          <Row label={t.rowBirthPlace} value={birthPlace} />
+          <Row label={t.rowLivingPlace} value={livingPlace} />
+          <Row label={t.rowMicrochip} value={dog.microchip} mono />
+          <Row label={t.rowPassportNo} value={dog.passportNumber} mono />
         </div>
 
         <div className="h-px bg-[#C9A227]/30 my-5" />
@@ -3888,6 +3889,26 @@ function PawWalletInner({ session }) {
   useEffect(() => {
     if (loaded && dogs.length && !activeId) setActiveId(dogs[0].id);
   }, [loaded, dogs, activeId]);
+
+  // Push bildirimine tıklanınca gelen ?dog=...&tab=... adresini oku
+  useEffect(() => {
+    if (!loaded || !dogs.length) return;
+    const params = new URLSearchParams(window.location.search);
+    const dogParam = params.get("dog");
+    const tabParam = params.get("tab");
+    let used = false;
+    if (dogParam && dogs.some((d) => d.id === dogParam)) {
+      setActiveId(dogParam);
+      used = true;
+    }
+    if (tabParam && TAB_IDS.some((t) => t.id === tabParam)) {
+      setTab(tabParam);
+      used = true;
+    }
+    if (used) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, [loaded, dogs]);
 
   const activeDog = dogs.find((d) => d.id === activeId) || null;
 

@@ -23,18 +23,28 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(title, options))
 })
 
-// --- Bildirime tıklanınca uygulamayı aç ---
+// --- Bildirime tıklanınca uygulamayı aç ve ilgili sayfaya götür ---
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
   const url = event.notification.data?.url || '/'
+  const targetUrl = new URL(url, self.location.origin).href
+
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(async (clientList) => {
       for (const client of clientList) {
         if (client.url.includes(self.location.origin) && 'focus' in client) {
-          return client.focus()
+          await client.focus()
+          if ('navigate' in client) {
+            try {
+              await client.navigate(targetUrl)
+            } catch {
+              /* bazı tarayıcılar navigate'i desteklemeyebilir, focus yeterli */
+            }
+          }
+          return
         }
       }
-      if (self.clients.openWindow) return self.clients.openWindow(url)
+      if (self.clients.openWindow) return self.clients.openWindow(targetUrl)
     })
   )
 })
