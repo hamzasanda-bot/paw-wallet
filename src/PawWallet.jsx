@@ -4039,10 +4039,7 @@ function PawWalletInner({ session }) {
         ) : (
           <>
             {/* tabs */}
-            <div
-              className="flex gap-1.5 mb-5 border-b border-[#d8cfb4] overflow-x-auto"
-              style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
-            >
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:flex lg:flex-wrap gap-2 mb-6">
               {TAB_IDS.map((tabDef) => {
                 const Icon = tabDef.icon;
                 const isActive = tab === tabDef.id;
@@ -4050,14 +4047,22 @@ function PawWalletInner({ session }) {
                   <button
                     key={tabDef.id}
                     onClick={() => setTab(tabDef.id)}
-                    className={`flex items-center gap-2 px-4 py-2.5 text-[13.5px] font-semibold rounded-t-lg border border-b-0 transition shrink-0 whitespace-nowrap ${
-                      isActive ? "bg-[#FBF8EE] border-[#d8cfb4] text-[#1B3A2F] -mb-px" : "border-transparent text-[#8d8560] hover:text-[#5b6d63]"
+                    className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
+                      isActive
+                        ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                        : "bg-[#FBF8EE] border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
                     }`}
                   >
-                    <Icon size={15} /> {t[tabDef.key]}
-                    {tabDef.id === "vaccines" && activeDog.vaccines.some((v) => v.nextDate && daysUntil(v.nextDate) < 0) && (
-                      <AlertTriangle size={13} className="text-[#a63d40]" />
-                    )}
+                    <span className="relative">
+                      <Icon size={16} />
+                      {tabDef.id === "vaccines" && activeDog.vaccines.some((v) => v.nextDate && daysUntil(v.nextDate) < 0) && (
+                        <AlertTriangle
+                          size={10}
+                          className={`absolute -top-1 -right-1.5 ${isActive ? "text-[#f3c8c9]" : "text-[#a63d40]"}`}
+                        />
+                      )}
+                    </span>
+                    <span className="leading-tight">{t[tabDef.key]}</span>
                   </button>
                 );
               })}
