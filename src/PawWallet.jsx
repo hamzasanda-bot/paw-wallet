@@ -20,6 +20,9 @@ import {
   Star,
   Loader2,
   Globe,
+  ClipboardList,
+  Pill,
+  CalendarClock,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -153,6 +156,54 @@ const TRANSLATIONS = {
     loginUserNotFound: "E-posta veya şifre hatalı, ya da hesabın henüz onaylanmamış olabilir.",
     verifyingSession: "Doğrulanıyor…",
     greeting: (name) => `Merhaba, ${name}`,
+    navHealth: "Sağlık",
+    navMedications: "İlaçlar",
+    navAppointments: "Randevular",
+    healthProfileTitle: "Sağlık Profili",
+    fieldChronicConditions: "Kronik hastalıklar",
+    fieldAllergies: "Alerjiler",
+    saveProfileBtn: "Profili Kaydet",
+    healthRecordsTitle: "Muayene Kayıtları",
+    healthRecordsSubtitle: (dogName, count) => `${dogName} için kayıtlı ${count} muayene`,
+    addHealthRecordBtn: "Kayıt Ekle",
+    healthRecordsEmpty: "Henüz muayene kaydı yok. İlk kaydı ekleyerek başlayın.",
+    addHealthRecordModalTitle: "Muayene Kaydı Ekle",
+    fieldRecordDate: "Muayene tarihi",
+    fieldDiagnosis: "Tanı",
+    fieldExamNotes: "Muayene notları",
+    fieldTreatment: "Uygulanan tedavi",
+    fieldPrescription: "Reçete",
+    fieldLabResults: "Laboratuvar sonuçları",
+    fieldSurgery: "Bu kayıt bir ameliyatı kapsıyor",
+    fieldSurgeryNotes: "Ameliyat notları",
+    medicationsTitle: "İlaç Takibi",
+    medicationsSubtitle: (dogName, count) => `${dogName} için kayıtlı ${count} ilaç`,
+    addMedicationBtn: "İlaç Ekle",
+    medicationsEmpty: "Henüz ilaç kaydı yok. İlk ilacı ekleyerek başlayın.",
+    addMedicationModalTitle: "İlaç Kaydı Ekle",
+    fieldMedName: "İlaç adı",
+    fieldDose: "Doz",
+    fieldStartDate: "Başlangıç tarihi",
+    fieldEndDate: "Bitiş tarihi",
+    fieldDailyReminder: "Günlük hatırlatıcı gönder",
+    medStatusActive: "AKTİF",
+    medStatusUpcoming: "YAKLAŞIYOR",
+    medStatusFinished: "TAMAMLANDI",
+    appointmentsTitle: "Randevu Takibi",
+    appointmentsSubtitle: (dogName, count) => `${dogName} için kayıtlı ${count} randevu`,
+    addAppointmentBtn: "Randevu Ekle",
+    appointmentsEmpty: "Henüz randevu yok. İlk randevuyu ekleyerek başlayın.",
+    addAppointmentModalTitle: "Randevu Ekle",
+    fieldApptDate: "Randevu tarihi",
+    fieldApptTime: "Saat",
+    fieldApptType: "Randevu türü",
+    apptTypeExam: "Muayene",
+    apptTypeVaccine: "Aşı",
+    apptTypeCheckup: "Kontrol",
+    fieldApptVet: "Veteriner / klinik",
+    apptReminderNote: "Randevudan 1 gün önce sahibine otomatik e-posta hatırlatması gönderilir.",
+    apptStatusUpcoming: "YAKLAŞIYOR",
+    apptStatusPast: "GEÇTİ",
   },
   en: {
     tagline: "Your dog's digital passport",
@@ -272,6 +323,54 @@ const TRANSLATIONS = {
     loginUserNotFound: "Incorrect email or password, or your account may not be confirmed yet.",
     verifyingSession: "Verifying…",
     greeting: (name) => `Hi, ${name}`,
+    navHealth: "Health",
+    navMedications: "Medications",
+    navAppointments: "Appointments",
+    healthProfileTitle: "Health Profile",
+    fieldChronicConditions: "Chronic conditions",
+    fieldAllergies: "Allergies",
+    saveProfileBtn: "Save Profile",
+    healthRecordsTitle: "Health Records",
+    healthRecordsSubtitle: (dogName, count) => `${count} records for ${dogName}`,
+    addHealthRecordBtn: "Add Record",
+    healthRecordsEmpty: "No health records yet. Add the first one to get started.",
+    addHealthRecordModalTitle: "Add Health Record",
+    fieldRecordDate: "Exam date",
+    fieldDiagnosis: "Diagnosis",
+    fieldExamNotes: "Exam notes",
+    fieldTreatment: "Treatment given",
+    fieldPrescription: "Prescription",
+    fieldLabResults: "Lab results",
+    fieldSurgery: "This record includes a surgery",
+    fieldSurgeryNotes: "Surgery notes",
+    medicationsTitle: "Medication Tracking",
+    medicationsSubtitle: (dogName, count) => `${count} medications for ${dogName}`,
+    addMedicationBtn: "Add Medication",
+    medicationsEmpty: "No medications yet. Add the first one to get started.",
+    addMedicationModalTitle: "Add Medication",
+    fieldMedName: "Medication name",
+    fieldDose: "Dose",
+    fieldStartDate: "Start date",
+    fieldEndDate: "End date",
+    fieldDailyReminder: "Send daily reminder",
+    medStatusActive: "ACTIVE",
+    medStatusUpcoming: "UPCOMING",
+    medStatusFinished: "FINISHED",
+    appointmentsTitle: "Appointment Tracking",
+    appointmentsSubtitle: (dogName, count) => `${count} appointments for ${dogName}`,
+    addAppointmentBtn: "Add Appointment",
+    appointmentsEmpty: "No appointments yet. Add the first one to get started.",
+    addAppointmentModalTitle: "Add Appointment",
+    fieldApptDate: "Appointment date",
+    fieldApptTime: "Time",
+    fieldApptType: "Appointment type",
+    apptTypeExam: "Exam",
+    apptTypeVaccine: "Vaccine",
+    apptTypeCheckup: "Check-up",
+    fieldApptVet: "Vet / clinic",
+    apptReminderNote: "An automatic email reminder is sent to the owner 1 day before the appointment.",
+    apptStatusUpcoming: "UPCOMING",
+    apptStatusPast: "PAST",
   },
   fr: {
     tagline: "Le passeport numérique de votre chien",
@@ -391,6 +490,54 @@ const TRANSLATIONS = {
     loginUserNotFound: "E-mail ou mot de passe incorrect, ou votre compte n'est peut-être pas encore confirmé.",
     verifyingSession: "Vérification…",
     greeting: (name) => `Bonjour, ${name}`,
+    navHealth: "Santé",
+    navMedications: "Médicaments",
+    navAppointments: "Rendez-vous",
+    healthProfileTitle: "Profil de Santé",
+    fieldChronicConditions: "Maladies chroniques",
+    fieldAllergies: "Allergies",
+    saveProfileBtn: "Enregistrer le Profil",
+    healthRecordsTitle: "Dossiers Médicaux",
+    healthRecordsSubtitle: (dogName, count) => `${count} consultations pour ${dogName}`,
+    addHealthRecordBtn: "Ajouter un Dossier",
+    healthRecordsEmpty: "Aucun dossier médical. Ajoutez le premier pour commencer.",
+    addHealthRecordModalTitle: "Ajouter un Dossier Médical",
+    fieldRecordDate: "Date de consultation",
+    fieldDiagnosis: "Diagnostic",
+    fieldExamNotes: "Notes de consultation",
+    fieldTreatment: "Traitement administré",
+    fieldPrescription: "Ordonnance",
+    fieldLabResults: "Résultats de laboratoire",
+    fieldSurgery: "Ce dossier inclut une opération",
+    fieldSurgeryNotes: "Notes de l'opération",
+    medicationsTitle: "Suivi des Médicaments",
+    medicationsSubtitle: (dogName, count) => `${count} médicaments pour ${dogName}`,
+    addMedicationBtn: "Ajouter un Médicament",
+    medicationsEmpty: "Aucun médicament. Ajoutez le premier pour commencer.",
+    addMedicationModalTitle: "Ajouter un Médicament",
+    fieldMedName: "Nom du médicament",
+    fieldDose: "Dose",
+    fieldStartDate: "Date de début",
+    fieldEndDate: "Date de fin",
+    fieldDailyReminder: "Envoyer un rappel quotidien",
+    medStatusActive: "ACTIF",
+    medStatusUpcoming: "À VENIR",
+    medStatusFinished: "TERMINÉ",
+    appointmentsTitle: "Suivi des Rendez-vous",
+    appointmentsSubtitle: (dogName, count) => `${count} rendez-vous pour ${dogName}`,
+    addAppointmentBtn: "Ajouter un Rendez-vous",
+    appointmentsEmpty: "Aucun rendez-vous. Ajoutez le premier pour commencer.",
+    addAppointmentModalTitle: "Ajouter un Rendez-vous",
+    fieldApptDate: "Date du rendez-vous",
+    fieldApptTime: "Heure",
+    fieldApptType: "Type de rendez-vous",
+    apptTypeExam: "Consultation",
+    apptTypeVaccine: "Vaccin",
+    apptTypeCheckup: "Contrôle",
+    fieldApptVet: "Vétérinaire / clinique",
+    apptReminderNote: "Un rappel automatique par e-mail est envoyé au propriétaire 1 jour avant le rendez-vous.",
+    apptStatusUpcoming: "À VENIR",
+    apptStatusPast: "PASSÉ",
   },
   de: {
     tagline: "Der digitale Pass Ihres Hundes",
@@ -510,6 +657,54 @@ const TRANSLATIONS = {
     loginUserNotFound: "E-Mail oder Passwort falsch, oder Ihr Konto ist noch nicht bestätigt.",
     verifyingSession: "Wird überprüft…",
     greeting: (name) => `Hallo, ${name}`,
+    navHealth: "Gesundheit",
+    navMedications: "Medikamente",
+    navAppointments: "Termine",
+    healthProfileTitle: "Gesundheitsprofil",
+    fieldChronicConditions: "Chronische Erkrankungen",
+    fieldAllergies: "Allergien",
+    saveProfileBtn: "Profil Speichern",
+    healthRecordsTitle: "Behandlungsakten",
+    healthRecordsSubtitle: (dogName, count) => `${count} Untersuchungen für ${dogName}`,
+    addHealthRecordBtn: "Eintrag Hinzufügen",
+    healthRecordsEmpty: "Noch keine Behandlungsakte. Fügen Sie die erste hinzu.",
+    addHealthRecordModalTitle: "Behandlungseintrag Hinzufügen",
+    fieldRecordDate: "Untersuchungsdatum",
+    fieldDiagnosis: "Diagnose",
+    fieldExamNotes: "Untersuchungsnotizen",
+    fieldTreatment: "Durchgeführte Behandlung",
+    fieldPrescription: "Rezept",
+    fieldLabResults: "Laborergebnisse",
+    fieldSurgery: "Dieser Eintrag beinhaltet eine Operation",
+    fieldSurgeryNotes: "Operationsnotizen",
+    medicationsTitle: "Medikamentenverfolgung",
+    medicationsSubtitle: (dogName, count) => `${count} Medikamente für ${dogName}`,
+    addMedicationBtn: "Medikament Hinzufügen",
+    medicationsEmpty: "Noch keine Medikamente. Fügen Sie das erste hinzu.",
+    addMedicationModalTitle: "Medikament Hinzufügen",
+    fieldMedName: "Medikamentenname",
+    fieldDose: "Dosis",
+    fieldStartDate: "Startdatum",
+    fieldEndDate: "Enddatum",
+    fieldDailyReminder: "Tägliche Erinnerung senden",
+    medStatusActive: "AKTIV",
+    medStatusUpcoming: "BEVORSTEHEND",
+    medStatusFinished: "ABGESCHLOSSEN",
+    appointmentsTitle: "Terminverfolgung",
+    appointmentsSubtitle: (dogName, count) => `${count} Termine für ${dogName}`,
+    addAppointmentBtn: "Termin Hinzufügen",
+    appointmentsEmpty: "Noch keine Termine. Fügen Sie den ersten hinzu.",
+    addAppointmentModalTitle: "Termin Hinzufügen",
+    fieldApptDate: "Termindatum",
+    fieldApptTime: "Uhrzeit",
+    fieldApptType: "Terminart",
+    apptTypeExam: "Untersuchung",
+    apptTypeVaccine: "Impfung",
+    apptTypeCheckup: "Kontrolle",
+    fieldApptVet: "Tierarzt / Klinik",
+    apptReminderNote: "Eine automatische E-Mail-Erinnerung wird 1 Tag vor dem Termin an den Besitzer gesendet.",
+    apptStatusUpcoming: "BEVORSTEHEND",
+    apptStatusPast: "VERGANGEN",
   },
   es: {
     tagline: "El pasaporte digital de tu perro",
@@ -629,6 +824,54 @@ const TRANSLATIONS = {
     loginUserNotFound: "Correo o contraseña incorrectos, o tu cuenta aún no está confirmada.",
     verifyingSession: "Verificando…",
     greeting: (name) => `Hola, ${name}`,
+    navHealth: "Salud",
+    navMedications: "Medicamentos",
+    navAppointments: "Citas",
+    healthProfileTitle: "Perfil de Salud",
+    fieldChronicConditions: "Enfermedades crónicas",
+    fieldAllergies: "Alergias",
+    saveProfileBtn: "Guardar Perfil",
+    healthRecordsTitle: "Historial Médico",
+    healthRecordsSubtitle: (dogName, count) => `${count} consultas registradas para ${dogName}`,
+    addHealthRecordBtn: "Añadir Registro",
+    healthRecordsEmpty: "Aún no hay registros médicos. Añade el primero para empezar.",
+    addHealthRecordModalTitle: "Añadir Registro Médico",
+    fieldRecordDate: "Fecha de consulta",
+    fieldDiagnosis: "Diagnóstico",
+    fieldExamNotes: "Notas de la consulta",
+    fieldTreatment: "Tratamiento aplicado",
+    fieldPrescription: "Receta",
+    fieldLabResults: "Resultados de laboratorio",
+    fieldSurgery: "Este registro incluye una cirugía",
+    fieldSurgeryNotes: "Notas de la cirugía",
+    medicationsTitle: "Seguimiento de Medicamentos",
+    medicationsSubtitle: (dogName, count) => `${count} medicamentos para ${dogName}`,
+    addMedicationBtn: "Añadir Medicamento",
+    medicationsEmpty: "Aún no hay medicamentos. Añade el primero para empezar.",
+    addMedicationModalTitle: "Añadir Medicamento",
+    fieldMedName: "Nombre del medicamento",
+    fieldDose: "Dosis",
+    fieldStartDate: "Fecha de inicio",
+    fieldEndDate: "Fecha de fin",
+    fieldDailyReminder: "Enviar recordatorio diario",
+    medStatusActive: "ACTIVO",
+    medStatusUpcoming: "PRÓXIMO",
+    medStatusFinished: "FINALIZADO",
+    appointmentsTitle: "Seguimiento de Citas",
+    appointmentsSubtitle: (dogName, count) => `${count} citas para ${dogName}`,
+    addAppointmentBtn: "Añadir Cita",
+    appointmentsEmpty: "Aún no hay citas. Añade la primera para empezar.",
+    addAppointmentModalTitle: "Añadir Cita",
+    fieldApptDate: "Fecha de la cita",
+    fieldApptTime: "Hora",
+    fieldApptType: "Tipo de cita",
+    apptTypeExam: "Consulta",
+    apptTypeVaccine: "Vacuna",
+    apptTypeCheckup: "Revisión",
+    fieldApptVet: "Veterinario / clínica",
+    apptReminderNote: "Se envía un recordatorio automático por correo al dueño 1 día antes de la cita.",
+    apptStatusUpcoming: "PRÓXIMA",
+    apptStatusPast: "PASADA",
   },
 };
 
@@ -1604,6 +1847,537 @@ function VaccineTab({ dog, onAdd, onDelete }) {
 /*  Vet assignment tab                                                  */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/*  Health records tab                                                  */
+/* ------------------------------------------------------------------ */
+
+function HealthProfileCard({ dog, onSave }) {
+  const { t } = useI18n();
+  const [chronic, setChronic] = useState(dog.chronicConditions || "");
+  const [allergies, setAllergies] = useState(dog.allergies || "");
+  const [dirty, setDirty] = useState(false);
+
+  return (
+    <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5 mb-5">
+      <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.healthProfileTitle}</p>
+      <div className="grid sm:grid-cols-2 gap-3.5">
+        <Field label={t.fieldChronicConditions}>
+          <input
+            className={inputCls}
+            value={chronic}
+            onChange={(e) => {
+              setChronic(e.target.value);
+              setDirty(true);
+            }}
+          />
+        </Field>
+        <Field label={t.fieldAllergies}>
+          <input
+            className={inputCls}
+            value={allergies}
+            onChange={(e) => {
+              setAllergies(e.target.value);
+              setDirty(true);
+            }}
+          />
+        </Field>
+      </div>
+      {dirty && (
+        <div className="mt-3 flex justify-end">
+          <PrimaryButton
+            icon={Check}
+            onClick={() => {
+              onSave({ chronicConditions: chronic, allergies });
+              setDirty(false);
+            }}
+          >
+            {t.saveProfileBtn}
+          </PrimaryButton>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AddHealthRecordModal({ onClose, onSave }) {
+  const { t } = useI18n();
+  const [form, setForm] = useState({
+    date: todayISO(),
+    diagnosis: "",
+    examNotes: "",
+    treatment: "",
+    prescription: "",
+    labResults: "",
+    isSurgery: false,
+    surgeryNotes: "",
+    vet: "",
+  });
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = () => {
+    if (!form.date) return;
+    onSave({ id: uid(), ...form });
+  };
+
+  return (
+    <Modal title={t.addHealthRecordModalTitle} onClose={onClose} wide>
+      <div className="space-y-3.5">
+        <div className="grid sm:grid-cols-2 gap-3.5">
+          <Field label={t.fieldRecordDate}>
+            <input type="date" className={inputCls} value={form.date} onChange={set("date")} />
+          </Field>
+          <Field label={t.fieldApptVet}>
+            <input className={inputCls} value={form.vet} onChange={set("vet")} />
+          </Field>
+        </div>
+        <Field label={t.fieldDiagnosis}>
+          <input className={inputCls} value={form.diagnosis} onChange={set("diagnosis")} />
+        </Field>
+        <Field label={t.fieldExamNotes}>
+          <textarea className={inputCls} rows={3} value={form.examNotes} onChange={set("examNotes")} />
+        </Field>
+        <div className="grid sm:grid-cols-2 gap-3.5">
+          <Field label={t.fieldTreatment}>
+            <textarea className={inputCls} rows={2} value={form.treatment} onChange={set("treatment")} />
+          </Field>
+          <Field label={t.fieldPrescription}>
+            <textarea className={inputCls} rows={2} value={form.prescription} onChange={set("prescription")} />
+          </Field>
+        </div>
+        <Field label={t.fieldLabResults}>
+          <textarea className={inputCls} rows={2} value={form.labResults} onChange={set("labResults")} />
+        </Field>
+        <label className="flex items-center gap-2 text-[13px] text-[#3c473f] cursor-pointer">
+          <input
+            type="checkbox"
+            checked={form.isSurgery}
+            onChange={(e) => setForm((f) => ({ ...f, isSurgery: e.target.checked }))}
+            className="h-4 w-4 accent-[#1B3A2F]"
+          />
+          {t.fieldSurgery}
+        </label>
+        {form.isSurgery && (
+          <Field label={t.fieldSurgeryNotes}>
+            <textarea className={inputCls} rows={2} value={form.surgeryNotes} onChange={set("surgeryNotes")} />
+          </Field>
+        )}
+      </div>
+      <div className="mt-6 flex justify-end gap-2">
+        <GhostButton onClick={onClose}>{t.cancel}</GhostButton>
+        <PrimaryButton onClick={submit} icon={Check}>
+          {t.saveBtn}
+        </PrimaryButton>
+      </div>
+    </Modal>
+  );
+}
+
+function HealthRecordCard({ record, onDelete }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-dashed border-[#d8cfb4]">
+        <div className="flex items-center gap-2.5">
+          <ClipboardList size={16} className="text-[#1B3A2F]" />
+          <span className="font-display text-[16px] text-[#1B3A2F]">{record.diagnosis || fmtDate(record.date, locale)}</span>
+          {record.isSurgery && (
+            <span className="text-[10px] font-bold tracking-wider px-2 py-1 rounded-full bg-[#a63d40] text-white">
+              {t.fieldSurgery.split(" ")[0]}
+            </span>
+          )}
+        </div>
+        <button onClick={() => onDelete(record.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+          <Trash2 size={14} />
+        </button>
+      </div>
+      <div className="px-5 py-3.5 space-y-2 text-[13px]">
+        <p className="text-[#5b6d63]">
+          <span className="font-semibold text-[#8d8560] uppercase text-[10.5px] tracking-wider mr-2">{t.fieldRecordDate}</span>
+          {fmtDate(record.date, locale)} {record.vet && `· ${record.vet}`}
+        </p>
+        {record.examNotes && <p className="text-[#1f2a24]">{record.examNotes}</p>}
+        {record.treatment && (
+          <p className="text-[#1f2a24]">
+            <span className="font-semibold text-[#8d8560] uppercase text-[10.5px] tracking-wider mr-2">{t.fieldTreatment}</span>
+            {record.treatment}
+          </p>
+        )}
+        {record.prescription && (
+          <p className="text-[#1f2a24]">
+            <span className="font-semibold text-[#8d8560] uppercase text-[10.5px] tracking-wider mr-2">{t.fieldPrescription}</span>
+            {record.prescription}
+          </p>
+        )}
+        {record.labResults && (
+          <p className="text-[#1f2a24]">
+            <span className="font-semibold text-[#8d8560] uppercase text-[10.5px] tracking-wider mr-2">{t.fieldLabResults}</span>
+            {record.labResults}
+          </p>
+        )}
+        {record.isSurgery && record.surgeryNotes && (
+          <p className="text-[#1f2a24]">
+            <span className="font-semibold text-[#8d8560] uppercase text-[10.5px] tracking-wider mr-2">{t.fieldSurgeryNotes}</span>
+            {record.surgeryNotes}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function HealthTab({ dog, onSaveProfile, onAddRecord, onDeleteRecord }) {
+  const { t } = useI18n();
+  const [showAdd, setShowAdd] = useState(false);
+  const records = [...(dog.healthRecords || [])].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  return (
+    <div>
+      <HealthProfileCard dog={dog} onSave={onSaveProfile} />
+
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.healthRecordsTitle}</h3>
+          <p className="text-[13px] text-[#5b6d63]">{t.healthRecordsSubtitle(dog.name, records.length)}</p>
+        </div>
+        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+          {t.addHealthRecordBtn}
+        </PrimaryButton>
+      </div>
+
+      {records.length === 0 ? (
+        <EmptyState icon={ClipboardList} text={t.healthRecordsEmpty} />
+      ) : (
+        <div className="space-y-3">
+          {records.map((r) => (
+            <HealthRecordCard key={r.id} record={r} onDelete={onDeleteRecord} />
+          ))}
+        </div>
+      )}
+
+      {showAdd && (
+        <AddHealthRecordModal
+          onClose={() => setShowAdd(false)}
+          onSave={(r) => {
+            onAddRecord(r);
+            setShowAdd(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Medication tab                                                      */
+/* ------------------------------------------------------------------ */
+
+function AddMedicationModal({ onClose, onSave }) {
+  const { t } = useI18n();
+  const [form, setForm] = useState({
+    name: "",
+    dose: "",
+    startDate: todayISO(),
+    endDate: "",
+    dailyReminder: false,
+  });
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = () => {
+    if (!form.name.trim() || !form.startDate) return;
+    onSave({ id: uid(), ...form });
+  };
+
+  return (
+    <Modal title={t.addMedicationModalTitle} onClose={onClose}>
+      <div className="space-y-3.5">
+        <Field label={t.fieldMedName}>
+          <input className={inputCls} value={form.name} onChange={set("name")} />
+        </Field>
+        <Field label={t.fieldDose}>
+          <input className={inputCls} value={form.dose} onChange={set("dose")} placeholder="1 tablet, günde 2 kez" />
+        </Field>
+        <div className="grid grid-cols-2 gap-3.5">
+          <Field label={t.fieldStartDate}>
+            <input type="date" className={inputCls} value={form.startDate} onChange={set("startDate")} />
+          </Field>
+          <Field label={t.fieldEndDate}>
+            <input type="date" className={inputCls} value={form.endDate} onChange={set("endDate")} />
+          </Field>
+        </div>
+        <label className="flex items-center gap-2 text-[13px] text-[#3c473f] cursor-pointer">
+          <input
+            type="checkbox"
+            checked={form.dailyReminder}
+            onChange={(e) => setForm((f) => ({ ...f, dailyReminder: e.target.checked }))}
+            className="h-4 w-4 accent-[#1B3A2F]"
+          />
+          {t.fieldDailyReminder}
+        </label>
+      </div>
+      <div className="mt-6 flex justify-end gap-2">
+        <GhostButton onClick={onClose}>{t.cancel}</GhostButton>
+        <PrimaryButton onClick={submit} icon={Check}>
+          {t.saveBtn}
+        </PrimaryButton>
+      </div>
+    </Modal>
+  );
+}
+
+function MedicationCard({ med, onDelete }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const today = todayISO();
+  let status;
+  if (med.startDate > today) status = { label: t.medStatusUpcoming, cls: "bg-[#C9A227] text-white" };
+  else if (med.endDate && med.endDate < today) status = { label: t.medStatusFinished, cls: "bg-[#8d8560] text-white" };
+  else status = { label: t.medStatusActive, cls: "bg-[#1B3A2F] text-[#F7F3E8]" };
+
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-dashed border-[#d8cfb4]">
+        <div className="flex items-center gap-2.5">
+          <Pill size={16} className="text-[#1B3A2F]" />
+          <span className="font-display text-[16px] text-[#1B3A2F]">{med.name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${status.cls}`}>{status.label}</span>
+          <button onClick={() => onDelete(med.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+      <div className="px-5 py-3.5 grid grid-cols-2 sm:grid-cols-3 gap-3 text-[13px]">
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldDose}</p>
+          <p className="text-[#1f2a24]">{med.dose || "—"}</p>
+        </div>
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldStartDate}</p>
+          <p className="text-[#1f2a24]">{fmtDate(med.startDate, locale)}</p>
+        </div>
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldEndDate}</p>
+          <p className="text-[#1f2a24]">{fmtDate(med.endDate, locale)}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MedicationTab({ dog, onAdd, onDelete }) {
+  const { t } = useI18n();
+  const [showAdd, setShowAdd] = useState(false);
+  const meds = [...(dog.medications || [])].sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.medicationsTitle}</h3>
+          <p className="text-[13px] text-[#5b6d63]">{t.medicationsSubtitle(dog.name, meds.length)}</p>
+        </div>
+        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+          {t.addMedicationBtn}
+        </PrimaryButton>
+      </div>
+
+      {meds.length === 0 ? (
+        <EmptyState icon={Pill} text={t.medicationsEmpty} />
+      ) : (
+        <div className="space-y-3">
+          {meds.map((m) => (
+            <MedicationCard key={m.id} med={m} onDelete={onDelete} />
+          ))}
+        </div>
+      )}
+
+      {showAdd && (
+        <AddMedicationModal
+          onClose={() => setShowAdd(false)}
+          onSave={(m) => {
+            onAdd(m);
+            setShowAdd(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Appointments tab                                                    */
+/* ------------------------------------------------------------------ */
+
+function AddAppointmentModal({ onClose, onSave }) {
+  const { t } = useI18n();
+  const [form, setForm] = useState({
+    date: "",
+    time: "",
+    type: "Muayene",
+    vetMode: "platform",
+    vetId: PLATFORM_VETS[0].id,
+    vetManual: "",
+  });
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = () => {
+    if (!form.date) return;
+    const vetLabel = form.vetMode === "platform" ? PLATFORM_VETS.find((v) => v.id === form.vetId)?.name : form.vetManual;
+    onSave({ id: uid(), date: form.date, time: form.time, type: form.type, vet: vetLabel });
+  };
+
+  return (
+    <Modal title={t.addAppointmentModalTitle} onClose={onClose}>
+      <div className="space-y-3.5">
+        <div className="grid grid-cols-2 gap-3.5">
+          <Field label={t.fieldApptDate}>
+            <input type="date" className={inputCls} value={form.date} onChange={set("date")} />
+          </Field>
+          <Field label={t.fieldApptTime}>
+            <input type="time" className={inputCls} value={form.time} onChange={set("time")} />
+          </Field>
+        </div>
+        <Field label={t.fieldApptType}>
+          <select className={inputCls} value={form.type} onChange={set("type")}>
+            <option value="Muayene">{t.apptTypeExam}</option>
+            <option value="Aşı">{t.apptTypeVaccine}</option>
+            <option value="Kontrol">{t.apptTypeCheckup}</option>
+          </select>
+        </Field>
+        <Field label={t.fieldApptVet}>
+          <div className="flex gap-2 mb-2">
+            <button
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, vetMode: "platform" }))}
+              className={`flex-1 rounded-md px-3 py-1.5 text-[12.5px] font-medium border transition ${
+                form.vetMode === "platform" ? "bg-[#1B3A2F] text-[#F7F3E8] border-[#1B3A2F]" : "border-[#d8cfb4] text-[#5b6d63]"
+              }`}
+            >
+              {t.chooseFromPlatform}
+            </button>
+            <button
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, vetMode: "manual" }))}
+              className={`flex-1 rounded-md px-3 py-1.5 text-[12.5px] font-medium border transition ${
+                form.vetMode === "manual" ? "bg-[#1B3A2F] text-[#F7F3E8] border-[#1B3A2F]" : "border-[#d8cfb4] text-[#5b6d63]"
+              }`}
+            >
+              {t.enterManually}
+            </button>
+          </div>
+          {form.vetMode === "platform" ? (
+            <select className={inputCls} value={form.vetId} onChange={set("vetId")}>
+              {PLATFORM_VETS.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.name} — {v.clinic}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input className={inputCls} value={form.vetManual} onChange={set("vetManual")} placeholder={t.fieldVetManualName} />
+          )}
+        </Field>
+        <p className="text-[11.5px] text-[#8a6d16] bg-[#f3e9c8] rounded-md px-3 py-2 flex items-start gap-1.5">
+          <CalendarClock size={14} className="shrink-0 mt-0.5" /> {t.apptReminderNote}
+        </p>
+      </div>
+      <div className="mt-6 flex justify-end gap-2">
+        <GhostButton onClick={onClose}>{t.cancel}</GhostButton>
+        <PrimaryButton onClick={submit} icon={Check}>
+          {t.saveBtn}
+        </PrimaryButton>
+      </div>
+    </Modal>
+  );
+}
+
+function AppointmentCard({ appt, onDelete }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const d = daysUntil(appt.date);
+  const isPast = d < 0;
+  const typeLabel = appt.type === "Aşı" ? t.apptTypeVaccine : appt.type === "Kontrol" ? t.apptTypeCheckup : t.apptTypeExam;
+
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-dashed border-[#d8cfb4]">
+        <div className="flex items-center gap-2.5">
+          <CalendarClock size={16} className="text-[#1B3A2F]" />
+          <span className="font-display text-[16px] text-[#1B3A2F]">{typeLabel}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${
+              isPast ? "bg-[#8d8560] text-white" : "bg-[#1B3A2F] text-[#F7F3E8]"
+            }`}
+          >
+            {isPast ? t.apptStatusPast : t.apptStatusUpcoming}
+          </span>
+          <button onClick={() => onDelete(appt.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+      <div className="px-5 py-3.5 grid grid-cols-2 sm:grid-cols-3 gap-3 text-[13px]">
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldApptDate}</p>
+          <p className="text-[#1f2a24]">{fmtDate(appt.date, locale)}</p>
+        </div>
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldApptTime}</p>
+          <p className="text-[#1f2a24] font-mono">{appt.time || "—"}</p>
+        </div>
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldApptVet}</p>
+          <p className="text-[#1f2a24]">{appt.vet || "—"}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AppointmentTab({ dog, onAdd, onDelete }) {
+  const { t } = useI18n();
+  const [showAdd, setShowAdd] = useState(false);
+  const appts = [...(dog.appointments || [])].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.appointmentsTitle}</h3>
+          <p className="text-[13px] text-[#5b6d63]">{t.appointmentsSubtitle(dog.name, appts.length)}</p>
+        </div>
+        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+          {t.addAppointmentBtn}
+        </PrimaryButton>
+      </div>
+
+      {appts.length === 0 ? (
+        <EmptyState icon={CalendarClock} text={t.appointmentsEmpty} />
+      ) : (
+        <div className="space-y-3">
+          {appts.map((a) => (
+            <AppointmentCard key={a.id} appt={a} onDelete={onDelete} />
+          ))}
+        </div>
+      )}
+
+      {showAdd && (
+        <AddAppointmentModal
+          onClose={() => setShowAdd(false)}
+          onSave={(a) => {
+            onAdd(a);
+            setShowAdd(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 function VetTab({ dog, onAssign, onRemove }) {
   const { t } = useI18n();
   const assignedIds = dog.vets.map((v) => v.vetId);
@@ -1898,6 +2672,9 @@ function AuthGate() {
 const TAB_IDS = [
   { id: "passport", key: "navPassport", icon: PawPrint },
   { id: "vaccines", key: "navVaccines", icon: Syringe },
+  { id: "health", key: "navHealth", icon: ClipboardList },
+  { id: "medications", key: "navMedications", icon: Pill },
+  { id: "appointments", key: "navAppointments", icon: CalendarClock },
   { id: "vets", key: "navVets", icon: Stethoscope },
 ];
 
@@ -1987,6 +2764,20 @@ function PawWalletInner({ session }) {
       return { ...d, vets };
     });
   const removeVet = (vetId) => updateDog(activeDog.id, (d) => ({ ...d, vets: d.vets.filter((v) => v.vetId !== vetId) }));
+
+  const saveHealthProfile = (profile) => updateDog(activeDog.id, (d) => ({ ...d, ...profile }));
+  const addHealthRecord = (r) =>
+    updateDog(activeDog.id, (d) => ({ ...d, healthRecords: [...(d.healthRecords || []), r] }));
+  const deleteHealthRecord = (id) =>
+    updateDog(activeDog.id, (d) => ({ ...d, healthRecords: (d.healthRecords || []).filter((r) => r.id !== id) }));
+
+  const addMedication = (m) => updateDog(activeDog.id, (d) => ({ ...d, medications: [...(d.medications || []), m] }));
+  const deleteMedication = (id) =>
+    updateDog(activeDog.id, (d) => ({ ...d, medications: (d.medications || []).filter((m) => m.id !== id) }));
+
+  const addAppointment = (a) => updateDog(activeDog.id, (d) => ({ ...d, appointments: [...(d.appointments || []), a] }));
+  const deleteAppointment = (id) =>
+    updateDog(activeDog.id, (d) => ({ ...d, appointments: (d.appointments || []).filter((a) => a.id !== id) }));
 
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
@@ -2113,6 +2904,18 @@ function PawWalletInner({ session }) {
               <PassportTab dog={activeDog} onEdit={() => setEditingDog(activeDog)} onDelete={() => setConfirmDeleteId(activeDog.id)} />
             )}
             {tab === "vaccines" && <VaccineTab dog={activeDog} onAdd={addVaccine} onDelete={deleteVaccine} />}
+            {tab === "health" && (
+              <HealthTab
+                dog={activeDog}
+                onSaveProfile={saveHealthProfile}
+                onAddRecord={addHealthRecord}
+                onDeleteRecord={deleteHealthRecord}
+              />
+            )}
+            {tab === "medications" && <MedicationTab dog={activeDog} onAdd={addMedication} onDelete={deleteMedication} />}
+            {tab === "appointments" && (
+              <AppointmentTab dog={activeDog} onAdd={addAppointment} onDelete={deleteAppointment} />
+            )}
             {tab === "vets" && <VetTab dog={activeDog} onAssign={assignVet} onRemove={removeVet} />}
           </>
         )}
