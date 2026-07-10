@@ -3289,7 +3289,7 @@ function AdminPanel({ session }) {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .font-display { font-family: 'Zilla Slab', serif; }
@@ -3542,7 +3542,7 @@ function VetPortal({ session }) {
   const pendingRequests = requests.filter((r) => r.status === "pending");
 
   return (
-    <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .font-display { font-family: 'Zilla Slab', serif; }
@@ -3786,10 +3786,14 @@ function NotificationButton({ userId }) {
 
   useEffect(() => {
     (async () => {
-      const supported = await isPushSupported();
-      if (!supported) return setState("unsupported");
-      const perm = await getPushPermissionState();
-      setState(perm);
+      try {
+        const supported = await isPushSupported();
+        if (!supported) return setState("unsupported");
+        const perm = await getPushPermissionState();
+        setState(perm || "unsupported");
+      } catch {
+        setState("unsupported");
+      }
     })();
   }, []);
 
@@ -3806,7 +3810,16 @@ function NotificationButton({ userId }) {
   };
 
   if (state === "checking") return null;
-  if (state === "unsupported") return null;
+  if (state === "unsupported") {
+    return (
+      <span
+        title={t.notificationsUnsupported}
+        className="hidden sm:flex items-center gap-1 text-[11.5px] text-[#a89c6e] cursor-help"
+      >
+        <Bell size={13} />
+      </span>
+    );
+  }
   if (state === "granted") {
     return (
       <span className="hidden sm:flex items-center gap-1 text-[12px] text-[#1B3A2F]">
@@ -3926,7 +3939,7 @@ function PawWalletInner({ session }) {
     updateDog(activeDog.id, (d) => ({ ...d, weightEntries: (d.weightEntries || []).filter((e) => e.id !== id) }));
 
   return (
-    <div className="min-h-screen w-full bg-[#EFE9D6] font-body" style={{ colorScheme: "light" }}>
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .font-display { font-family: 'Zilla Slab', serif; }
@@ -4026,7 +4039,10 @@ function PawWalletInner({ session }) {
         ) : (
           <>
             {/* tabs */}
-            <div className="flex gap-1.5 mb-5 border-b border-[#d8cfb4]">
+            <div
+              className="flex gap-1.5 mb-5 border-b border-[#d8cfb4] overflow-x-auto"
+              style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+            >
               {TAB_IDS.map((tabDef) => {
                 const Icon = tabDef.icon;
                 const isActive = tab === tabDef.id;
@@ -4034,7 +4050,7 @@ function PawWalletInner({ session }) {
                   <button
                     key={tabDef.id}
                     onClick={() => setTab(tabDef.id)}
-                    className={`flex items-center gap-2 px-4 py-2.5 text-[13.5px] font-semibold rounded-t-lg border border-b-0 transition ${
+                    className={`flex items-center gap-2 px-4 py-2.5 text-[13.5px] font-semibold rounded-t-lg border border-b-0 transition shrink-0 whitespace-nowrap ${
                       isActive ? "bg-[#FBF8EE] border-[#d8cfb4] text-[#1B3A2F] -mb-px" : "border-transparent text-[#8d8560] hover:text-[#5b6d63]"
                     }`}
                   >

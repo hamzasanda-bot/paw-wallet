@@ -15,7 +15,12 @@ export async function isPushSupported() {
 
 export async function getPushPermissionState() {
   if (!(await isPushSupported())) return "unsupported";
-  return Notification.permission; // "default" | "granted" | "denied"
+  if (typeof Notification === "undefined") return "unsupported";
+  try {
+    return Notification.permission; // "default" | "granted" | "denied"
+  } catch {
+    return "unsupported";
+  }
 }
 
 export async function subscribeToPush(userId) {
