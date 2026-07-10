@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/vaccine-reminders?secret=pawwallet_2026_gizli",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
