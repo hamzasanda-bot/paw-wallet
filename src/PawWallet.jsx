@@ -29,6 +29,7 @@ import {
   ShieldAlert,
   Bell,
   BellRing,
+  FileText,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
@@ -178,6 +179,7 @@ const TRANSLATIONS = {
     verifyingSession: "Doğrulanıyor…",
     greeting: (name) => `Merhaba, ${name}`,
     navHealth: "Sağlık",
+    navDocuments: "Belgeler",
     navMedications: "İlaçlar",
     navAppointments: "Randevular",
     healthProfileTitle: "Sağlık Profili",
@@ -424,6 +426,7 @@ const TRANSLATIONS = {
     verifyingSession: "Verifying…",
     greeting: (name) => `Hi, ${name}`,
     navHealth: "Health",
+    navDocuments: "Documents",
     navMedications: "Medications",
     navAppointments: "Appointments",
     healthProfileTitle: "Health Profile",
@@ -670,6 +673,7 @@ const TRANSLATIONS = {
     verifyingSession: "Vérification…",
     greeting: (name) => `Bonjour, ${name}`,
     navHealth: "Santé",
+    navDocuments: "Documents",
     navMedications: "Médicaments",
     navAppointments: "Rendez-vous",
     healthProfileTitle: "Profil de Santé",
@@ -916,6 +920,7 @@ const TRANSLATIONS = {
     verifyingSession: "Wird überprüft…",
     greeting: (name) => `Hallo, ${name}`,
     navHealth: "Gesundheit",
+    navDocuments: "Dokumente",
     navMedications: "Medikamente",
     navAppointments: "Termine",
     healthProfileTitle: "Gesundheitsprofil",
@@ -1162,6 +1167,7 @@ const TRANSLATIONS = {
     verifyingSession: "Verificando…",
     greeting: (name) => `Hola, ${name}`,
     navHealth: "Salud",
+    navDocuments: "Documentos",
     navMedications: "Medicamentos",
     navAppointments: "Citas",
     healthProfileTitle: "Perfil de Salud",
@@ -1915,7 +1921,7 @@ function StampSeal({ qrUrl }) {
   );
 }
 
-function PassportTab({ dog, onEdit, onDelete, onAddDocument, onDeleteDocument }) {
+function PassportTab({ dog, onEdit, onDelete }) {
   const { t, lang } = useI18n();
   const ownerPhone = fmtPhone(dog.ownerPhoneCode, dog.ownerPhoneNumber);
   const emergencyPhone = fmtPhone(dog.emergencyPhoneCode, dog.emergencyPhoneNumber);
@@ -1943,7 +1949,6 @@ function PassportTab({ dog, onEdit, onDelete, onAddDocument, onDeleteDocument })
   const locale = LANGS.find((l) => l.code === lang)?.locale;
 
   return (
-    <>
     <div className="grid lg:grid-cols-[1fr_280px] gap-6">
       <div
         className="rounded-2xl border border-[#C9A227]/50 bg-[#FBF8EE] p-6 sm:p-8 relative overflow-hidden"
@@ -2020,9 +2025,6 @@ function PassportTab({ dog, onEdit, onDelete, onAddDocument, onDeleteDocument })
         </div>
       </div>
     </div>
-
-    <DocumentsSection dog={dog} onAdd={onAddDocument} onDelete={onDeleteDocument} />
-    </>
   );
 }
 
@@ -2122,18 +2124,18 @@ function AddDocumentModal({ onClose, onSave }) {
   );
 }
 
-function DocumentsSection({ dog, onAdd, onDelete }) {
+function DocumentsTab({ dog, onAdd, onDelete }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const [showAdd, setShowAdd] = useState(false);
   const docs = dog.documents || [];
 
   return (
-    <div className="rounded-2xl border border-[#d8cfb4] bg-[#FBF8EE] p-6 mt-6">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="font-display text-[18px] text-[#1B3A2F]">{t.documentsTitle}</h3>
-          <p className="text-[12.5px] text-[#5b6d63]">{t.documentsSubtitle(docs.length)}</p>
+          <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.documentsTitle}</h3>
+          <p className="text-[13px] text-[#5b6d63]">{t.documentsSubtitle(docs.length)}</p>
         </div>
         <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
           {t.addDocumentBtn}
@@ -2141,16 +2143,16 @@ function DocumentsSection({ dog, onAdd, onDelete }) {
       </div>
 
       {docs.length === 0 ? (
-        <EmptyState icon={ClipboardList} text={t.documentsEmpty} />
+        <EmptyState icon={FileText} text={t.documentsEmpty} />
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {docs.map((doc) => (
-            <div key={doc.id} className="rounded-xl border border-[#d8cfb4] bg-white/50 overflow-hidden flex flex-col">
+            <div key={doc.id} className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] overflow-hidden flex flex-col">
               <div className="h-28 bg-[#eee6cd] grid place-items-center overflow-hidden">
                 {doc.isImage ? (
                   <img src={doc.data} alt="" className="h-full w-full object-cover" />
                 ) : (
-                  <ClipboardList size={26} className="text-[#a89c6e]" />
+                  <FileText size={26} className="text-[#a89c6e]" />
                 )}
               </div>
               <div className="p-3 flex-1 flex flex-col gap-1.5">
@@ -4000,6 +4002,7 @@ function AuthGate() {
 
 const TAB_IDS = [
   { id: "passport", key: "navPassport", icon: PawPrint },
+  { id: "documents", key: "navDocuments", icon: FileText },
   { id: "vaccines", key: "navVaccines", icon: Syringe },
   { id: "health", key: "navHealth", icon: ClipboardList },
   { id: "medications", key: "navMedications", icon: Pill },
@@ -4322,14 +4325,9 @@ function PawWalletInner({ session }) {
             </div>
 
             {tab === "passport" && (
-              <PassportTab
-                dog={activeDog}
-                onEdit={() => setEditingDog(activeDog)}
-                onDelete={() => setConfirmDeleteId(activeDog.id)}
-                onAddDocument={addDocument}
-                onDeleteDocument={deleteDocument}
-              />
+              <PassportTab dog={activeDog} onEdit={() => setEditingDog(activeDog)} onDelete={() => setConfirmDeleteId(activeDog.id)} />
             )}
+            {tab === "documents" && <DocumentsTab dog={activeDog} onAdd={addDocument} onDelete={deleteDocument} />}
             {tab === "vaccines" && <VaccineTab dog={activeDog} onAdd={addVaccine} onDelete={deleteVaccine} />}
             {tab === "health" && (
               <HealthTab
