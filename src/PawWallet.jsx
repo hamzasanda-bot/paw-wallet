@@ -4377,7 +4377,7 @@ function PawWalletInner({ session }) {
 }
 
 export default function PawWallet() {
-  const [lang, setLang] = useState(() => localStorage.getItem("paw-wallet-lang") || "tr");
+  const [lang, setLang] = useState(() => localStorage.getItem("paw-wallet-lang") || "en");
 
   useEffect(() => {
     localStorage.setItem("paw-wallet-lang", lang);
