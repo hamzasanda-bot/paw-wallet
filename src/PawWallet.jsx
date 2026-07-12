@@ -177,6 +177,18 @@ const TRANSLATIONS = {
     backToForm: "Geri dön",
     authError: "Bir şeyler ters gitti, tekrar dener misin?",
     loginUserNotFound: "E-posta veya şifre hatalı, ya da hesabın henüz onaylanmamış olabilir.",
+    forgotPasswordLink: "Şifremi unuttum",
+    forgotPasswordTitle: "Şifreni Sıfırla",
+    forgotPasswordDesc: "Kayıtlı e-posta adresini gir, sana bir şifre sıfırlama bağlantısı gönderelim.",
+    sendResetLinkBtn: "Sıfırlama Bağlantısı Gönder",
+    resetLinkSentTitle: "Bağlantı Gönderildi",
+    resetLinkSentDesc: (email) => `${email} adresine bir şifre sıfırlama bağlantısı gönderdik. Gelen kutunu (ve spam klasörünü) kontrol et.`,
+    fieldNewPassword: "Yeni şifre",
+    fieldConfirmNewPassword: "Yeni şifreni tekrar gir",
+    setNewPasswordBtn: "Şifreyi Güncelle",
+    resetPasswordScreenTitle: "Yeni Şifre Belirle",
+    passwordUpdatedDesc: "Şifren güncellendi. Şimdi devam edebilirsin.",
+    continueBtn: "Devam Et",
     verifyingSession: "Doğrulanıyor…",
     greeting: (name) => `Merhaba, ${name}`,
     navHealth: "Sağlık",
@@ -456,6 +468,18 @@ const TRANSLATIONS = {
     backToForm: "Go back",
     authError: "Something went wrong, could you try again?",
     loginUserNotFound: "Incorrect email or password, or your account may not be confirmed yet.",
+    forgotPasswordLink: "Forgot password?",
+    forgotPasswordTitle: "Reset Your Password",
+    forgotPasswordDesc: "Enter your registered email and we'll send you a password reset link.",
+    sendResetLinkBtn: "Send Reset Link",
+    resetLinkSentTitle: "Link Sent",
+    resetLinkSentDesc: (email) => `We sent a password reset link to ${email}. Check your inbox (and spam folder).`,
+    fieldNewPassword: "New password",
+    fieldConfirmNewPassword: "Confirm new password",
+    setNewPasswordBtn: "Update Password",
+    resetPasswordScreenTitle: "Set a New Password",
+    passwordUpdatedDesc: "Your password has been updated. You can continue now.",
+    continueBtn: "Continue",
     verifyingSession: "Verifying…",
     greeting: (name) => `Hi, ${name}`,
     navHealth: "Health",
@@ -735,6 +759,18 @@ const TRANSLATIONS = {
     backToForm: "Retour",
     authError: "Une erreur s'est produite, veuillez réessayer.",
     loginUserNotFound: "E-mail ou mot de passe incorrect, ou votre compte n'est peut-être pas encore confirmé.",
+    forgotPasswordLink: "Mot de passe oublié ?",
+    forgotPasswordTitle: "Réinitialiser votre Mot de Passe",
+    forgotPasswordDesc: "Entrez votre e-mail enregistré, nous vous enverrons un lien de réinitialisation.",
+    sendResetLinkBtn: "Envoyer le Lien",
+    resetLinkSentTitle: "Lien Envoyé",
+    resetLinkSentDesc: (email) => `Nous avons envoyé un lien de réinitialisation à ${email}. Vérifiez votre boîte de réception (et vos spams).`,
+    fieldNewPassword: "Nouveau mot de passe",
+    fieldConfirmNewPassword: "Confirmer le nouveau mot de passe",
+    setNewPasswordBtn: "Mettre à Jour",
+    resetPasswordScreenTitle: "Définir un Nouveau Mot de Passe",
+    passwordUpdatedDesc: "Votre mot de passe a été mis à jour. Vous pouvez continuer.",
+    continueBtn: "Continuer",
     verifyingSession: "Vérification…",
     greeting: (name) => `Bonjour, ${name}`,
     navHealth: "Santé",
@@ -991,6 +1027,18 @@ const TRANSLATIONS = {
     backToForm: "Zurück",
     authError: "Etwas ist schiefgelaufen, bitte versuchen Sie es erneut.",
     loginUserNotFound: "E-Mail oder Passwort falsch, oder Ihr Konto ist noch nicht bestätigt.",
+    forgotPasswordLink: "Passwort vergessen?",
+    forgotPasswordTitle: "Passwort Zurücksetzen",
+    forgotPasswordDesc: "Geben Sie Ihre registrierte E-Mail ein, wir senden Ihnen einen Link zum Zurücksetzen.",
+    sendResetLinkBtn: "Link Senden",
+    resetLinkSentTitle: "Link Gesendet",
+    resetLinkSentDesc: (email) => `Wir haben einen Link zum Zurücksetzen an ${email} gesendet. Prüfen Sie Ihr Postfach (und den Spam-Ordner).`,
+    fieldNewPassword: "Neues Passwort",
+    fieldConfirmNewPassword: "Neues Passwort bestätigen",
+    setNewPasswordBtn: "Passwort Aktualisieren",
+    resetPasswordScreenTitle: "Neues Passwort Festlegen",
+    passwordUpdatedDesc: "Ihr Passwort wurde aktualisiert. Sie können jetzt fortfahren.",
+    continueBtn: "Weiter",
     verifyingSession: "Wird überprüft…",
     greeting: (name) => `Hallo, ${name}`,
     navHealth: "Gesundheit",
@@ -1247,6 +1295,18 @@ const TRANSLATIONS = {
     backToForm: "Volver",
     authError: "Algo salió mal, ¿podrías intentarlo de nuevo?",
     loginUserNotFound: "Correo o contraseña incorrectos, o tu cuenta aún no está confirmada.",
+    forgotPasswordLink: "¿Olvidaste tu contraseña?",
+    forgotPasswordTitle: "Restablece tu Contraseña",
+    forgotPasswordDesc: "Introduce tu correo registrado y te enviaremos un enlace para restablecerla.",
+    sendResetLinkBtn: "Enviar Enlace",
+    resetLinkSentTitle: "Enlace Enviado",
+    resetLinkSentDesc: (email) => `Enviamos un enlace de restablecimiento a ${email}. Revisa tu bandeja de entrada (y spam).`,
+    fieldNewPassword: "Nueva contraseña",
+    fieldConfirmNewPassword: "Confirmar nueva contraseña",
+    setNewPasswordBtn: "Actualizar Contraseña",
+    resetPasswordScreenTitle: "Establecer Nueva Contraseña",
+    passwordUpdatedDesc: "Tu contraseña ha sido actualizada. Ya puedes continuar.",
+    continueBtn: "Continuar",
     verifyingSession: "Verificando…",
     greeting: (name) => `Hola, ${name}`,
     navHealth: "Salud",
@@ -3389,6 +3449,8 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sentTo, setSentTo] = useState("");
+  const [forgotMode, setForgotMode] = useState(false);
+  const [resetSentTo, setResetSentTo] = useState("");
 
   const submit = async () => {
     setError("");
@@ -3428,6 +3490,55 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
     }
   };
 
+  const submitForgotPassword = async () => {
+    setError("");
+    if (!email.trim()) return;
+    setLoading(true);
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    });
+    setLoading(false);
+    if (resetError) {
+      setError(resetError.message || t.authError);
+      return;
+    }
+    setResetSentTo(email);
+  };
+
+  if (resetSentTo) {
+    return (
+      <Modal title={t.resetLinkSentTitle} onClose={onClose}>
+        <p className="text-[14px] text-[#3c473f] leading-relaxed">{t.resetLinkSentDesc(resetSentTo)}</p>
+        <div className="mt-6 flex justify-end">
+          <GhostButton onClick={onClose}>{t.backToForm}</GhostButton>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (forgotMode) {
+    return (
+      <Modal title={t.forgotPasswordTitle} onClose={onClose}>
+        <div className="space-y-3.5">
+          <p className="text-[13.5px] text-[#5b6d63]">{t.forgotPasswordDesc}</p>
+          <Field label={t.fieldEmail}>
+            <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} />
+          </Field>
+          {error && <p className="text-[13px] text-[#a63d40]">{error}</p>}
+          <PrimaryButton onClick={submitForgotPassword} full icon={loading ? Loader2 : Check}>
+            {t.sendResetLinkBtn}
+          </PrimaryButton>
+          <button
+            onClick={() => setForgotMode(false)}
+            className="w-full text-center text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 mt-1"
+          >
+            {t.backToForm}
+          </button>
+        </div>
+      </Modal>
+    );
+  }
+
   if (sentTo) {
     return (
       <Modal title={t.checkInboxTitle} onClose={onClose}>
@@ -3462,6 +3573,19 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
           <Field label={t.fieldConfirmPassword}>
             <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
           </Field>
+        )}
+
+        {mode === "login" && (
+          <button
+            type="button"
+            onClick={() => {
+              setError("");
+              setForgotMode(true);
+            }}
+            className="text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 -mt-1"
+          >
+            {t.forgotPasswordLink}
+          </button>
         )}
 
         {error && <p className="text-[13px] text-[#a63d40]">{error}</p>}
@@ -4151,9 +4275,85 @@ function VetPortal({ session }) {
   );
 }
 
+function ResetPasswordScreen({ onDone }) {
+  const { t } = useI18n();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [done, setDone] = useState(false);
+
+  const submit = async () => {
+    setError("");
+    if (password.length < 6) {
+      setError(t.passwordTooShort);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError(t.passwordsDontMatch);
+      return;
+    }
+    setLoading(true);
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    setLoading(false);
+    if (updateError) {
+      setError(updateError.message || t.authError);
+      return;
+    }
+    setDone(true);
+  };
+
+  return (
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body flex items-center justify-center p-4 overflow-x-hidden" style={{ colorScheme: "light" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+        .font-display { font-family: 'Zilla Slab', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+      `}</style>
+      <div className="w-full max-w-sm rounded-2xl border border-[#e3d9bd] bg-[#F7F3E8] p-6 shadow-xl">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="h-10 w-10 rounded-full bg-[#1B3A2F] grid place-items-center">
+            <PawPrint size={19} className="text-[#F7F3E8]" />
+          </div>
+          <h1 className="font-display text-[19px] text-[#1B3A2F]">{t.resetPasswordScreenTitle}</h1>
+        </div>
+
+        {done ? (
+          <div className="space-y-4">
+            <p className="text-[14px] text-[#3c473f]">{t.passwordUpdatedDesc}</p>
+            <PrimaryButton full onClick={onDone} icon={Check}>
+              {t.continueBtn}
+            </PrimaryButton>
+          </div>
+        ) : (
+          <div className="space-y-3.5">
+            <Field label={t.fieldNewPassword}>
+              <input type="password" className={inputCls} value={password} onChange={(e) => setPassword(e.target.value)} />
+            </Field>
+            <Field label={t.fieldConfirmNewPassword}>
+              <input
+                type="password"
+                className={inputCls}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Field>
+            {error && <p className="text-[13px] text-[#a63d40]">{error}</p>}
+            <PrimaryButton full onClick={submit} icon={loading ? Loader2 : Check}>
+              {t.setNewPasswordBtn}
+            </PrimaryButton>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AuthGate() {
   const { t } = useI18n();
   const [session, setSession] = useState(undefined); // undefined = loading
+  const [recoveryMode, setRecoveryMode] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -4162,9 +4362,16 @@ function AuthGate() {
       if (event === "SIGNED_IN" && newSession?.user) {
         logActivity(newSession.user.id, "login", newSession.user.email);
       }
+      if (event === "PASSWORD_RECOVERY") {
+        setRecoveryMode(true);
+      }
     });
     return () => listener.subscription.unsubscribe();
   }, []);
+
+  if (recoveryMode) {
+    return <ResetPasswordScreen onDone={() => setRecoveryMode(false)} />;
+  }
 
   if (session === undefined) {
     return (
