@@ -261,6 +261,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Onay Bekleyen Atama",
     adminStatsServiceProviders: "Hizmet Firması",
     addVetSectionTitle: "Yeni Veteriner Hesabı Aç",
+    changePasswordSectionTitle: "Kullanıcı Şifresi Değiştir",
+    fieldUserEmail: "Kullanıcı e-postası",
+    changePasswordBtn: "Şifreyi Değiştir",
+    passwordChangedSuccess: "Şifre başarıyla değiştirildi.",
     fieldClinicName: "Klinik adı",
     fieldVetCity: "Şehir",
     fieldVetCountry: "Ülke",
@@ -552,6 +556,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Pending Assignments",
     adminStatsServiceProviders: "Service Providers",
     addVetSectionTitle: "Create New Vet Account",
+    changePasswordSectionTitle: "Change User Password",
+    fieldUserEmail: "User's email",
+    changePasswordBtn: "Change Password",
+    passwordChangedSuccess: "Password changed successfully.",
     fieldClinicName: "Clinic name",
     fieldVetCity: "City",
     fieldVetCountry: "Country",
@@ -843,6 +851,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Attributions en Attente",
     adminStatsServiceProviders: "Prestataires de Services",
     addVetSectionTitle: "Créer un Nouveau Compte Vétérinaire",
+    changePasswordSectionTitle: "Changer le Mot de Passe d'un Utilisateur",
+    fieldUserEmail: "E-mail de l'utilisateur",
+    changePasswordBtn: "Changer le Mot de Passe",
+    passwordChangedSuccess: "Mot de passe changé avec succès.",
     fieldClinicName: "Nom de la clinique",
     fieldVetCity: "Ville",
     fieldVetCountry: "Pays",
@@ -1111,6 +1123,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Ausstehende Zuweisungen",
     adminStatsServiceProviders: "Dienstleister",
     addVetSectionTitle: "Neues Tierarztkonto Erstellen",
+    changePasswordSectionTitle: "Benutzerpasswort Ändern",
+    fieldUserEmail: "E-Mail des Benutzers",
+    changePasswordBtn: "Passwort Ändern",
+    passwordChangedSuccess: "Passwort erfolgreich geändert.",
     fieldClinicName: "Klinikname",
     fieldVetCity: "Stadt",
     fieldVetCountry: "Land",
@@ -1379,6 +1395,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Asignaciones Pendientes",
     adminStatsServiceProviders: "Proveedores de Servicios",
     addVetSectionTitle: "Crear Nueva Cuenta Veterinaria",
+    changePasswordSectionTitle: "Cambiar Contraseña de Usuario",
+    fieldUserEmail: "Correo del usuario",
+    changePasswordBtn: "Cambiar Contraseña",
+    passwordChangedSuccess: "Contraseña cambiada con éxito.",
     fieldClinicName: "Nombre de la clínica",
     fieldVetCity: "Ciudad",
     fieldVetCountry: "País",
@@ -3673,6 +3693,9 @@ function AdminPanel({ session }) {
   const [svcForm, setSvcForm] = useState({ name: "", service_type: "Yıkama & Tıraş", city: "", country: "", phone: "" });
   const [svcBusy, setSvcBusy] = useState(false);
   const [svcMsg, setSvcMsg] = useState("");
+  const [pwForm, setPwForm] = useState({ email: "", newPassword: "" });
+  const [pwBusy, setPwBusy] = useState(false);
+  const [pwMsg, setPwMsg] = useState("");
   const [vetsList, setVetsList] = useState([]);
   const [logs, setLogs] = useState([]);
   const [logsLoading, setLogsLoading] = useState(false);
@@ -3757,6 +3780,29 @@ function AdminPanel({ session }) {
     setSvcBusy(false);
   };
 
+  const submitPasswordChange = async () => {
+    if (!pwForm.email.trim() || pwForm.newPassword.length < 6) return;
+    setPwBusy(true);
+    setPwMsg("");
+    try {
+      const res = await fetch("/api/admin-set-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ email: pwForm.email, newPassword: pwForm.newPassword }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPwMsg(t.passwordChangedSuccess);
+        setPwForm({ email: "", newPassword: "" });
+      } else {
+        setPwMsg(data.error || t.authError);
+      }
+    } catch {
+      setPwMsg(t.authError);
+    }
+    setPwBusy(false);
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
       <style>{`
@@ -3796,7 +3842,7 @@ function AdminPanel({ session }) {
           <StatCard label={t.adminStatsServiceProviders} value={stats?.serviceProviderCount} />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid lg:grid-cols-3 gap-6 mb-8">
           <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5">
             <p className="font-display text-[16px] text-[#1B3A2F] mb-3 flex items-center gap-2">
               <UserCog size={16} /> {t.addVetSectionTitle}
@@ -3904,6 +3950,34 @@ function AdminPanel({ session }) {
               {svcMsg && <p className="text-[12.5px] text-[#5b6d63]">{svcMsg}</p>}
               <PrimaryButton full onClick={submitServiceProvider} icon={svcBusy ? Loader2 : Check}>
                 {t.createServiceProviderBtn}
+              </PrimaryButton>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5">
+            <p className="font-display text-[16px] text-[#1B3A2F] mb-3 flex items-center gap-2">
+              <UserCog size={16} /> {t.changePasswordSectionTitle}
+            </p>
+            <div className="space-y-3">
+              <Field label={t.fieldUserEmail}>
+                <input
+                  type="email"
+                  className={inputCls}
+                  value={pwForm.email}
+                  onChange={(e) => setPwForm((f) => ({ ...f, email: e.target.value }))}
+                />
+              </Field>
+              <Field label={t.fieldNewPassword}>
+                <input
+                  type="password"
+                  className={inputCls}
+                  value={pwForm.newPassword}
+                  onChange={(e) => setPwForm((f) => ({ ...f, newPassword: e.target.value }))}
+                />
+              </Field>
+              {pwMsg && <p className="text-[12.5px] text-[#5b6d63]">{pwMsg}</p>}
+              <PrimaryButton full onClick={submitPasswordChange} icon={pwBusy ? Loader2 : Check}>
+                {t.changePasswordBtn}
               </PrimaryButton>
             </div>
           </div>
