@@ -32,6 +32,7 @@ import {
   FileText,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
+import { logActivity } from "./activityLog";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 /* ------------------------------------------------------------------ */
@@ -266,6 +267,37 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Firmayı Ekle",
     serviceProviderAdded: "Firma eklendi.",
     vetListSectionTitle: "Kayıtlı Veterinerler",
+    activityLogsTitle: "Kullanıcı Hareket Kayıtları",
+    fieldFilterByEmail: "E-postaya göre filtrele",
+    filterBtn: "Filtrele",
+    clearFilterBtn: "Temizle",
+    noLogsFound: "Kayıt bulunamadı.",
+    logColumnTime: "Zaman",
+    logColumnUser: "Kullanıcı",
+    logColumnAction: "Hareket",
+    logColumnDetails: "Detay",
+    actionLabels: {
+      login: "Giriş yaptı",
+      dog_created: "Köpek eklendi",
+      dog_updated: "Köpek düzenlendi",
+      dog_deleted: "Köpek silindi",
+      vaccine_added: "Aşı eklendi",
+      vaccine_deleted: "Aşı silindi",
+      health_profile_updated: "Sağlık profili güncellendi",
+      document_added: "Belge eklendi",
+      document_deleted: "Belge silindi",
+      health_record_added: "Muayene kaydı eklendi",
+      health_record_deleted: "Muayene kaydı silindi",
+      medication_added: "İlaç eklendi",
+      medication_deleted: "İlaç silindi",
+      appointment_added: "Randevu eklendi",
+      appointment_deleted: "Randevu silindi",
+      ideal_weight_updated: "İdeal ağırlık güncellendi",
+      weight_entry_added: "Ağırlık ölçümü eklendi",
+      weight_entry_deleted: "Ağırlık ölçümü silindi",
+      vet_requested: "Veteriner atama isteği",
+      vet_request_cancelled: "Veteriner isteği iptal edildi",
+    },
     vetPortalWelcome: (clinic) => `Hoş geldin, ${clinic}`,
     pendingRequestsTitle: "Onay Bekleyen Atamalar",
     noPendingRequests: "Şu an onay bekleyen atama yok.",
@@ -513,6 +545,37 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Add Company",
     serviceProviderAdded: "Company added.",
     vetListSectionTitle: "Registered Vets",
+    activityLogsTitle: "User Activity Logs",
+    fieldFilterByEmail: "Filter by email",
+    filterBtn: "Filter",
+    clearFilterBtn: "Clear",
+    noLogsFound: "No logs found.",
+    logColumnTime: "Time",
+    logColumnUser: "User",
+    logColumnAction: "Action",
+    logColumnDetails: "Details",
+    actionLabels: {
+      login: "Logged in",
+      dog_created: "Dog added",
+      dog_updated: "Dog edited",
+      dog_deleted: "Dog deleted",
+      vaccine_added: "Vaccine added",
+      vaccine_deleted: "Vaccine deleted",
+      health_profile_updated: "Health profile updated",
+      document_added: "Document added",
+      document_deleted: "Document deleted",
+      health_record_added: "Health record added",
+      health_record_deleted: "Health record deleted",
+      medication_added: "Medication added",
+      medication_deleted: "Medication deleted",
+      appointment_added: "Appointment added",
+      appointment_deleted: "Appointment deleted",
+      ideal_weight_updated: "Ideal weight updated",
+      weight_entry_added: "Weight entry added",
+      weight_entry_deleted: "Weight entry deleted",
+      vet_requested: "Vet assignment requested",
+      vet_request_cancelled: "Vet request cancelled",
+    },
     vetPortalWelcome: (clinic) => `Welcome, ${clinic}`,
     pendingRequestsTitle: "Pending Assignment Requests",
     noPendingRequests: "No pending requests right now.",
@@ -760,6 +823,15 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Ajouter l'Entreprise",
     serviceProviderAdded: "Entreprise ajoutée.",
     vetListSectionTitle: "Vétérinaires Enregistrés",
+    activityLogsTitle: "Journaux d'Activité",
+    fieldFilterByEmail: "Filtrer par e-mail",
+    filterBtn: "Filtrer",
+    clearFilterBtn: "Effacer",
+    noLogsFound: "Aucun journal trouvé.",
+    logColumnTime: "Heure",
+    logColumnUser: "Utilisateur",
+    logColumnAction: "Action",
+    logColumnDetails: "Détails",
     vetPortalWelcome: (clinic) => `Bienvenue, ${clinic}`,
     pendingRequestsTitle: "Demandes d'Attribution en Attente",
     noPendingRequests: "Aucune demande en attente pour le moment.",
@@ -1007,6 +1079,15 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Firma Hinzufügen",
     serviceProviderAdded: "Firma hinzugefügt.",
     vetListSectionTitle: "Registrierte Tierärzte",
+    activityLogsTitle: "Aktivitätsprotokolle",
+    fieldFilterByEmail: "Nach E-Mail filtern",
+    filterBtn: "Filtern",
+    clearFilterBtn: "Löschen",
+    noLogsFound: "Keine Protokolle gefunden.",
+    logColumnTime: "Zeit",
+    logColumnUser: "Benutzer",
+    logColumnAction: "Aktion",
+    logColumnDetails: "Details",
     vetPortalWelcome: (clinic) => `Willkommen, ${clinic}`,
     pendingRequestsTitle: "Ausstehende Zuweisungsanfragen",
     noPendingRequests: "Derzeit keine ausstehenden Anfragen.",
@@ -1254,6 +1335,15 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Añadir Empresa",
     serviceProviderAdded: "Empresa añadida.",
     vetListSectionTitle: "Veterinarios Registrados",
+    activityLogsTitle: "Registros de Actividad",
+    fieldFilterByEmail: "Filtrar por correo",
+    filterBtn: "Filtrar",
+    clearFilterBtn: "Limpiar",
+    noLogsFound: "No se encontraron registros.",
+    logColumnTime: "Hora",
+    logColumnUser: "Usuario",
+    logColumnAction: "Acción",
+    logColumnDetails: "Detalles",
     vetPortalWelcome: (clinic) => `Bienvenido, ${clinic}`,
     pendingRequestsTitle: "Solicitudes de Asignación Pendientes",
     noPendingRequests: "No hay solicitudes pendientes por ahora.",
@@ -3141,11 +3231,13 @@ function VetTab({ dog, session }) {
       role,
       status: "pending",
     });
+    logActivity(session.user.id, "vet_requested", `${role} — ${dog.name}`);
     load();
   };
 
   const cancelRequest = async (id) => {
     await supabase.from("vet_assignment_requests").delete().eq("id", id);
+    logActivity(session.user.id, "vet_request_cancelled", dog.name);
     load();
   };
 
@@ -3456,6 +3548,25 @@ function AdminPanel({ session }) {
   const [svcBusy, setSvcBusy] = useState(false);
   const [svcMsg, setSvcMsg] = useState("");
   const [vetsList, setVetsList] = useState([]);
+  const [logs, setLogs] = useState([]);
+  const [logsLoading, setLogsLoading] = useState(false);
+  const [emailFilterInput, setEmailFilterInput] = useState("");
+
+  const loadLogs = useCallback(
+    async (emailFilter = "") => {
+      setLogsLoading(true);
+      try {
+        const url = emailFilter ? `/api/admin-logs?email=${encodeURIComponent(emailFilter)}` : "/api/admin-logs";
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${session.access_token}` } });
+        const data = await res.json();
+        setLogs(data.logs || []);
+      } catch {
+        /* ignore */
+      }
+      setLogsLoading(false);
+    },
+    [session]
+  );
 
   const loadStats = useCallback(async () => {
     try {
@@ -3477,7 +3588,8 @@ function AdminPanel({ session }) {
   useEffect(() => {
     loadStats();
     loadVets();
-  }, [loadStats, loadVets]);
+    loadLogs();
+  }, [loadStats, loadVets, loadLogs]);
 
   const submitVet = async () => {
     if (!vetForm.clinicName.trim() || !vetForm.email.trim()) return;
@@ -3684,13 +3796,78 @@ function AdminPanel({ session }) {
             </div>
           ))}
         </div>
+
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
+            <p className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#5b6d63]">{t.activityLogsTitle}</p>
+            <div className="flex items-center gap-2">
+              <input
+                className={inputCls + " !py-1.5 !text-[12.5px] w-52"}
+                placeholder={t.fieldFilterByEmail}
+                value={emailFilterInput}
+                onChange={(e) => setEmailFilterInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && loadLogs(emailFilterInput)}
+              />
+              <GhostButton onClick={() => loadLogs(emailFilterInput)}>{t.filterBtn}</GhostButton>
+              {emailFilterInput && (
+                <GhostButton
+                  onClick={() => {
+                    setEmailFilterInput("");
+                    loadLogs("");
+                  }}
+                >
+                  {t.clearFilterBtn}
+                </GhostButton>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] overflow-hidden">
+            {logsLoading ? (
+              <div className="py-10 grid place-items-center text-[#5b6d63]">
+                <Loader2 className="animate-spin" size={18} />
+              </div>
+            ) : logs.length === 0 ? (
+              <p className="text-[13px] text-[#5b6d63] p-5 text-center">{t.noLogsFound}</p>
+            ) : (
+              <div className="max-h-[420px] overflow-y-auto">
+                <table className="w-full text-[12.5px]">
+                  <thead className="sticky top-0 bg-[#F0EBD8]">
+                    <tr>
+                      <th className="text-left font-semibold text-[#5b6d63] px-3 py-2">{t.logColumnTime}</th>
+                      <th className="text-left font-semibold text-[#5b6d63] px-3 py-2">{t.logColumnUser}</th>
+                      <th className="text-left font-semibold text-[#5b6d63] px-3 py-2">{t.logColumnAction}</th>
+                      <th className="text-left font-semibold text-[#5b6d63] px-3 py-2">{t.logColumnDetails}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {logs.map((log) => (
+                      <tr key={log.id} className="border-t border-[#e3d9bd]">
+                        <td className="px-3 py-2 text-[#8d8560] font-mono whitespace-nowrap">
+                          {new Date(log.created_at).toLocaleString(undefined, {
+                            month: "short",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </td>
+                        <td className="px-3 py-2 text-[#1f2a24]">{log.email}</td>
+                        <td className="px-3 py-2 text-[#1B3A2F] font-medium whitespace-nowrap">
+                          {t.actionLabels?.[log.action] || log.action.replace(/_/g, " ")}
+                        </td>
+                        <td className="px-3 py-2 text-[#5b6d63]">{log.details || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-/* ------------------------------------------------------------------ */
-/*  Vet Portal                                                          */
 /* ------------------------------------------------------------------ */
 
 function VetPortal({ session }) {
@@ -3972,8 +4149,11 @@ function AuthGate() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
+      if (event === "SIGNED_IN" && newSession?.user) {
+        logActivity(newSession.user.id, "login", newSession.user.email);
+      }
     });
     return () => listener.subscription.unsubscribe();
   }, []);
@@ -4154,9 +4334,11 @@ function PawWalletInner({ session }) {
     setActiveId(dog.id);
     setShowAddDog(false);
     setEditingDog(null);
+    logActivity(userId, isEdit ? "dog_updated" : "dog_created", dog.name);
   };
 
   const deleteDog = async (id) => {
+    const deletedDog = dogs.find((d) => d.id === id);
     const next = dogs.filter((d) => d.id !== id);
     setDogs(next);
     try {
@@ -4165,34 +4347,70 @@ function PawWalletInner({ session }) {
       /* ignore */
     }
     if (activeId === id) setActiveId(next[0]?.id || null);
+    logActivity(userId, "dog_deleted", deletedDog?.name);
   };
 
-  const addVaccine = (v) => updateDog(activeDog.id, (d) => ({ ...d, vaccines: [...d.vaccines, v] }));
-  const deleteVaccine = (id) => updateDog(activeDog.id, (d) => ({ ...d, vaccines: d.vaccines.filter((v) => v.id !== id) }));
+  const addVaccine = (v) => {
+    updateDog(activeDog.id, (d) => ({ ...d, vaccines: [...d.vaccines, v] }));
+    logActivity(userId, "vaccine_added", `${v.name} — ${activeDog.name}`);
+  };
+  const deleteVaccine = (id) => {
+    updateDog(activeDog.id, (d) => ({ ...d, vaccines: d.vaccines.filter((v) => v.id !== id) }));
+    logActivity(userId, "vaccine_deleted", activeDog.name);
+  };
 
-  const saveHealthProfile = (profile) => updateDog(activeDog.id, (d) => ({ ...d, ...profile }));
+  const saveHealthProfile = (profile) => {
+    updateDog(activeDog.id, (d) => ({ ...d, ...profile }));
+    logActivity(userId, "health_profile_updated", activeDog.name);
+  };
 
-  const addDocument = (doc) => updateDog(activeDog.id, (d) => ({ ...d, documents: [...(d.documents || []), doc] }));
-  const deleteDocument = (id) =>
+  const addDocument = (doc) => {
+    updateDog(activeDog.id, (d) => ({ ...d, documents: [...(d.documents || []), doc] }));
+    logActivity(userId, "document_added", `${doc.label || doc.type} — ${activeDog.name}`);
+  };
+  const deleteDocument = (id) => {
     updateDog(activeDog.id, (d) => ({ ...d, documents: (d.documents || []).filter((doc) => doc.id !== id) }));
-  const addHealthRecord = (r) =>
+    logActivity(userId, "document_deleted", activeDog.name);
+  };
+  const addHealthRecord = (r) => {
     updateDog(activeDog.id, (d) => ({ ...d, healthRecords: [...(d.healthRecords || []), r] }));
-  const deleteHealthRecord = (id) =>
+    logActivity(userId, "health_record_added", activeDog.name);
+  };
+  const deleteHealthRecord = (id) => {
     updateDog(activeDog.id, (d) => ({ ...d, healthRecords: (d.healthRecords || []).filter((r) => r.id !== id) }));
+    logActivity(userId, "health_record_deleted", activeDog.name);
+  };
 
-  const addMedication = (m) => updateDog(activeDog.id, (d) => ({ ...d, medications: [...(d.medications || []), m] }));
-  const deleteMedication = (id) =>
+  const addMedication = (m) => {
+    updateDog(activeDog.id, (d) => ({ ...d, medications: [...(d.medications || []), m] }));
+    logActivity(userId, "medication_added", `${m.name} — ${activeDog.name}`);
+  };
+  const deleteMedication = (id) => {
     updateDog(activeDog.id, (d) => ({ ...d, medications: (d.medications || []).filter((m) => m.id !== id) }));
+    logActivity(userId, "medication_deleted", activeDog.name);
+  };
 
-  const addAppointment = (a) => updateDog(activeDog.id, (d) => ({ ...d, appointments: [...(d.appointments || []), a] }));
-  const deleteAppointment = (id) =>
+  const addAppointment = (a) => {
+    updateDog(activeDog.id, (d) => ({ ...d, appointments: [...(d.appointments || []), a] }));
+    logActivity(userId, "appointment_added", `${a.type} — ${activeDog.name}`);
+  };
+  const deleteAppointment = (id) => {
     updateDog(activeDog.id, (d) => ({ ...d, appointments: (d.appointments || []).filter((a) => a.id !== id) }));
+    logActivity(userId, "appointment_deleted", activeDog.name);
+  };
 
-  const saveIdealWeight = (idealWeight) => updateDog(activeDog.id, (d) => ({ ...d, idealWeight }));
-  const addWeightEntry = (entry) =>
+  const saveIdealWeight = (idealWeight) => {
+    updateDog(activeDog.id, (d) => ({ ...d, idealWeight }));
+    logActivity(userId, "ideal_weight_updated", `${idealWeight}kg — ${activeDog.name}`);
+  };
+  const addWeightEntry = (entry) => {
     updateDog(activeDog.id, (d) => ({ ...d, weightEntries: [...(d.weightEntries || []), entry] }));
-  const deleteWeightEntry = (id) =>
+    logActivity(userId, "weight_entry_added", `${entry.weight}kg — ${activeDog.name}`);
+  };
+  const deleteWeightEntry = (id) => {
     updateDog(activeDog.id, (d) => ({ ...d, weightEntries: (d.weightEntries || []).filter((e) => e.id !== id) }));
+    logActivity(userId, "weight_entry_deleted", activeDog.name);
+  };
 
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
