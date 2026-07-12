@@ -4568,7 +4568,7 @@ function PawWalletInner({ session }) {
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
-        .from("dogs")
+        .from("dogs"))
         .select("id, payload")
         .eq("user_id", userId)
         .order("created_at");
@@ -4583,7 +4583,7 @@ function PawWalletInner({ session }) {
     async (next) => {
       setDogs(next);
       for (const dog of next) {
-        await supabase.from("dogs").upsert({ id: dog.id, payload: dog, user_id: userId });
+        await supabase.from("dogs")).upsert({ id: dog.id, payload: dog, user_id: userId });
       }
     },
     [userId]
@@ -4641,7 +4641,7 @@ function PawWalletInner({ session }) {
     const next = dogs.filter((d) => d.id !== id);
     setDogs(next);
     try {
-      await supabase.from("dogs").delete().eq("id", id).eq("user_id", userId);
+      await supabase.from("dogs")).delete().eq("id", id).eq("user_id", userId);
     } catch {
       /* ignore */
     }
