@@ -278,6 +278,7 @@ const TRANSLATIONS = {
     logColumnDetails: "Detay",
     actionLabels: {
       login: "Giriş yaptı",
+      logout: "Çıkış yaptı",
       dog_created: "Köpek eklendi",
       dog_updated: "Köpek düzenlendi",
       dog_deleted: "Köpek silindi",
@@ -556,6 +557,7 @@ const TRANSLATIONS = {
     logColumnDetails: "Details",
     actionLabels: {
       login: "Logged in",
+      logout: "Logged out",
       dog_created: "Dog added",
       dog_updated: "Dog edited",
       dog_deleted: "Dog deleted",
@@ -3650,7 +3652,10 @@ function AdminPanel({ session }) {
           <div className="flex items-center gap-2.5">
             <LanguageSwitcher />
             <button
-              onClick={() => supabase.auth.signOut()}
+              onClick={() => {
+                logActivity(session.user.id, "logout", session.user.email);
+                supabase.auth.signOut();
+              }}
               className="text-[12.5px] font-medium text-[#5b6d63] hover:text-[#a63d40] underline underline-offset-2"
             >
               {t.logOut}
@@ -3971,7 +3976,10 @@ function VetPortal({ session }) {
           <div className="flex items-center gap-2.5">
             <LanguageSwitcher />
             <button
-              onClick={() => supabase.auth.signOut()}
+              onClick={() => {
+                logActivity(session.user.id, "logout", session.user.email);
+                supabase.auth.signOut();
+              }}
               className="text-[12.5px] font-medium text-[#5b6d63] hover:text-[#a63d40] underline underline-offset-2"
             >
               {t.logOut}
@@ -4439,7 +4447,10 @@ function PawWalletInner({ session }) {
             <NotificationButton userId={userId} />
             <LanguageSwitcher />
             <button
-              onClick={() => supabase.auth.signOut()}
+              onClick={() => {
+                logActivity(userId, "logout", session.user.email);
+                supabase.auth.signOut();
+              }}
               className="text-[12.5px] font-medium text-[#5b6d63] hover:text-[#a63d40] underline underline-offset-2 transition"
             >
               {t.logOut}
