@@ -4353,13 +4353,16 @@ function ResetPasswordScreen({ onDone }) {
 function AuthGate() {
   const { t } = useI18n();
   const [session, setSession] = useState(undefined); // undefined = loading
-  const [recoveryMode, setRecoveryMode] = useState(false);
+  const [recoveryMode, setRecoveryMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.location.hash.includes("type=recovery") || window.location.search.includes("type=recovery");
+  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const { data: listener } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
-      if (event === "SIGNED_IN" && newSession?.user) {
+      if (event === "SIGNED_IN" && newSession?.user && !recoveryMode) {
         logActivity(newSession.user.id, "login", newSession.user.email);
       }
       if (event === "PASSWORD_RECOVERY") {
@@ -4367,10 +4370,17 @@ function AuthGate() {
       }
     });
     return () => listener.subscription.unsubscribe();
-  }, []);
+  }, [recoveryMode]);
 
   if (recoveryMode) {
-    return <ResetPasswordScreen onDone={() => setRecoveryMode(false)} />;
+    return (
+      <ResetPasswordScreen
+        onDone={() => {
+          setRecoveryMode(false);
+          window.history.replaceState({}, "", window.location.pathname);
+        }}
+      />
+    );
   }
 
   if (session === undefined) {
