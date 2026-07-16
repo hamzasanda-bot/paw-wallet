@@ -19,6 +19,7 @@ export default async function handler(req, res) {
   // Sadece güvenli/gerekli alanları döndür — tam kaydı asla dışarı vermiyoruz
   const publicCard = {
     name: dog.name || "",
+    species: dog.species || "dog",
     breed: dog.breed || "",
     photo: dog.photo || null,
     microchip: dog.microchip || "",

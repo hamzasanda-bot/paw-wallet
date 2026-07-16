@@ -50,20 +50,23 @@ const LANGS = [
 
 const TRANSLATIONS = {
   tr: {
-    tagline: "Köpeğinizin dijital pasaportu",
+    speciesLabel: { dog: "Köpek", cat: "Kedi" },
+    tagline: "Evcil hayvanınızın dijital pasaportu",
     navPassport: "Pasaport",
     navVaccines: "Aşı Kartı",
     navVets: "Veteriner",
-    addDogMenuItem: "Yeni köpek ekle",
-    noDogsTitle: "Henüz köpek eklenmedi",
-    noDogsText: "Başlamak için köpeğinizin pasaportunu oluşturun — kimlik bilgileri, QR kod ve daha fazlası otomatik hazırlanır.",
+    addNewDogItem: "Yeni köpek ekle",
+    addNewCatItem: "Yeni kedi ekle",
+    noDogsTitle: "Henüz evcil hayvan eklenmedi",
+    noDogsText: "Başlamak için evcil hayvanınızın pasaportunu oluşturun — kimlik bilgileri, QR kod ve daha fazlası otomatik hazırlanır.",
     addFirstDog: "İlk Köpeği Ekle",
+    addFirstCat: "İlk Kediyi Ekle",
     footerNote: "Faz 1 önizlemesi — Pasaport, Aşı Kartı, Veteriner Ataması. Veriler Supabase'de saklanır.",
-    addDogModalTitle: "Yeni Köpek Ekle",
-    editDogModalTitle: "Köpek Bilgilerini Düzenle",
+    addPetModalTitle: (species) => (species === "cat" ? "Yeni Kedi Ekle" : "Yeni Köpek Ekle"),
+    editPetModalTitle: (species) => (species === "cat" ? "Kedi Bilgilerini Düzenle" : "Köpek Bilgilerini Düzenle"),
     uploadPhoto: "Fotoğraf yükle",
     changePhoto: "Fotoğrafı değiştir",
-    fieldDogName: "Köpek adı",
+    fieldPetName: (species) => (species === "cat" ? "Kedi adı" : "Köpek adı"),
     fieldBreed: "Irk",
     fieldBirthDate: "Doğum tarihi",
     fieldGender: "Cinsiyet",
@@ -114,12 +117,15 @@ const TRANSLATIONS = {
     verifiedIdentityLabel: "DOĞRULANMIŞ KİMLİK",
     scannableIdDesc: (name) => `Bu kod taratıldığında ${name}'in kimlik ve iletişim bilgileri anında görüntülenir.`,
     scanToReach: "Kayıp durumunda tara & ulaş",
-    lostPetCardBadge: "Bu köpeği buldunuz mu?",
+    lostPetCardBadge: (species) => (species === "cat" ? "Bu kediyi buldunuz mu?" : "Bu köpeği buldunuz mu?"),
     lostPetCardTitle: (name) => `${name}'in Kimlik Kartı`,
-    lostPetCardDesc: "Bu köpeğin sahibi Paw Wallet kullanıyor. Aşağıdaki bilgilerle sahibine ulaşabilirsin.",
+    lostPetCardDesc: (species) =>
+      species === "cat"
+        ? "Bu kedinin sahibi Paw Wallet kullanıyor. Aşağıdaki bilgilerle sahibine ulaşabilirsin."
+        : "Bu köpeğin sahibi Paw Wallet kullanıyor. Aşağıdaki bilgilerle sahibine ulaşabilirsin.",
     callOwnerBtn: "Sahibini Ara",
     callEmergencyBtn: "Acil Kişiyi Ara",
-    lostCardNotFound: "Bu köpeğe ait bir kayıt bulunamadı.",
+    lostCardNotFound: (species) => (species === "cat" ? "Bu kediye ait bir kayıt bulunamadı." : "Bu köpeğe ait bir kayıt bulunamadı."),
     lostCardFooter: "Paw Wallet ile oluşturuldu",
     colorNames: {
       "Siyah": "Siyah",
@@ -137,8 +143,11 @@ const TRANSLATIONS = {
       "Altın Sarısı": "Altın Sarısı",
       "Diğer": "Diğer",
     },
-    deleteDogModalTitle: "Köpeği Sil",
-    deleteDogWarning: (name) => `${name} adlı köpeğin pasaportunu, aşı kayıtlarını ve veteriner atamalarını kalıcı olarak silmek üzeresin. Bu işlem geri alınamaz.`,
+    deletePetModalTitle: (species) => (species === "cat" ? "Kediyi Sil" : "Köpeği Sil"),
+    deletePetWarning: (name, species) =>
+      species === "cat"
+        ? `${name} adlı kedinin pasaportunu, aşı kayıtlarını ve veteriner atamalarını kalıcı olarak silmek üzeresin. Bu işlem geri alınamaz.`
+        : `${name} adlı köpeğin pasaportunu, aşı kayıtlarını ve veteriner atamalarını kalıcı olarak silmek üzeresin. Bu işlem geri alınamaz.`,
     confirmDeleteBtn: "Evet, Sil",
     vaccineTabTitle: "Aşı Kartı",
     vaccineTabSubtitle: (dogName, count) => `${dogName} için kayıtlı ${count} aşı`,
@@ -182,7 +191,7 @@ const TRANSLATIONS = {
     platformVetsLabel: "Platform Veterinerleri",
     makePrimaryBtn: "Birincil Yap",
     makeSecondaryBtn: "İkincil Yap",
-    landingHeadline: "Köpeğinizin tüm hayatı, tek bir dijital pasaportta.",
+    landingHeadline: "Evcil hayvanınızın tüm hayatı, tek bir dijital pasaportta.",
     landingSub: "Kimlik bilgileri, aşı takvimi ve veteriner ataması — hepsi güvenle saklanır, her yerden erişilir.",
     signIn: "Giriş Yap",
     signUp: "Kayıt Ol",
@@ -284,7 +293,7 @@ const TRANSLATIONS = {
     adminPanelTitle: "Admin Paneli",
     vetPortalTitle: "Veteriner Portalı",
     adminStatsUsers: "Toplam Kullanıcı",
-    adminStatsOwners: "Köpek Sahibi",
+    adminStatsOwners: "Evcil Hayvan Sahibi",
     adminStatsVetAccounts: "Veteriner Hesabı",
     adminStatsVetListings: "Veteriner Kaydı",
     adminStatsPendingRequests: "Onay Bekleyen Atama",
@@ -324,9 +333,9 @@ const TRANSLATIONS = {
     actionLabels: {
       login: "Giriş yaptı",
       logout: "Çıkış yaptı",
-      dog_created: "Köpek eklendi",
-      dog_updated: "Köpek düzenlendi",
-      dog_deleted: "Köpek silindi",
+      dog_created: "Evcil hayvan eklendi",
+      dog_updated: "Evcil hayvan düzenlendi",
+      dog_deleted: "Evcil hayvan silindi",
       vaccine_added: "Aşı eklendi",
       vaccine_deleted: "Aşı silindi",
       health_profile_updated: "Sağlık profili güncellendi",
@@ -388,20 +397,23 @@ const TRANSLATIONS = {
     notificationsUnsupported: "Bu tarayıcı push bildirimlerini desteklemiyor.",
   },
   en: {
-    tagline: "Your dog's digital passport",
+    speciesLabel: { dog: "Dog", cat: "Cat" },
+    tagline: "Your pet's digital passport",
     navPassport: "Passport",
     navVaccines: "Vaccine Card",
     navVets: "Vet",
-    addDogMenuItem: "Add new dog",
-    noDogsTitle: "No dog added yet",
-    noDogsText: "Get started by creating your dog's passport — identity details, QR code and more are prepared automatically.",
+    addNewDogItem: "Add new dog",
+    addNewCatItem: "Add new cat",
+    noDogsTitle: "No pets added yet",
+    noDogsText: "Get started by creating your pet's passport — identity details, QR code and more are prepared automatically.",
     addFirstDog: "Add First Dog",
+    addFirstCat: "Add First Cat",
     footerNote: "Phase 1 preview — Passport, Vaccine Card, Vet Assignment. Data is stored in Supabase.",
-    addDogModalTitle: "Add New Dog",
-    editDogModalTitle: "Edit Dog Details",
+    addPetModalTitle: (species) => (species === "cat" ? "Add New Cat" : "Add New Dog"),
+    editPetModalTitle: (species) => (species === "cat" ? "Edit Cat Details" : "Edit Dog Details"),
     uploadPhoto: "Upload photo",
     changePhoto: "Change photo",
-    fieldDogName: "Dog's name",
+    fieldPetName: (species) => (species === "cat" ? "Cat's name" : "Dog's name"),
     fieldBreed: "Breed",
     fieldBirthDate: "Date of birth",
     fieldGender: "Gender",
@@ -452,12 +464,12 @@ const TRANSLATIONS = {
     verifiedIdentityLabel: "VERIFIED IDENTITY",
     scannableIdDesc: (name) => `When scanned, ${name}'s identity and contact details appear instantly.`,
     scanToReach: "Scan & reach out if lost",
-    lostPetCardBadge: "Found this dog?",
+    lostPetCardBadge: (species) => `Found this ${species.toLowerCase()}?`,
     lostPetCardTitle: (name) => `${name}'s ID Card`,
-    lostPetCardDesc: "This dog's owner uses Paw Wallet. You can reach them using the details below.",
+    lostPetCardDesc: (species) => `This ${species.toLowerCase()}'s owner uses Paw Wallet. You can reach them using the details below.`,
     callOwnerBtn: "Call Owner",
     callEmergencyBtn: "Call Emergency Contact",
-    lostCardNotFound: "No record found for this dog.",
+    lostCardNotFound: (species) => `No record found for this ${species.toLowerCase()}.`,
     lostCardFooter: "Made with Paw Wallet",
     colorNames: {
       "Siyah": "Black",
@@ -475,8 +487,9 @@ const TRANSLATIONS = {
       "Altın Sarısı": "Golden",
       "Diğer": "Other",
     },
-    deleteDogModalTitle: "Delete Dog",
-    deleteDogWarning: (name) => `You're about to permanently delete ${name}'s passport, vaccine records and vet assignments. This action cannot be undone.`,
+    deletePetModalTitle: (species) => (species === "cat" ? "Delete Cat" : "Delete Dog"),
+    deletePetWarning: (name, species) =>
+      `You're about to permanently delete ${name}'s passport, vaccine records and vet assignments. This action cannot be undone.`,
     confirmDeleteBtn: "Yes, Delete",
     vaccineTabTitle: "Vaccine Card",
     vaccineTabSubtitle: (dogName, count) => `${count} vaccines recorded for ${dogName}`,
@@ -520,7 +533,7 @@ const TRANSLATIONS = {
     platformVetsLabel: "Platform Vets",
     makePrimaryBtn: "Make Primary",
     makeSecondaryBtn: "Make Secondary",
-    landingHeadline: "Your dog's whole life, in one digital passport.",
+    landingHeadline: "Your pet's whole life, in one digital passport.",
     landingSub: "Identity details, vaccine schedule and vet assignment — securely stored, accessible from anywhere.",
     signIn: "Log In",
     signUp: "Sign Up",
@@ -622,7 +635,7 @@ const TRANSLATIONS = {
     adminPanelTitle: "Admin Panel",
     vetPortalTitle: "Vet Portal",
     adminStatsUsers: "Total Users",
-    adminStatsOwners: "Dog Owners",
+    adminStatsOwners: "Pet Owners",
     adminStatsVetAccounts: "Vet Accounts",
     adminStatsVetListings: "Vet Listings",
     adminStatsPendingRequests: "Pending Assignments",
@@ -662,9 +675,9 @@ const TRANSLATIONS = {
     actionLabels: {
       login: "Logged in",
       logout: "Logged out",
-      dog_created: "Dog added",
-      dog_updated: "Dog edited",
-      dog_deleted: "Dog deleted",
+      dog_created: "Pet added",
+      dog_updated: "Pet edited",
+      dog_deleted: "Pet deleted",
       vaccine_added: "Vaccine added",
       vaccine_deleted: "Vaccine deleted",
       health_profile_updated: "Health profile updated",
@@ -726,20 +739,23 @@ const TRANSLATIONS = {
     notificationsUnsupported: "This browser doesn't support push notifications.",
   },
   fr: {
-    tagline: "Le passeport numérique de votre chien",
+    speciesLabel: { dog: "Chien", cat: "Chat" },
+    tagline: "Le passeport numérique de votre animal",
     navPassport: "Passeport",
     navVaccines: "Carnet de Vaccination",
     navVets: "Vétérinaire",
-    addDogMenuItem: "Ajouter un chien",
-    noDogsTitle: "Aucun chien ajouté",
-    noDogsText: "Commencez par créer le passeport de votre chien — identité, code QR et plus sont préparés automatiquement.",
+    addNewDogItem: "Ajouter un chien",
+    addNewCatItem: "Ajouter un chat",
+    noDogsTitle: "Aucun animal ajouté",
+    noDogsText: "Commencez par créer le passeport de votre animal — identité, code QR et plus sont préparés automatiquement.",
     addFirstDog: "Ajouter le Premier Chien",
+    addFirstCat: "Ajouter le Premier Chat",
     footerNote: "Aperçu Phase 1 — Passeport, Carnet de Vaccination, Attribution Vétérinaire. Les données sont stockées dans Supabase.",
-    addDogModalTitle: "Ajouter un Nouveau Chien",
-    editDogModalTitle: "Modifier les Informations",
+    addPetModalTitle: (species) => (species === "cat" ? "Ajouter un Nouveau Chat" : "Ajouter un Nouveau Chien"),
+    editPetModalTitle: (species) => (species === "cat" ? "Modifier les Informations du Chat" : "Modifier les Informations du Chien"),
     uploadPhoto: "Télécharger une photo",
     changePhoto: "Changer la photo",
-    fieldDogName: "Nom du chien",
+    fieldPetName: (species) => (species === "cat" ? "Nom du chat" : "Nom du chien"),
     fieldBreed: "Race",
     fieldBirthDate: "Date de naissance",
     fieldGender: "Sexe",
@@ -790,12 +806,15 @@ const TRANSLATIONS = {
     verifiedIdentityLabel: "IDENTITÉ VÉRIFIÉE",
     scannableIdDesc: (name) => `Une fois scanné, ce code affiche instantanément l'identité et les coordonnées de ${name}.`,
     scanToReach: "Scanner & contacter en cas de perte",
-    lostPetCardBadge: "Vous avez trouvé ce chien ?",
+    lostPetCardBadge: (species) => (species === "cat" ? "Vous avez trouvé ce chat ?" : "Vous avez trouvé ce chien ?"),
     lostPetCardTitle: (name) => `Carte d'Identité de ${name}`,
-    lostPetCardDesc: "Le propriétaire de ce chien utilise Paw Wallet. Vous pouvez le contacter ci-dessous.",
+    lostPetCardDesc: (species) =>
+      species === "cat"
+        ? "Le propriétaire de ce chat utilise Paw Wallet. Vous pouvez le contacter ci-dessous."
+        : "Le propriétaire de ce chien utilise Paw Wallet. Vous pouvez le contacter ci-dessous.",
     callOwnerBtn: "Appeler le Propriétaire",
     callEmergencyBtn: "Appeler le Contact d'Urgence",
-    lostCardNotFound: "Aucun enregistrement trouvé pour ce chien.",
+    lostCardNotFound: (species) => (species === "cat" ? "Aucun enregistrement trouvé pour ce chat." : "Aucun enregistrement trouvé pour ce chien."),
     lostCardFooter: "Créé avec Paw Wallet",
     colorNames: {
       "Siyah": "Noir",
@@ -813,8 +832,9 @@ const TRANSLATIONS = {
       "Altın Sarısı": "Doré",
       "Diğer": "Autre",
     },
-    deleteDogModalTitle: "Supprimer le Chien",
-    deleteDogWarning: (name) => `Vous êtes sur le point de supprimer définitivement le passeport, les vaccins et les vétérinaires assignés de ${name}. Cette action est irréversible.`,
+    deletePetModalTitle: (species) => (species === "cat" ? "Supprimer le Chat" : "Supprimer le Chien"),
+    deletePetWarning: (name, species) =>
+      `Vous êtes sur le point de supprimer définitivement le passeport, les vaccins et les vétérinaires assignés de ${name}. Cette action est irréversible.`,
     confirmDeleteBtn: "Oui, Supprimer",
     vaccineTabTitle: "Carnet de Vaccination",
     vaccineTabSubtitle: (dogName, count) => `${count} vaccins enregistrés pour ${dogName}`,
@@ -858,7 +878,7 @@ const TRANSLATIONS = {
     platformVetsLabel: "Vétérinaires de la Plateforme",
     makePrimaryBtn: "Définir Principal",
     makeSecondaryBtn: "Définir Secondaire",
-    landingHeadline: "Toute la vie de votre chien, dans un seul passeport numérique.",
+    landingHeadline: "Toute la vie de votre animal, dans un seul passeport numérique.",
     landingSub: "Identité, calendrier de vaccination et vétérinaire assigné — stockés en sécurité, accessibles de partout.",
     signIn: "Connexion",
     signUp: "S'inscrire",
@@ -1041,20 +1061,23 @@ const TRANSLATIONS = {
     notificationsUnsupported: "Ce navigateur ne prend pas en charge les notifications push.",
   },
   de: {
-    tagline: "Der digitale Pass Ihres Hundes",
+    speciesLabel: { dog: "Hund", cat: "Katze" },
+    tagline: "Der digitale Pass Ihres Haustiers",
     navPassport: "Reisepass",
     navVaccines: "Impfausweis",
     navVets: "Tierarzt",
-    addDogMenuItem: "Neuen Hund hinzufügen",
-    noDogsTitle: "Noch kein Hund hinzugefügt",
-    noDogsText: "Erstellen Sie den Pass Ihres Hundes — Identitätsdaten, QR-Code und mehr werden automatisch vorbereitet.",
+    addNewDogItem: "Neuen Hund hinzufügen",
+    addNewCatItem: "Neue Katze hinzufügen",
+    noDogsTitle: "Noch kein Haustier hinzugefügt",
+    noDogsText: "Erstellen Sie den Pass Ihres Haustiers — Identitätsdaten, QR-Code und mehr werden automatisch vorbereitet.",
     addFirstDog: "Ersten Hund Hinzufügen",
+    addFirstCat: "Erste Katze Hinzufügen",
     footerNote: "Phase-1-Vorschau — Reisepass, Impfausweis, Tierarztzuweisung. Daten werden in Supabase gespeichert.",
-    addDogModalTitle: "Neuen Hund Hinzufügen",
-    editDogModalTitle: "Hundedaten Bearbeiten",
+    addPetModalTitle: (species) => (species === "cat" ? "Neue Katze Hinzufügen" : "Neuen Hund Hinzufügen"),
+    editPetModalTitle: (species) => (species === "cat" ? "Katzendaten Bearbeiten" : "Hundedaten Bearbeiten"),
     uploadPhoto: "Foto hochladen",
     changePhoto: "Foto ändern",
-    fieldDogName: "Name des Hundes",
+    fieldPetName: (species) => (species === "cat" ? "Name der Katze" : "Name des Hundes"),
     fieldBreed: "Rasse",
     fieldBirthDate: "Geburtsdatum",
     fieldGender: "Geschlecht",
@@ -1105,12 +1128,15 @@ const TRANSLATIONS = {
     verifiedIdentityLabel: "VERIFIZIERTE IDENTITÄT",
     scannableIdDesc: (name) => `Beim Scannen werden die Identitäts- und Kontaktdaten von ${name} sofort angezeigt.`,
     scanToReach: "Bei Verlust scannen & kontaktieren",
-    lostPetCardBadge: "Diesen Hund gefunden?",
+    lostPetCardBadge: (species) => (species === "cat" ? "Diese Katze gefunden?" : "Diesen Hund gefunden?"),
     lostPetCardTitle: (name) => `Ausweis von ${name}`,
-    lostPetCardDesc: "Der Besitzer dieses Hundes nutzt Paw Wallet. Sie können ihn unten kontaktieren.",
+    lostPetCardDesc: (species) =>
+      species === "cat"
+        ? "Der Besitzer dieser Katze nutzt Paw Wallet. Sie können ihn unten kontaktieren."
+        : "Der Besitzer dieses Hundes nutzt Paw Wallet. Sie können ihn unten kontaktieren.",
     callOwnerBtn: "Besitzer Anrufen",
     callEmergencyBtn: "Notfallkontakt Anrufen",
-    lostCardNotFound: "Kein Eintrag für diesen Hund gefunden.",
+    lostCardNotFound: (species) => (species === "cat" ? "Kein Eintrag für diese Katze gefunden." : "Kein Eintrag für diesen Hund gefunden."),
     lostCardFooter: "Erstellt mit Paw Wallet",
     colorNames: {
       "Siyah": "Schwarz",
@@ -1128,8 +1154,9 @@ const TRANSLATIONS = {
       "Altın Sarısı": "Golden",
       "Diğer": "Andere",
     },
-    deleteDogModalTitle: "Hund Löschen",
-    deleteDogWarning: (name) => `Sie sind dabei, den Pass, die Impfdaten und die Tierarztzuweisungen von ${name} dauerhaft zu löschen. Dies kann nicht rückgängig gemacht werden.`,
+    deletePetModalTitle: (species) => (species === "cat" ? "Katze Löschen" : "Hund Löschen"),
+    deletePetWarning: (name, species) =>
+      `Sie sind dabei, den Pass, die Impfdaten und die Tierarztzuweisungen von ${name} dauerhaft zu löschen. Dies kann nicht rückgängig gemacht werden.`,
     confirmDeleteBtn: "Ja, Löschen",
     vaccineTabTitle: "Impfausweis",
     vaccineTabSubtitle: (dogName, count) => `${count} Impfungen für ${dogName} erfasst`,
@@ -1173,7 +1200,7 @@ const TRANSLATIONS = {
     platformVetsLabel: "Plattform-Tierärzte",
     makePrimaryBtn: "Als Primär Festlegen",
     makeSecondaryBtn: "Als Sekundär Festlegen",
-    landingHeadline: "Das ganze Leben Ihres Hundes in einem digitalen Pass.",
+    landingHeadline: "Das ganze Leben Ihres Haustiers in einem digitalen Pass.",
     landingSub: "Identitätsdaten, Impfplan und Tierarztzuweisung — sicher gespeichert, von überall zugänglich.",
     signIn: "Anmelden",
     signUp: "Registrieren",
@@ -1275,7 +1302,7 @@ const TRANSLATIONS = {
     adminPanelTitle: "Admin-Panel",
     vetPortalTitle: "Tierarzt-Portal",
     adminStatsUsers: "Nutzer Gesamt",
-    adminStatsOwners: "Hundebesitzer",
+    adminStatsOwners: "Haustierbesitzer",
     adminStatsVetAccounts: "Tierarztkonten",
     adminStatsVetListings: "Registrierte Tierärzte",
     adminStatsPendingRequests: "Ausstehende Zuweisungen",
@@ -1356,20 +1383,23 @@ const TRANSLATIONS = {
     notificationsUnsupported: "Dieser Browser unterstützt keine Push-Benachrichtigungen.",
   },
   es: {
-    tagline: "El pasaporte digital de tu perro",
+    speciesLabel: { dog: "Perro", cat: "Gato" },
+    tagline: "El pasaporte digital de tu mascota",
     navPassport: "Pasaporte",
     navVaccines: "Cartilla de Vacunas",
     navVets: "Veterinario",
-    addDogMenuItem: "Añadir nuevo perro",
-    noDogsTitle: "Aún no se ha añadido ningún perro",
-    noDogsText: "Comienza creando el pasaporte de tu perro — los datos de identidad, el código QR y más se preparan automáticamente.",
+    addNewDogItem: "Añadir nuevo perro",
+    addNewCatItem: "Añadir nuevo gato",
+    noDogsTitle: "Aún no se ha añadido ninguna mascota",
+    noDogsText: "Comienza creando el pasaporte de tu mascota — los datos de identidad, el código QR y más se preparan automáticamente.",
     addFirstDog: "Añadir Primer Perro",
+    addFirstCat: "Añadir Primer Gato",
     footerNote: "Vista previa Fase 1 — Pasaporte, Cartilla de Vacunas, Asignación de Veterinario. Los datos se almacenan en Supabase.",
-    addDogModalTitle: "Añadir Nuevo Perro",
-    editDogModalTitle: "Editar Datos del Perro",
+    addPetModalTitle: (species) => (species === "cat" ? "Añadir Nuevo Gato" : "Añadir Nuevo Perro"),
+    editPetModalTitle: (species) => (species === "cat" ? "Editar Datos del Gato" : "Editar Datos del Perro"),
     uploadPhoto: "Subir foto",
     changePhoto: "Cambiar foto",
-    fieldDogName: "Nombre del perro",
+    fieldPetName: (species) => (species === "cat" ? "Nombre del gato" : "Nombre del perro"),
     fieldBreed: "Raza",
     fieldBirthDate: "Fecha de nacimiento",
     fieldGender: "Sexo",
@@ -1420,12 +1450,15 @@ const TRANSLATIONS = {
     verifiedIdentityLabel: "IDENTIDAD VERIFICADA",
     scannableIdDesc: (name) => `Al escanearlo, aparecen al instante los datos de identidad y contacto de ${name}.`,
     scanToReach: "Escanea y contacta si se pierde",
-    lostPetCardBadge: "¿Encontraste a este perro?",
+    lostPetCardBadge: (species) => (species === "cat" ? "¿Encontraste a este gato?" : "¿Encontraste a este perro?"),
     lostPetCardTitle: (name) => `Tarjeta de Identidad de ${name}`,
-    lostPetCardDesc: "El dueño de este perro usa Paw Wallet. Puedes contactarlo con los datos de abajo.",
+    lostPetCardDesc: (species) =>
+      species === "cat"
+        ? "El dueño de este gato usa Paw Wallet. Puedes contactarlo con los datos de abajo."
+        : "El dueño de este perro usa Paw Wallet. Puedes contactarlo con los datos de abajo.",
     callOwnerBtn: "Llamar al Dueño",
     callEmergencyBtn: "Llamar al Contacto de Emergencia",
-    lostCardNotFound: "No se encontró ningún registro para este perro.",
+    lostCardNotFound: (species) => (species === "cat" ? "No se encontró ningún registro para este gato." : "No se encontró ningún registro para este perro."),
     lostCardFooter: "Creado con Paw Wallet",
     colorNames: {
       "Siyah": "Negro",
@@ -1443,8 +1476,11 @@ const TRANSLATIONS = {
       "Altın Sarısı": "Dorado",
       "Diğer": "Otro",
     },
-    deleteDogModalTitle: "Eliminar Perro",
-    deleteDogWarning: (name) => `Estás a punto de eliminar permanentemente el pasaporte, los registros de vacunas y las asignaciones de veterinario de ${name}. Esta acción no se puede deshacer.`,
+    deletePetModalTitle: (species) => (species === "cat" ? "Eliminar Gato" : "Eliminar Perro"),
+    deletePetWarning: (name, species) =>
+      species === "cat"
+        ? `Estás a punto de eliminar permanentemente el pasaporte, los registros de vacunas y las asignaciones de veterinario de ${name}. Esta acción no se puede deshacer.`
+        : `Estás a punto de eliminar permanentemente el pasaporte, los registros de vacunas y las asignaciones de veterinario de ${name}. Esta acción no se puede deshacer.`,
     confirmDeleteBtn: "Sí, Eliminar",
     vaccineTabTitle: "Cartilla de Vacunas",
     vaccineTabSubtitle: (dogName, count) => `${count} vacunas registradas para ${dogName}`,
@@ -1488,7 +1524,7 @@ const TRANSLATIONS = {
     platformVetsLabel: "Veterinarios de la Plataforma",
     makePrimaryBtn: "Hacer Principal",
     makeSecondaryBtn: "Hacer Secundario",
-    landingHeadline: "Toda la vida de tu perro, en un solo pasaporte digital.",
+    landingHeadline: "Toda la vida de tu mascota, en un solo pasaporte digital.",
     landingSub: "Datos de identidad, calendario de vacunas y veterinario asignado — almacenados con seguridad, accesibles desde cualquier lugar.",
     signIn: "Iniciar Sesión",
     signUp: "Registrarse",
@@ -1590,7 +1626,7 @@ const TRANSLATIONS = {
     adminPanelTitle: "Panel de Administración",
     vetPortalTitle: "Portal Veterinario",
     adminStatsUsers: "Usuarios Totales",
-    adminStatsOwners: "Dueños de Perros",
+    adminStatsOwners: "Dueños de Mascotas",
     adminStatsVetAccounts: "Cuentas Veterinarias",
     adminStatsVetListings: "Veterinarios Registrados",
     adminStatsPendingRequests: "Asignaciones Pendientes",
@@ -1736,6 +1772,16 @@ const COMMON_VACCINES = [
   "Bordetella (Kennel Cough)",
   "Leishmania",
   "Corona virüsü",
+  "Diğer",
+];
+
+const CAT_VACCINES = [
+  "Kuduz / Rabies",
+  "Karma (FVRCP)",
+  "Lösemi (FeLV)",
+  "FIV Testi",
+  "Klamidya (Chlamydia)",
+  "Bordetella",
   "Diğer",
 ];
 
@@ -1937,6 +1983,72 @@ const BREEDS = [
   "Diğer",
 ];
 
+const CAT_BREEDS = [
+  "Melez / Karışık",
+  "Abyssinian",
+  "American Bobtail",
+  "American Curl",
+  "American Shorthair",
+  "American Wirehair",
+  "Balinese",
+  "Bengal",
+  "Birman",
+  "Bombay",
+  "British Longhair",
+  "British Shorthair",
+  "Burmese",
+  "Burmilla",
+  "Chartreux",
+  "Colorpoint Shorthair",
+  "Cornish Rex",
+  "Cymric",
+  "Devon Rex",
+  "Donskoy",
+  "Egyptian Mau",
+  "European Shorthair",
+  "Exotic Shorthair",
+  "Havana Brown",
+  "Himalayan",
+  "Japanese Bobtail",
+  "Javanese",
+  "Khao Manee",
+  "Korat",
+  "Kurilian Bobtail",
+  "LaPerm",
+  "Maine Coon",
+  "Manx",
+  "Munchkin",
+  "Nebelung",
+  "Norwegian Forest Cat",
+  "Ocicat",
+  "Oriental Shorthair",
+  "Persian",
+  "Peterbald",
+  "Pixie-bob",
+  "Ragamuffin",
+  "Ragdoll",
+  "Russian Blue",
+  "Savannah",
+  "Scottish Fold",
+  "Selkirk Rex",
+  "Serengeti",
+  "Siamese",
+  "Siberian",
+  "Singapura",
+  "Skookum",
+  "Snowshoe",
+  "Sokoke",
+  "Somali",
+  "Sphynx",
+  "Tonkinese",
+  "Toyger",
+  "Turkish Angora",
+  "Turkish Van",
+  "Ukrainian Levkoy",
+  "York Chocolate",
+  "Diğer",
+];
+
 const COLORS = [
   "Siyah",
   "Beyaz",
@@ -2000,6 +2112,31 @@ const DOG_BG_PATTERN_SVG = `<svg xmlns='http://www.w3.org/2000/svg' width='200' 
   </g>
 </svg>`;
 const DOG_BG_PATTERN_URL = `url("data:image/svg+xml,${encodeURIComponent(DOG_BG_PATTERN_SVG)}")`;
+
+/* Subtle scattered cat-themed background pattern (cat faces + fish) */
+const CAT_BG_PATTERN_SVG = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>
+  <g fill='#1B3A2F' fill-opacity='0.05'>
+    <g transform='translate(28,32) rotate(-12)'>
+      <circle cx='0' cy='2' r='9'/>
+      <polygon points='-9,-3 -13,-14 -2,-7'/>
+      <polygon points='9,-3 13,-14 2,-7'/>
+    </g>
+    <g transform='translate(150,55) rotate(18)'>
+      <ellipse cx='-3' cy='0' rx='10' ry='6'/>
+      <polygon points='9,0 20,-7 20,7'/>
+    </g>
+    <g transform='translate(55,145) rotate(8)'>
+      <circle cx='0' cy='1.5' r='7'/>
+      <polygon points='-7,-2 -10,-11 -1.5,-5.5'/>
+      <polygon points='7,-2 10,-11 1.5,-5.5'/>
+    </g>
+    <g transform='translate(160,170) rotate(-22)'>
+      <ellipse cx='-2.5' cy='0' rx='8' ry='5'/>
+      <polygon points='7,0 16,-5.5 16,5.5'/>
+    </g>
+  </g>
+</svg>`;
+const CAT_BG_PATTERN_URL = `url("data:image/svg+xml,${encodeURIComponent(CAT_BG_PATTERN_SVG)}")`;
 
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
@@ -2310,20 +2447,24 @@ function SearchableSelect({ value, onChange, options, placeholder }) {
   );
 }
 
-function AddDogModal({ onClose, onSave, existingDog }) {
+function AddDogModal({ onClose, onSave, existingDog, initialSpecies }) {
   const { t } = useI18n();
   const isEdit = !!existingDog;
+  const species = existingDog?.species || initialSpecies || "dog";
+  const speciesBreeds = species === "cat" ? CAT_BREEDS : BREEDS;
   const [form, setForm] = useState(
     existingDog
       ? {
           ...existingDog,
+          species,
           neutered: existingDog.neutered || "Hayır",
           customColor: !COLORS.includes(existingDog.color) ? existingDog.color : "",
           color: COLORS.includes(existingDog.color) ? existingDog.color : "Diğer",
         }
       : {
+          species,
           name: "",
-          breed: BREEDS[0],
+          breed: speciesBreeds[0],
           birthDate: "",
           gender: "Erkek",
           neutered: "Hayır",
@@ -2381,7 +2522,7 @@ function AddDogModal({ onClose, onSave, existingDog }) {
   };
 
   return (
-    <Modal title={isEdit ? t.editDogModalTitle : t.addDogModalTitle} onClose={onClose} wide>
+    <Modal title={isEdit ? t.editPetModalTitle(species) : t.addPetModalTitle(species)} onClose={onClose} wide>
       <div className="grid sm:grid-cols-[136px_1fr] gap-5">
         <div className="flex flex-col items-center gap-2">
           <div
@@ -2403,14 +2544,14 @@ function AddDogModal({ onClose, onSave, existingDog }) {
         </div>
 
         <div className="grid sm:grid-cols-2 gap-3.5">
-          <Field label={t.fieldDogName}>
+          <Field label={t.fieldPetName(species)}>
             <input className={inputCls} value={form.name} onChange={set("name")} placeholder="Zeytin" />
           </Field>
           <Field label={t.fieldBreed}>
             <SearchableSelect
               value={form.breed}
               onChange={(v) => setForm((f) => ({ ...f, breed: v }))}
-              options={BREEDS}
+              options={speciesBreeds}
               placeholder={t.fieldBreed}
             />
           </Field>
@@ -2806,10 +2947,11 @@ function DocumentsTab({ dog, onAdd, onDelete }) {
   );
 }
 
-function AddVaccineModal({ onClose, onSave }) {
+function AddVaccineModal({ onClose, onSave, species }) {
   const { t } = useI18n();
+  const vaccineList = species === "cat" ? CAT_VACCINES : COMMON_VACCINES;
   const [form, setForm] = useState({
-    name: COMMON_VACCINES[0],
+    name: vaccineList[0],
     customName: "",
     date: todayISO(),
     nextDate: "",
@@ -2855,7 +2997,7 @@ function AddVaccineModal({ onClose, onSave }) {
       <div className="space-y-3.5">
         <Field label={t.fieldVaccineName}>
           <select className={inputCls} value={form.name} onChange={set("name")}>
-            {COMMON_VACCINES.map((v) => (
+            {vaccineList.map((v) => (
               <option key={v}>{v}</option>
             ))}
           </select>
@@ -3016,6 +3158,7 @@ function VaccineTab({ dog, onAdd, onDelete }) {
 
       {showAdd && (
         <AddVaccineModal
+          species={dog.species}
           onClose={() => setShowAdd(false)}
           onSave={(v) => {
             onAdd(v);
@@ -5162,6 +5305,7 @@ function PawWalletInner({ session }) {
   const [activeId, setActiveId] = useState(null);
   const [tab, setTab] = useState("passport");
   const [showAddDog, setShowAddDog] = useState(false);
+  const [addSpecies, setAddSpecies] = useState("dog");
   const [editingDog, setEditingDog] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [dogMenuOpen, setDogMenuOpen] = useState(false);
@@ -5320,7 +5464,11 @@ function PawWalletInner({ session }) {
   return (
     <div
       className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden"
-      style={{ colorScheme: "light", backgroundImage: DOG_BG_PATTERN_URL, backgroundSize: "200px 200px" }}
+      style={{
+        colorScheme: "light",
+        backgroundImage: activeDog?.species === "cat" ? CAT_BG_PATTERN_URL : DOG_BG_PATTERN_URL,
+        backgroundSize: "200px 200px",
+      }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
@@ -5390,12 +5538,23 @@ function PawWalletInner({ session }) {
                     ))}
                     <button
                       onClick={() => {
+                        setAddSpecies("dog");
                         setShowAddDog(true);
                         setDogMenuOpen(false);
                       }}
                       className="w-full flex items-center gap-2 px-3 py-2.5 text-left text-[13.5px] text-[#1B3A2F] font-semibold border-t border-[#e3d9bd] hover:bg-[#f0e9cd] transition"
                     >
-                      <Plus size={13} /> {t.addDogMenuItem}
+                      <Plus size={13} /> {t.addNewDogItem}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setAddSpecies("cat");
+                        setShowAddDog(true);
+                        setDogMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-left text-[13.5px] text-[#1B3A2F] font-semibold hover:bg-[#f0e9cd] transition"
+                    >
+                      <Plus size={13} /> {t.addNewCatItem}
                     </button>
                   </div>
                 )}
@@ -5417,9 +5576,26 @@ function PawWalletInner({ session }) {
               <h2 className="font-display text-[20px] text-[#1B3A2F] mb-1">{t.noDogsTitle}</h2>
               <p className="text-[13.5px] text-[#5b6d63] max-w-sm">{t.noDogsText}</p>
             </div>
-            <PrimaryButton icon={Plus} onClick={() => setShowAddDog(true)}>
-              {t.addFirstDog}
-            </PrimaryButton>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <PrimaryButton
+                icon={Plus}
+                onClick={() => {
+                  setAddSpecies("dog");
+                  setShowAddDog(true);
+                }}
+              >
+                {t.addFirstDog}
+              </PrimaryButton>
+              <GhostButton
+                icon={Plus}
+                onClick={() => {
+                  setAddSpecies("cat");
+                  setShowAddDog(true);
+                }}
+              >
+                {t.addFirstCat}
+              </GhostButton>
+            </div>
           </div>
         ) : (
           <>
@@ -5481,12 +5657,18 @@ function PawWalletInner({ session }) {
         <p className="text-center text-[11px] text-[#8d8560] mt-10">{t.footerNote}</p>
       </div>
 
-      {showAddDog && <AddDogModal onClose={() => setShowAddDog(false)} onSave={addDog} />}
+      {showAddDog && <AddDogModal initialSpecies={addSpecies} onClose={() => setShowAddDog(false)} onSave={addDog} />}
       {editingDog && <AddDogModal existingDog={editingDog} onClose={() => setEditingDog(null)} onSave={addDog} />}
       {confirmDeleteId && (
-        <Modal title={t.deleteDogModalTitle} onClose={() => setConfirmDeleteId(null)}>
+        <Modal
+          title={t.deletePetModalTitle(dogs.find((d) => d.id === confirmDeleteId)?.species || "dog")}
+          onClose={() => setConfirmDeleteId(null)}
+        >
           <p className="text-[14px] text-[#3c473f] leading-relaxed">
-            {t.deleteDogWarning(dogs.find((d) => d.id === confirmDeleteId)?.name)}
+            {t.deletePetWarning(
+              dogs.find((d) => d.id === confirmDeleteId)?.name,
+              dogs.find((d) => d.id === confirmDeleteId)?.species || "dog"
+            )}
           </p>
           <div className="mt-6 flex justify-end gap-2">
             <GhostButton onClick={() => setConfirmDeleteId(null)}>{t.cancel}</GhostButton>
@@ -5536,11 +5718,11 @@ function LostPetCard({ dogId }) {
       {card === undefined ? (
         <Loader2 className="animate-spin text-[#5b6d63]" size={24} />
       ) : card === null ? (
-        <div className="text-center text-[#5b6d63] text-[14px]">{t.lostCardNotFound}</div>
+        <div className="text-center text-[#5b6d63] text-[14px]">{t.lostCardNotFound("dog")}</div>
       ) : (
         <div className="w-full max-w-sm">
           <div className="flex items-center gap-1.5 justify-center mb-4 text-[11px] font-bold tracking-wider text-white bg-[#a63d40] rounded-full px-3 py-1.5 w-fit mx-auto">
-            <ScanLine size={13} /> {t.lostPetCardBadge}
+            <ScanLine size={13} /> {t.lostPetCardBadge(card.species || "dog")}
           </div>
 
           <div className="rounded-2xl border border-[#C9A227]/50 bg-[#FBF8EE] p-6 shadow-xl">
@@ -5556,7 +5738,7 @@ function LostPetCard({ dogId }) {
                 <h1 className="font-display text-[26px] text-[#1B3A2F] leading-tight">{t.lostPetCardTitle(card.name)}</h1>
                 <p className="text-[13px] text-[#5b6d63]">{card.breed}</p>
               </div>
-              <p className="text-[13px] text-[#5b6d63]">{t.lostPetCardDesc}</p>
+              <p className="text-[13px] text-[#5b6d63]">{t.lostPetCardDesc(card.species || "dog")}</p>
             </div>
 
             <div className="space-y-2 mb-5">
