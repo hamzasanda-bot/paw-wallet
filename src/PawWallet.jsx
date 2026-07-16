@@ -127,6 +127,8 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Acil Kişiyi Ara",
     lostCardNotFound: (species) => (species === "cat" ? "Bu kediye ait bir kayıt bulunamadı." : "Bu köpeğe ait bir kayıt bulunamadı."),
     lostCardFooter: "Paw Wallet ile oluşturuldu",
+    breedMixedOption: "Melez / Karışık",
+    breedOtherOption: "Diğer",
     colorNames: {
       "Siyah": "Siyah",
       "Beyaz": "Beyaz",
@@ -471,6 +473,8 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Call Emergency Contact",
     lostCardNotFound: (species) => `No record found for this ${species.toLowerCase()}.`,
     lostCardFooter: "Made with Paw Wallet",
+    breedMixedOption: "Mixed / Unknown",
+    breedOtherOption: "Other",
     colorNames: {
       "Siyah": "Black",
       "Beyaz": "White",
@@ -816,6 +820,8 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Appeler le Contact d'Urgence",
     lostCardNotFound: (species) => (species === "cat" ? "Aucun enregistrement trouvé pour ce chat." : "Aucun enregistrement trouvé pour ce chien."),
     lostCardFooter: "Créé avec Paw Wallet",
+    breedMixedOption: "Croisé / Inconnu",
+    breedOtherOption: "Autre",
     colorNames: {
       "Siyah": "Noir",
       "Beyaz": "Blanc",
@@ -1138,6 +1144,8 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Notfallkontakt Anrufen",
     lostCardNotFound: (species) => (species === "cat" ? "Kein Eintrag für diese Katze gefunden." : "Kein Eintrag für diesen Hund gefunden."),
     lostCardFooter: "Erstellt mit Paw Wallet",
+    breedMixedOption: "Mischling / Unbekannt",
+    breedOtherOption: "Andere",
     colorNames: {
       "Siyah": "Schwarz",
       "Beyaz": "Weiß",
@@ -1460,6 +1468,8 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Llamar al Contacto de Emergencia",
     lostCardNotFound: (species) => (species === "cat" ? "No se encontró ningún registro para este gato." : "No se encontró ningún registro para este perro."),
     lostCardFooter: "Creado con Paw Wallet",
+    breedMixedOption: "Mestizo / Desconocido",
+    breedOtherOption: "Otro",
     colorNames: {
       "Siyah": "Negro",
       "Beyaz": "Blanco",
@@ -2395,6 +2405,7 @@ function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeho
 /* Searchable combobox — type to filter a long list (e.g. dog breeds), free typing also allowed */
 function SearchableSelect({ value, onChange, options, placeholder }) {
   const [query, setQuery] = useState(value || "");
+  const [filterText, setFilterText] = useState("");
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -2408,7 +2419,7 @@ function SearchableSelect({ value, onChange, options, placeholder }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const q = query.trim().toLowerCase();
+  const q = filterText.trim().toLowerCase();
   const filtered = q ? options.filter((o) => o.toLowerCase().includes(q)).slice(0, 60) : options.slice(0, 60);
 
   return (
@@ -2418,10 +2429,15 @@ function SearchableSelect({ value, onChange, options, placeholder }) {
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
+          setFilterText(e.target.value);
           setOpen(true);
           onChange(e.target.value);
         }}
-        onFocus={() => setOpen(true)}
+        onFocus={(e) => {
+          setOpen(true);
+          setFilterText("");
+          e.target.select();
+        }}
         placeholder={placeholder}
         autoComplete="off"
       />
@@ -2452,6 +2468,11 @@ function AddDogModal({ onClose, onSave, existingDog, initialSpecies }) {
   const isEdit = !!existingDog;
   const species = existingDog?.species || initialSpecies || "dog";
   const speciesBreeds = species === "cat" ? CAT_BREEDS : BREEDS;
+  const displayBreeds = speciesBreeds.map((b) => {
+    if (b === "Melez / Karışık") return t.breedMixedOption;
+    if (b === "Diğer") return t.breedOtherOption;
+    return b;
+  });
   const [form, setForm] = useState(
     existingDog
       ? {
@@ -2464,7 +2485,7 @@ function AddDogModal({ onClose, onSave, existingDog, initialSpecies }) {
       : {
           species,
           name: "",
-          breed: speciesBreeds[0],
+          breed: displayBreeds[0],
           birthDate: "",
           gender: "Erkek",
           neutered: "Hayır",
@@ -2551,7 +2572,7 @@ function AddDogModal({ onClose, onSave, existingDog, initialSpecies }) {
             <SearchableSelect
               value={form.breed}
               onChange={(v) => setForm((f) => ({ ...f, breed: v }))}
-              options={speciesBreeds}
+              options={displayBreeds}
               placeholder={t.fieldBreed}
             />
           </Field>
@@ -2729,7 +2750,7 @@ function PassportTab({ dog, onEdit, onDelete }) {
 
         <div className="flex gap-4 sm:gap-6">
           <div className="shrink-0">
-            <div className="h-28 w-24 sm:h-40 sm:w-32 rounded-lg overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
+            <div className="h-28 w-28 sm:h-36 sm:w-36 rounded-full overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
               {dog.photo ? (
                 <img src={dog.photo} alt={dog.name} className="h-full w-full object-cover" />
               ) : (
@@ -4102,7 +4123,7 @@ function PetCVTab({ dog, session }) {
 
         <div className="flex gap-4 sm:gap-6 mb-6">
           <div className="shrink-0">
-            <div className="h-24 w-24 rounded-lg overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
+            <div className="h-24 w-24 rounded-full overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
               {dog.photo ? (
                 <img src={dog.photo} alt={dog.name} className="h-full w-full object-cover" />
               ) : (
