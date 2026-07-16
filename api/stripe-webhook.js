@@ -16,6 +16,15 @@ function buffer(readable) {
   });
 }
 
+// Stripe'ın yeni API sürümlerinde current_period_end artık abonelik
+// nesnesinin üst seviyesinde değil, "items" içindeki her bir kalem için
+// ayrı ayrı tutuluyor olabilir. İkisini de dener, hiçbiri yoksa null döner.
+function getPeriodEndISO(sub) {
+  const raw = sub?.current_period_end ?? sub?.items?.data?.[0]?.current_period_end;
+  if (!raw || Number.isNaN(Number(raw))) return null;
+  return new Date(Number(raw) * 1000).toISOString();
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
@@ -45,7 +54,7 @@ export default async function handler(req, res) {
         plan: "premium",
         status: sub.status,
         billing_cycle: session.metadata?.billing_cycle || "monthly",
-        current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+        current_period_end: getPeriodEndISO(sub),
         updated_at: new Date().toISOString(),
       });
     }
@@ -59,7 +68,7 @@ export default async function handler(req, res) {
         .update({
           status: sub.status,
           plan: isActive ? "premium" : "free",
-          current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+          current_period_end: getPeriodEndISO(sub),
           updated_at: new Date().toISOString(),
         })
         .eq("stripe_subscription_id", sub.id);
@@ -71,3 +80,4 @@ export default async function handler(req, res) {
 
   return res.status(200).json({ received: true });
 }
+
