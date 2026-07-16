@@ -386,6 +386,24 @@ const TRANSLATIONS = {
     addServiceBtn: "Hizmet Ekle",
     fieldServiceNameShort: "Hizmet adı",
     fieldServicePrice: "Fiyat",
+    selectServiceType: "Hizmet seçin",
+    vetServiceOptions: [
+      "Muayene",
+      "Aşılama",
+      "Kısırlaştırma",
+      "Diş Temizliği",
+      "Röntgen",
+      "Kan Tahlili",
+      "Ameliyat",
+      "Ultrason",
+      "Mikroçip Takma",
+      "Tırnak Kesimi",
+      "Yıkama & Tıraş",
+      "Ev Ziyareti",
+      "Acil Müdahale",
+      "Laboratuvar Testi",
+      "Diğer",
+    ],
     noServices: "Henüz hizmet eklenmedi.",
     clinicInfoTitle: "Klinik Bilgileri",
     saveClinicInfoBtn: "Bilgileri Kaydet",
@@ -768,6 +786,24 @@ const TRANSLATIONS = {
     addServiceBtn: "Add Service",
     fieldServiceNameShort: "Service name",
     fieldServicePrice: "Price",
+    selectServiceType: "Select service",
+    vetServiceOptions: [
+      "Consultation",
+      "Vaccination",
+      "Spay/Neuter",
+      "Dental Cleaning",
+      "X-Ray",
+      "Blood Test",
+      "Surgery",
+      "Ultrasound",
+      "Microchipping",
+      "Nail Trim",
+      "Grooming",
+      "House Call",
+      "Emergency Care",
+      "Lab Test",
+      "Other",
+    ],
     noServices: "No services added yet.",
     clinicInfoTitle: "Clinic Info",
     saveClinicInfoBtn: "Save Info",
@@ -1130,6 +1166,24 @@ const TRANSLATIONS = {
     addServiceBtn: "Ajouter un Service",
     fieldServiceNameShort: "Nom du service",
     fieldServicePrice: "Prix",
+    selectServiceType: "Choisir un service",
+    vetServiceOptions: [
+      "Consultation",
+      "Vaccination",
+      "Stérilisation/Castration",
+      "Nettoyage Dentaire",
+      "Radiographie",
+      "Analyse de Sang",
+      "Chirurgie",
+      "Échographie",
+      "Puce Électronique",
+      "Coupe des Griffes",
+      "Toilettage",
+      "Visite à Domicile",
+      "Soins d'Urgence",
+      "Test de Laboratoire",
+      "Autre",
+    ],
     noServices: "Aucun service ajouté.",
     clinicInfoTitle: "Infos de la Clinique",
     saveClinicInfoBtn: "Enregistrer",
@@ -1492,6 +1546,24 @@ const TRANSLATIONS = {
     addServiceBtn: "Dienstleistung Hinzufügen",
     fieldServiceNameShort: "Name der Dienstleistung",
     fieldServicePrice: "Preis",
+    selectServiceType: "Dienstleistung wählen",
+    vetServiceOptions: [
+      "Beratung",
+      "Impfung",
+      "Kastration/Sterilisation",
+      "Zahnreinigung",
+      "Röntgen",
+      "Bluttest",
+      "Operation",
+      "Ultraschall",
+      "Mikrochip-Implantation",
+      "Krallenschneiden",
+      "Fellpflege",
+      "Hausbesuch",
+      "Notfallversorgung",
+      "Labortest",
+      "Andere",
+    ],
     noServices: "Noch keine Dienstleistungen hinzugefügt.",
     clinicInfoTitle: "Klinikinformationen",
     saveClinicInfoBtn: "Informationen Speichern",
@@ -1856,6 +1928,24 @@ const TRANSLATIONS = {
     addServiceBtn: "Añadir Servicio",
     fieldServiceNameShort: "Nombre del servicio",
     fieldServicePrice: "Precio",
+    selectServiceType: "Seleccionar servicio",
+    vetServiceOptions: [
+      "Consulta",
+      "Vacunación",
+      "Esterilización/Castración",
+      "Limpieza Dental",
+      "Radiografía",
+      "Análisis de Sangre",
+      "Cirugía",
+      "Ecografía",
+      "Microchip",
+      "Corte de Uñas",
+      "Peluquería",
+      "Visita a Domicilio",
+      "Atención de Emergencia",
+      "Prueba de Laboratorio",
+      "Otro",
+    ],
     noServices: "Aún no hay servicios añadidos.",
     clinicInfoTitle: "Información de la Clínica",
     saveClinicInfoBtn: "Guardar Información",
@@ -5091,12 +5181,15 @@ function VetPortal({ session }) {
     const { data: vetRow } = await supabase.from("vets").select("*").eq("id", vetId).single();
     if (vetRow) {
       setVet(vetRow);
+      const existingPhone = vetRow.phone || "";
+      const firstSpace = existingPhone.indexOf(" ");
       setClinicForm({
         clinic_name: vetRow.clinic_name || "",
         city: vetRow.city || "",
         country: vetRow.country || "",
         specialty: vetRow.specialty || "",
-        phone: vetRow.phone || "",
+        phoneCode: firstSpace > 0 ? existingPhone.slice(0, firstSpace) : "",
+        phoneNumber: firstSpace > 0 ? existingPhone.slice(firstSpace + 1) : existingPhone,
       });
     }
     const { data: reqRows } = await supabase
@@ -5118,7 +5211,11 @@ function VetPortal({ session }) {
   };
 
   const saveClinicInfo = async () => {
-    await supabase.from("vets").update(clinicForm).eq("id", vetId);
+    const { phoneCode, phoneNumber, ...rest } = clinicForm;
+    await supabase
+      .from("vets")
+      .update({ ...rest, phone: fmtPhone(phoneCode, phoneNumber) })
+      .eq("id", vetId);
     load();
   };
 
@@ -5280,12 +5377,16 @@ function VetPortal({ session }) {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <input
+                  <select
                     className={inputCls}
-                    placeholder={t.fieldServiceNameShort}
                     value={newService.name}
                     onChange={(e) => setNewService((f) => ({ ...f, name: e.target.value }))}
-                  />
+                  >
+                    <option value="">{t.selectServiceType}</option>
+                    {t.vetServiceOptions.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </select>
                   <input
                     className={inputCls}
                     placeholder={t.fieldServicePrice}
@@ -5309,33 +5410,33 @@ function VetPortal({ session }) {
                     />
                   </Field>
                   <Field label={t.fieldVetSpecialty}>
-                    <input
+                    <select
                       className={inputCls}
                       value={clinicForm.specialty}
                       onChange={(e) => setClinicForm((f) => ({ ...f, specialty: e.target.value }))}
-                    />
+                    >
+                      <option value="">{t.selectVetSpecialty}</option>
+                      {t.vetSpecialtyOptions.map((s) => (
+                        <option key={s}>{s}</option>
+                      ))}
+                    </select>
                   </Field>
-                  <Field label={t.fieldVetCity}>
-                    <input
-                      className={inputCls}
-                      value={clinicForm.city}
-                      onChange={(e) => setClinicForm((f) => ({ ...f, city: e.target.value }))}
-                    />
-                  </Field>
-                  <Field label={t.fieldVetCountry}>
-                    <input
-                      className={inputCls}
-                      value={clinicForm.country}
-                      onChange={(e) => setClinicForm((f) => ({ ...f, country: e.target.value }))}
-                    />
-                  </Field>
-                  <Field label={t.fieldVetPhone}>
-                    <input
-                      className={inputCls}
-                      value={clinicForm.phone}
-                      onChange={(e) => setClinicForm((f) => ({ ...f, phone: e.target.value }))}
-                    />
-                  </Field>
+                  <CountryCityPicker
+                    t={t}
+                    countryLabel={t.fieldVetCountry}
+                    cityLabel={t.fieldVetCity}
+                    country={clinicForm.country}
+                    city={clinicForm.city}
+                    onCountryChange={(v) => setClinicForm((f) => ({ ...f, country: v }))}
+                    onCityChange={(v) => setClinicForm((f) => ({ ...f, city: v }))}
+                  />
+                  <PhoneField
+                    label={t.fieldVetPhone}
+                    code={clinicForm.phoneCode}
+                    number={clinicForm.phoneNumber}
+                    onCodeChange={(v) => setClinicForm((f) => ({ ...f, phoneCode: v }))}
+                    onNumberChange={(v) => setClinicForm((f) => ({ ...f, phoneNumber: v }))}
+                  />
                 </div>
                 <PrimaryButton onClick={saveClinicInfo} icon={Check}>
                   {t.saveClinicInfoBtn}
@@ -5429,7 +5530,12 @@ function AuthGate() {
   const [session, setSession] = useState(undefined); // undefined = loading
   const [recoveryMode, setRecoveryMode] = useState(() => {
     if (typeof window === "undefined") return false;
-    return window.location.hash.includes("type=recovery") || window.location.search.includes("type=recovery");
+    return (
+      window.location.hash.includes("type=recovery") ||
+      window.location.search.includes("type=recovery") ||
+      window.location.hash.includes("type=invite") ||
+      window.location.search.includes("type=invite")
+    );
   });
 
   useEffect(() => {
