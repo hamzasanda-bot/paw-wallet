@@ -111,6 +111,7 @@ const TRANSLATIONS = {
     rowEmergency: "Acil Kişi",
     rowEmergencyPhone: "Acil Telefon",
     scannableIdTitle: "Taranabilir Kimlik",
+    verifiedIdentityLabel: "DOĞRULANMIŞ KİMLİK",
     scannableIdDesc: (name) => `Bu kod taratıldığında ${name}'in kimlik ve iletişim bilgileri anında görüntülenir.`,
     scanToReach: "Kayıp durumunda tara & ulaş",
     lostPetCardBadge: "Bu köpeği buldunuz mu?",
@@ -448,6 +449,7 @@ const TRANSLATIONS = {
     rowEmergency: "Emergency Contact",
     rowEmergencyPhone: "Emergency Phone",
     scannableIdTitle: "Scannable Identity",
+    verifiedIdentityLabel: "VERIFIED IDENTITY",
     scannableIdDesc: (name) => `When scanned, ${name}'s identity and contact details appear instantly.`,
     scanToReach: "Scan & reach out if lost",
     lostPetCardBadge: "Found this dog?",
@@ -785,6 +787,7 @@ const TRANSLATIONS = {
     rowEmergency: "Contact d'Urgence",
     rowEmergencyPhone: "Téléphone d'Urgence",
     scannableIdTitle: "Identité Scannable",
+    verifiedIdentityLabel: "IDENTITÉ VÉRIFIÉE",
     scannableIdDesc: (name) => `Une fois scanné, ce code affiche instantanément l'identité et les coordonnées de ${name}.`,
     scanToReach: "Scanner & contacter en cas de perte",
     lostPetCardBadge: "Vous avez trouvé ce chien ?",
@@ -1099,6 +1102,7 @@ const TRANSLATIONS = {
     rowEmergency: "Notfallkontakt",
     rowEmergencyPhone: "Notfalltelefon",
     scannableIdTitle: "Scanbare Identität",
+    verifiedIdentityLabel: "VERIFIZIERTE IDENTITÄT",
     scannableIdDesc: (name) => `Beim Scannen werden die Identitäts- und Kontaktdaten von ${name} sofort angezeigt.`,
     scanToReach: "Bei Verlust scannen & kontaktieren",
     lostPetCardBadge: "Diesen Hund gefunden?",
@@ -1413,6 +1417,7 @@ const TRANSLATIONS = {
     rowEmergency: "Contacto de Emergencia",
     rowEmergencyPhone: "Teléfono de Emergencia",
     scannableIdTitle: "Identidad Escaneable",
+    verifiedIdentityLabel: "IDENTIDAD VERIFICADA",
     scannableIdDesc: (name) => `Al escanearlo, aparecen al instante los datos de identidad y contacto de ${name}.`,
     scanToReach: "Escanea y contacta si se pierde",
     lostPetCardBadge: "¿Encontraste a este perro?",
@@ -2479,6 +2484,7 @@ function AddDogModal({ onClose, onSave, existingDog }) {
 /* ------------------------------------------------------------------ */
 
 function StampSeal({ qrUrl }) {
+  const { t } = useI18n();
   return (
     <div className="relative shrink-0" style={{ width: 168, height: 168 }}>
       <svg viewBox="0 0 168 168" width={168} height={168} className="absolute inset-0">
@@ -2489,7 +2495,7 @@ function StampSeal({ qrUrl }) {
         <circle cx="84" cy="84" r="72" fill="none" stroke="#C9A227" strokeWidth="1.4" />
         <text fill="#8a6d16" fontSize="10.3" fontWeight="700" letterSpacing="2.6" fontFamily="'Zilla Slab', serif">
           <textPath href="#sealCircle" startOffset="2%">
-            PAW WALLET · DOĞRULANMIŞ KİMLİK ·
+            PAW WALLET · {t.verifiedIdentityLabel} ·
           </textPath>
         </text>
       </svg>
@@ -3562,10 +3568,14 @@ function AddWeightModal({ onClose, onSave }) {
   );
 }
 
-function WeightChart({ entries, idealWeight, t }) {
+function WeightChart({ entries, idealWeight, t, locale }) {
   const data = [...entries]
     .sort((a, b) => (a.date > b.date ? 1 : -1))
-    .map((e) => ({ date: e.date, weight: e.weight, label: e.date.slice(5) }));
+    .map((e) => ({
+      date: e.date,
+      weight: e.weight,
+      label: new Date(e.date + "T00:00:00").toLocaleDateString(locale || "en-US", { month: "short", year: "numeric" }),
+    }));
 
   const maxRecorded = Math.max(...data.map((d) => d.weight), 0);
   const upperBound = Math.ceil(Math.max(maxRecorded * 1.5, idealWeight || 0));
@@ -3623,7 +3633,7 @@ function WeightTab({ dog, onSaveIdeal, onAdd, onDelete }) {
         <PrimaryButton onClick={() => onSaveIdeal(parseFloat(idealInput) || 0)}>{t.saveIdealWeightBtn}</PrimaryButton>
       </div>
 
-      {entries.length > 1 && <WeightChart entries={entries} idealWeight={dog.idealWeight || 0} t={t} />}
+      {entries.length > 1 && <WeightChart entries={entries} idealWeight={dog.idealWeight || 0} t={t} locale={locale} />}
 
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -3924,6 +3934,18 @@ function PetCVTab({ dog, session }) {
             <h2 className="font-display text-[26px] text-[#1B3A2F] leading-tight">{dog.name}</h2>
             <p className="text-[13px] text-[#5b6d63]">{dog.breed}</p>
           </div>
+          <div className="shrink-0">
+            <div className="h-24 w-24 rounded-lg overflow-hidden border-2 border-[#C9A227]/40 bg-white grid place-items-center p-1.5">
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=0&data=${encodeURIComponent(
+                  `${window.location.origin}/?lost=${dog.id}`
+                )}`}
+                alt="QR"
+                className="h-full w-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
         </div>
 
         <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvIdentitySection}</p>
@@ -5363,7 +5385,7 @@ function PawWalletInner({ session }) {
         ) : (
           <>
             {/* tabs */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 lg:flex lg:flex-wrap gap-2 mb-6">
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
               {TAB_IDS.map((tabDef) => {
                 const Icon = tabDef.icon;
                 const isActive = tab === tabDef.id;
