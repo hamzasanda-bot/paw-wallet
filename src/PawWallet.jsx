@@ -311,6 +311,21 @@ const TRANSLATIONS = {
     fieldVetCountry: "Ülke",
     fieldVetSpecialty: "Uzmanlık",
     fieldVetPhone: "Telefon",
+    selectVetSpecialty: "Uzmanlık seçin",
+    vetSpecialtyOptions: [
+      "İç Hastalıkları",
+      "Cerrahi",
+      "Diş & Ağız Sağlığı",
+      "Dermatoloji",
+      "Kardiyoloji",
+      "Ortopedi",
+      "Göz Hastalıkları",
+      "Onkoloji",
+      "Acil & Yoğun Bakım",
+      "Egzotik Hayvan Sağlığı",
+      "Beslenme",
+      "Genel Bakım",
+    ],
     fieldVetEmail: "Veterinerin e-postası (davet buraya gider)",
     createVetAccountBtn: "Hesap Oluştur & Davet Gönder",
     vetInviteSuccess: (email) => `${email} adresine davet gönderildi.`,
@@ -678,6 +693,21 @@ const TRANSLATIONS = {
     fieldVetCountry: "Country",
     fieldVetSpecialty: "Specialty",
     fieldVetPhone: "Phone",
+    selectVetSpecialty: "Select specialty",
+    vetSpecialtyOptions: [
+      "Internal Medicine",
+      "Surgery",
+      "Dentistry",
+      "Dermatology",
+      "Cardiology",
+      "Orthopedics",
+      "Ophthalmology",
+      "Oncology",
+      "Emergency & Critical Care",
+      "Exotic Animal Medicine",
+      "Nutrition",
+      "General Care",
+    ],
     fieldVetEmail: "Vet's email (invite is sent here)",
     createVetAccountBtn: "Create Account & Send Invite",
     vetInviteSuccess: (email) => `Invite sent to ${email}.`,
@@ -1048,6 +1078,21 @@ const TRANSLATIONS = {
     fieldVetCountry: "Pays",
     fieldVetSpecialty: "Spécialité",
     fieldVetPhone: "Téléphone",
+    selectVetSpecialty: "Choisir une spécialité",
+    vetSpecialtyOptions: [
+      "Médecine Interne",
+      "Chirurgie",
+      "Dentisterie",
+      "Dermatologie",
+      "Cardiologie",
+      "Orthopédie",
+      "Ophtalmologie",
+      "Oncologie",
+      "Urgences et Soins Intensifs",
+      "Médecine des Animaux Exotiques",
+      "Nutrition",
+      "Soins Généraux",
+    ],
     fieldVetEmail: "E-mail du vétérinaire (invitation envoyée ici)",
     createVetAccountBtn: "Créer le Compte & Envoyer l'Invitation",
     vetInviteSuccess: (email) => `Invitation envoyée à ${email}.`,
@@ -1395,6 +1440,21 @@ const TRANSLATIONS = {
     fieldVetCountry: "Land",
     fieldVetSpecialty: "Spezialisierung",
     fieldVetPhone: "Telefon",
+    selectVetSpecialty: "Fachgebiet wählen",
+    vetSpecialtyOptions: [
+      "Innere Medizin",
+      "Chirurgie",
+      "Zahnmedizin",
+      "Dermatologie",
+      "Kardiologie",
+      "Orthopädie",
+      "Augenheilkunde",
+      "Onkologie",
+      "Notfall- und Intensivmedizin",
+      "Exotenmedizin",
+      "Ernährung",
+      "Allgemeinmedizin",
+    ],
     fieldVetEmail: "E-Mail des Tierarztes (Einladung geht hierhin)",
     createVetAccountBtn: "Konto Erstellen & Einladung Senden",
     vetInviteSuccess: (email) => `Einladung an ${email} gesendet.`,
@@ -1744,6 +1804,21 @@ const TRANSLATIONS = {
     fieldVetCountry: "País",
     fieldVetSpecialty: "Especialidad",
     fieldVetPhone: "Teléfono",
+    selectVetSpecialty: "Seleccionar especialidad",
+    vetSpecialtyOptions: [
+      "Medicina Interna",
+      "Cirugía",
+      "Odontología",
+      "Dermatología",
+      "Cardiología",
+      "Ortopedia",
+      "Oftalmología",
+      "Oncología",
+      "Emergencias y Cuidados Intensivos",
+      "Medicina de Animales Exóticos",
+      "Nutrición",
+      "Atención General",
+    ],
     fieldVetEmail: "Correo del veterinario (la invitación se envía aquí)",
     createVetAccountBtn: "Crear Cuenta y Enviar Invitación",
     vetInviteSuccess: (email) => `Invitación enviada a ${email}.`,
@@ -4599,7 +4674,15 @@ function StatCard({ label, value }) {
 function AdminPanel({ session }) {
   const { t } = useI18n();
   const [stats, setStats] = useState(null);
-  const [vetForm, setVetForm] = useState({ clinicName: "", city: "", country: "", specialty: "", phone: "", email: "" });
+  const [vetForm, setVetForm] = useState({
+    clinicName: "",
+    city: "",
+    country: "",
+    specialty: "",
+    phoneCode: "",
+    phoneNumber: "",
+    email: "",
+  });
   const [vetBusy, setVetBusy] = useState(false);
   const [vetMsg, setVetMsg] = useState("");
   const [svcForm, setSvcForm] = useState({ name: "", service_type: "Yıkama & Tıraş", city: "", country: "", phone: "" });
@@ -4660,12 +4743,19 @@ function AdminPanel({ session }) {
       const res = await fetch("/api/admin-create-vet", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify(vetForm),
+        body: JSON.stringify({
+          clinicName: vetForm.clinicName,
+          city: vetForm.city,
+          country: vetForm.country,
+          specialty: vetForm.specialty,
+          phone: fmtPhone(vetForm.phoneCode, vetForm.phoneNumber),
+          email: vetForm.email,
+        }),
       });
       const data = await res.json();
       if (res.ok) {
         setVetMsg(t.vetInviteSuccess(vetForm.email));
-        setVetForm({ clinicName: "", city: "", country: "", specialty: "", phone: "", email: "" });
+        setVetForm({ clinicName: "", city: "", country: "", specialty: "", phoneCode: "", phoneNumber: "", email: "" });
         loadStats();
         loadVets();
       } else {
@@ -4767,36 +4857,34 @@ function AdminPanel({ session }) {
                   onChange={(e) => setVetForm((f) => ({ ...f, clinicName: e.target.value }))}
                 />
               </Field>
-              <div className="grid grid-cols-2 gap-3">
-                <Field label={t.fieldVetCity}>
-                  <input
-                    className={inputCls}
-                    value={vetForm.city}
-                    onChange={(e) => setVetForm((f) => ({ ...f, city: e.target.value }))}
-                  />
-                </Field>
-                <Field label={t.fieldVetCountry}>
-                  <input
-                    className={inputCls}
-                    value={vetForm.country}
-                    onChange={(e) => setVetForm((f) => ({ ...f, country: e.target.value }))}
-                  />
-                </Field>
-              </div>
+              <CountryCityPicker
+                t={t}
+                countryLabel={t.fieldVetCountry}
+                cityLabel={t.fieldVetCity}
+                country={vetForm.country}
+                city={vetForm.city}
+                onCountryChange={(v) => setVetForm((f) => ({ ...f, country: v }))}
+                onCityChange={(v) => setVetForm((f) => ({ ...f, city: v }))}
+              />
               <Field label={t.fieldVetSpecialty}>
-                <input
+                <select
                   className={inputCls}
                   value={vetForm.specialty}
                   onChange={(e) => setVetForm((f) => ({ ...f, specialty: e.target.value }))}
-                />
+                >
+                  <option value="">{t.selectVetSpecialty}</option>
+                  {t.vetSpecialtyOptions.map((s) => (
+                    <option key={s}>{s}</option>
+                  ))}
+                </select>
               </Field>
-              <Field label={t.fieldVetPhone}>
-                <input
-                  className={inputCls}
-                  value={vetForm.phone}
-                  onChange={(e) => setVetForm((f) => ({ ...f, phone: e.target.value }))}
-                />
-              </Field>
+              <PhoneField
+                label={t.fieldVetPhone}
+                code={vetForm.phoneCode}
+                number={vetForm.phoneNumber}
+                onCodeChange={(v) => setVetForm((f) => ({ ...f, phoneCode: v }))}
+                onNumberChange={(v) => setVetForm((f) => ({ ...f, phoneNumber: v }))}
+              />
               <Field label={t.fieldVetEmail}>
                 <input
                   type="email"
