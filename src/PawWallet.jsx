@@ -5422,7 +5422,7 @@ function PawWalletInner({ session }) {
             </PrimaryButton>
           </div>
         ) : (
-          <div className="bg-[#EFE9D6] relative z-10">
+          <>
             {/* tabs */}
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
               {TAB_IDS.map((tabDef) => {
@@ -5475,7 +5475,7 @@ function PawWalletInner({ session }) {
             )}
             {tab === "vets" && <VetTab dog={activeDog} session={session} />}
             {tab === "cv" && <PetCVTab dog={activeDog} session={session} />}
-          </div>
+          </>
         )}
 
         <p className="text-center text-[11px] text-[#8d8560] mt-10">{t.footerNote}</p>
