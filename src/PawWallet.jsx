@@ -31,6 +31,7 @@ import {
   BellRing,
   FileText,
   Award,
+  Crown,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
@@ -397,6 +398,29 @@ const TRANSLATIONS = {
     notificationsEnabled: "Bildirimler açık",
     notificationPermissionDenied: "Bildirim izni reddedildi. Tarayıcı ayarlarından izin verebilirsin.",
     notificationsUnsupported: "Bu tarayıcı push bildirimlerini desteklemiyor.",
+    premiumBadge: "Premium",
+    upgradeBtn: "Premium'a Geç",
+    manageSubscriptionBtn: "Aboneliği Yönet",
+    premiumModalTitle: "Paw Wallet Premium",
+    premiumModalSubtitle: "Tüm hayvanlarınız, tüm veterinerleriniz, sınırsız belge.",
+    billingMonthly: "Aylık",
+    billingYearly: "Yıllık",
+    billingYearlyBadge: "%30 tasarruf",
+    priceMonthly: "€2.99/ay",
+    priceYearly: "€24.99/yıl",
+    premiumFeature1: "Sınırsız hayvan ekleme",
+    premiumFeature2: "İkincil veteriner ataması",
+    premiumFeature3: "Sınırsız belge yükleme",
+    premiumFeature4: "Pet CV / PDF indirme",
+    subscribeBtn: "Abone Ol",
+    freePlanLabel: "Ücretsiz Plan",
+    premiumPlanLabel: "Premium Plan",
+    limitReachedPets: "Ücretsiz planda 1 hayvan ekleyebilirsin. Daha fazlası için Premium'a geç.",
+    limitReachedVet: "İkincil veteriner ataması Premium özelliğidir.",
+    limitReachedDocs: "Ücretsiz planda en fazla 3 belge yükleyebilirsin.",
+    limitReachedCv: "Pet CV ve PDF indirme Premium özelliğidir.",
+    seePremiumBtn: "Premium'u Gör",
+    redirectingToStripe: "Ödeme sayfasına yönlendiriliyorsun…",
   },
   en: {
     speciesLabel: { dog: "Dog", cat: "Cat" },
@@ -741,6 +765,29 @@ const TRANSLATIONS = {
     notificationsEnabled: "Notifications on",
     notificationPermissionDenied: "Notification permission denied. You can allow it in your browser settings.",
     notificationsUnsupported: "This browser doesn't support push notifications.",
+    premiumBadge: "Premium",
+    upgradeBtn: "Upgrade to Premium",
+    manageSubscriptionBtn: "Manage Subscription",
+    premiumModalTitle: "Paw Wallet Premium",
+    premiumModalSubtitle: "All your pets, all your vets, unlimited documents.",
+    billingMonthly: "Monthly",
+    billingYearly: "Yearly",
+    billingYearlyBadge: "Save 30%",
+    priceMonthly: "€2.99/mo",
+    priceYearly: "€24.99/yr",
+    premiumFeature1: "Add unlimited pets",
+    premiumFeature2: "Assign a secondary vet",
+    premiumFeature3: "Unlimited document uploads",
+    premiumFeature4: "Pet CV / PDF download",
+    subscribeBtn: "Subscribe",
+    freePlanLabel: "Free Plan",
+    premiumPlanLabel: "Premium Plan",
+    limitReachedPets: "You can add 1 pet on the free plan. Upgrade to Premium for more.",
+    limitReachedVet: "Secondary vet assignment is a Premium feature.",
+    limitReachedDocs: "You can upload up to 3 documents on the free plan.",
+    limitReachedCv: "Pet CV and PDF download are Premium features.",
+    seePremiumBtn: "See Premium",
+    redirectingToStripe: "Redirecting you to checkout…",
   },
   fr: {
     speciesLabel: { dog: "Chien", cat: "Chat" },
@@ -1065,6 +1112,29 @@ const TRANSLATIONS = {
     notificationsEnabled: "Notifications activées",
     notificationPermissionDenied: "Autorisation refusée. Vous pouvez l'activer dans les paramètres du navigateur.",
     notificationsUnsupported: "Ce navigateur ne prend pas en charge les notifications push.",
+    premiumBadge: "Premium",
+    upgradeBtn: "Passer à Premium",
+    manageSubscriptionBtn: "Gérer l'Abonnement",
+    premiumModalTitle: "Paw Wallet Premium",
+    premiumModalSubtitle: "Tous vos animaux, tous vos vétérinaires, documents illimités.",
+    billingMonthly: "Mensuel",
+    billingYearly: "Annuel",
+    billingYearlyBadge: "Économisez 30%",
+    priceMonthly: "2,99€/mois",
+    priceYearly: "24,99€/an",
+    premiumFeature1: "Ajouter des animaux illimités",
+    premiumFeature2: "Assigner un vétérinaire secondaire",
+    premiumFeature3: "Téléversement de documents illimité",
+    premiumFeature4: "CV animal / téléchargement PDF",
+    subscribeBtn: "S'abonner",
+    freePlanLabel: "Plan Gratuit",
+    premiumPlanLabel: "Plan Premium",
+    limitReachedPets: "Vous pouvez ajouter 1 animal avec le plan gratuit. Passez à Premium pour plus.",
+    limitReachedVet: "L'assignation d'un vétérinaire secondaire est une fonctionnalité Premium.",
+    limitReachedDocs: "Vous pouvez téléverser jusqu'à 3 documents avec le plan gratuit.",
+    limitReachedCv: "Le CV animal et le téléchargement PDF sont des fonctionnalités Premium.",
+    seePremiumBtn: "Voir Premium",
+    redirectingToStripe: "Redirection vers le paiement…",
   },
   de: {
     speciesLabel: { dog: "Hund", cat: "Katze" },
@@ -1389,6 +1459,29 @@ const TRANSLATIONS = {
     notificationsEnabled: "Benachrichtigungen aktiv",
     notificationPermissionDenied: "Berechtigung verweigert. Sie können sie in den Browsereinstellungen aktivieren.",
     notificationsUnsupported: "Dieser Browser unterstützt keine Push-Benachrichtigungen.",
+    premiumBadge: "Premium",
+    upgradeBtn: "Auf Premium Upgraden",
+    manageSubscriptionBtn: "Abo Verwalten",
+    premiumModalTitle: "Paw Wallet Premium",
+    premiumModalSubtitle: "Alle Haustiere, alle Tierärzte, unbegrenzte Dokumente.",
+    billingMonthly: "Monatlich",
+    billingYearly: "Jährlich",
+    billingYearlyBadge: "30% sparen",
+    priceMonthly: "2,99€/Monat",
+    priceYearly: "24,99€/Jahr",
+    premiumFeature1: "Unbegrenzt Haustiere hinzufügen",
+    premiumFeature2: "Zweiten Tierarzt zuweisen",
+    premiumFeature3: "Unbegrenzter Dokumenten-Upload",
+    premiumFeature4: "Haustier-CV / PDF-Download",
+    subscribeBtn: "Abonnieren",
+    freePlanLabel: "Kostenloser Plan",
+    premiumPlanLabel: "Premium-Plan",
+    limitReachedPets: "Im kostenlosen Plan kannst du 1 Haustier hinzufügen. Upgrade auf Premium für mehr.",
+    limitReachedVet: "Die Zuweisung eines zweiten Tierarztes ist eine Premium-Funktion.",
+    limitReachedDocs: "Im kostenlosen Plan kannst du bis zu 3 Dokumente hochladen.",
+    limitReachedCv: "Haustier-CV und PDF-Download sind Premium-Funktionen.",
+    seePremiumBtn: "Premium Ansehen",
+    redirectingToStripe: "Sie werden zur Kasse weitergeleitet…",
   },
   es: {
     speciesLabel: { dog: "Perro", cat: "Gato" },
@@ -1715,6 +1808,29 @@ const TRANSLATIONS = {
     notificationsEnabled: "Notificaciones activadas",
     notificationPermissionDenied: "Permiso denegado. Puedes activarlo en la configuración del navegador.",
     notificationsUnsupported: "Este navegador no admite notificaciones push.",
+    premiumBadge: "Premium",
+    upgradeBtn: "Pasar a Premium",
+    manageSubscriptionBtn: "Gestionar Suscripción",
+    premiumModalTitle: "Paw Wallet Premium",
+    premiumModalSubtitle: "Todas tus mascotas, todos tus veterinarios, documentos ilimitados.",
+    billingMonthly: "Mensual",
+    billingYearly: "Anual",
+    billingYearlyBadge: "Ahorra 30%",
+    priceMonthly: "2,99€/mes",
+    priceYearly: "24,99€/año",
+    premiumFeature1: "Añadir mascotas ilimitadas",
+    premiumFeature2: "Asignar un veterinario secundario",
+    premiumFeature3: "Subida ilimitada de documentos",
+    premiumFeature4: "CV de mascota / descarga en PDF",
+    subscribeBtn: "Suscribirse",
+    freePlanLabel: "Plan Gratuito",
+    premiumPlanLabel: "Plan Premium",
+    limitReachedPets: "Puedes añadir 1 mascota en el plan gratuito. Actualiza a Premium para más.",
+    limitReachedVet: "La asignación de un veterinario secundario es una función Premium.",
+    limitReachedDocs: "Puedes subir hasta 3 documentos en el plan gratuito.",
+    limitReachedCv: "El CV de mascota y la descarga en PDF son funciones Premium.",
+    seePremiumBtn: "Ver Premium",
+    redirectingToStripe: "Redirigiendo al pago…",
   },
 };
 
@@ -2901,11 +3017,20 @@ function AddDocumentModal({ onClose, onSave }) {
   );
 }
 
-function DocumentsTab({ dog, onAdd, onDelete }) {
+function DocumentsTab({ dog, onAdd, onDelete, isPremium, onRequirePremium }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const [showAdd, setShowAdd] = useState(false);
   const docs = dog.documents || [];
+  const FREE_DOC_LIMIT = 3;
+
+  const handleAddClick = () => {
+    if (!isPremium && docs.length >= FREE_DOC_LIMIT) {
+      onRequirePremium();
+      return;
+    }
+    setShowAdd(true);
+  };
 
   return (
     <div>
@@ -2914,10 +3039,14 @@ function DocumentsTab({ dog, onAdd, onDelete }) {
           <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.documentsTitle}</h3>
           <p className="text-[13px] text-[#5b6d63]">{t.documentsSubtitle(docs.length)}</p>
         </div>
-        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+        <PrimaryButton icon={Plus} onClick={handleAddClick}>
           {t.addDocumentBtn}
         </PrimaryButton>
       </div>
+
+      {!isPremium && docs.length >= FREE_DOC_LIMIT && (
+        <p className="text-[12.5px] text-[#8a6d16] bg-[#f3e9c8] rounded-md px-3 py-2 mb-4">{t.limitReachedDocs}</p>
+      )}
 
       {docs.length === 0 ? (
         <EmptyState icon={FileText} text={t.documentsEmpty} />
@@ -3883,7 +4012,7 @@ function WeightTab({ dog, onSaveIdeal, onAdd, onDelete }) {
   );
 }
 
-function VetTab({ dog, session }) {
+function VetTab({ dog, session, isPremium, onRequirePremium }) {
   const { t } = useI18n();
   const [vetsList, setVetsList] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -4040,7 +4169,7 @@ function VetTab({ dog, session }) {
                 </button>
                 <button
                   disabled={isSecondary}
-                  onClick={() => requestVet(vet.id, "İkincil")}
+                  onClick={() => (isPremium ? requestVet(vet.id, "İkincil") : onRequirePremium())}
                   className="flex-1 rounded-md border border-[#C9A227] text-[#8a6d16] text-[12px] font-semibold py-1.5 hover:bg-[#C9A227] hover:text-white transition disabled:opacity-40"
                 >
                   {t.makeSecondaryBtn}
@@ -4058,7 +4187,7 @@ function VetTab({ dog, session }) {
 /*  Pet CV — printable full summary                                     */
 /* ------------------------------------------------------------------ */
 
-function PetCVTab({ dog, session }) {
+function PetCVTab({ dog, session, isPremium, onRequirePremium }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const [assignedVets, setAssignedVets] = useState([]);
@@ -4094,6 +4223,20 @@ function PetCVTab({ dog, session }) {
       <span className="text-right text-[13.5px] text-[#1f2a24]">{value || "—"}</span>
     </div>
   );
+
+  if (!isPremium) {
+    return (
+      <div className="rounded-2xl border border-dashed border-[#C9A227]/50 bg-[#FBF8EE]/60 py-16 flex flex-col items-center gap-3 text-center px-6">
+        <div className="h-12 w-12 rounded-full bg-[#C9A227] grid place-items-center">
+          <Crown size={22} className="text-white" />
+        </div>
+        <p className="text-[13.5px] text-[#5b6d63] max-w-sm">{t.limitReachedCv}</p>
+        <PrimaryButton icon={Crown} onClick={onRequirePremium}>
+          {t.seePremiumBtn}
+        </PrimaryButton>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -5260,6 +5403,87 @@ const TAB_IDS = [
   { id: "cv", key: "navPetCV", icon: Award },
 ];
 
+function PremiumModal({ session, onClose }) {
+  const { t } = useI18n();
+  const [cycle, setCycle] = useState("monthly");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const subscribe = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ billingCycle: cycle }),
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || "Something went wrong");
+        setLoading(false);
+      }
+    } catch {
+      setError("Something went wrong");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Modal title={t.premiumModalTitle} onClose={onClose}>
+      <div className="text-center mb-5">
+        <div className="h-12 w-12 rounded-full bg-[#C9A227] grid place-items-center mx-auto mb-3">
+          <Crown size={22} className="text-white" />
+        </div>
+        <p className="text-[13.5px] text-[#5b6d63]">{t.premiumModalSubtitle}</p>
+      </div>
+
+      <div className="flex gap-2 mb-5 bg-[#F0EBD8] rounded-full p-1">
+        <button
+          onClick={() => setCycle("monthly")}
+          className={`flex-1 rounded-full py-2 text-[13px] font-semibold transition ${
+            cycle === "monthly" ? "bg-[#1B3A2F] text-[#F7F3E8]" : "text-[#5b6d63]"
+          }`}
+        >
+          {t.billingMonthly}
+        </button>
+        <button
+          onClick={() => setCycle("yearly")}
+          className={`flex-1 rounded-full py-2 text-[13px] font-semibold transition relative ${
+            cycle === "yearly" ? "bg-[#1B3A2F] text-[#F7F3E8]" : "text-[#5b6d63]"
+          }`}
+        >
+          {t.billingYearly}
+          <span className="ml-1.5 text-[10px] font-bold text-[#8a6d16] bg-[#f3e9c8] rounded-full px-1.5 py-0.5">
+            {t.billingYearlyBadge}
+          </span>
+        </button>
+      </div>
+
+      <p className="text-center font-display text-[30px] text-[#1B3A2F] mb-5">
+        {cycle === "monthly" ? t.priceMonthly : t.priceYearly}
+      </p>
+
+      <div className="space-y-2.5 mb-6">
+        {[t.premiumFeature1, t.premiumFeature2, t.premiumFeature3, t.premiumFeature4].map((f) => (
+          <div key={f} className="flex items-center gap-2.5 text-[13.5px] text-[#1f2a24]">
+            <Check size={15} className="text-[#1B3A2F] shrink-0" />
+            {f}
+          </div>
+        ))}
+      </div>
+
+      {error && <p className="text-[13px] text-[#a63d40] mb-3 text-center">{error}</p>}
+
+      <PrimaryButton full onClick={subscribe} icon={loading ? Loader2 : Crown}>
+        {loading ? t.redirectingToStripe : t.subscribeBtn}
+      </PrimaryButton>
+    </Modal>
+  );
+}
+
 function NotificationButton({ userId }) {
   const { t } = useI18n();
   const [state, setState] = useState("checking"); // checking | unsupported | default | granted | denied
@@ -5331,9 +5555,39 @@ function PawWalletInner({ session }) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [dogMenuOpen, setDogMenuOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [subscription, setSubscription] = useState(null);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   const userId = session.user.id;
   const displayName = session.user.user_metadata?.first_name || session.user.email;
+  const isPremium = subscription?.plan === "premium" && (subscription?.status === "active" || subscription?.status === "trialing");
+
+  useEffect(() => {
+    supabase
+      .from("subscriptions")
+      .select("*")
+      .eq("user_id", userId)
+      .single()
+      .then(({ data }) => setSubscription(data || null));
+  }, [userId]);
+
+  const openBillingPortal = async () => {
+    const res = await fetch("/api/create-portal-session", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  };
+
+  const handleAddPetClick = (species) => {
+    if (dogs.length >= 1 && !isPremium) {
+      setShowPremiumModal(true);
+      return;
+    }
+    setAddSpecies(species);
+    setShowAddDog(true);
+  };
 
   // load — only this user's dogs
   useEffect(() => {
@@ -5390,6 +5644,23 @@ function PawWalletInner({ session }) {
       window.history.replaceState({}, "", window.location.pathname);
     }
   }, [loaded, dogs]);
+
+  // Stripe ödemesinden döndükten sonra abonelik durumunu tazele
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("upgraded") === "1") {
+      window.history.replaceState({}, "", window.location.pathname);
+      // Webhook'un işlemesi için kısa bir gecikmeyle tekrar sorgula
+      setTimeout(() => {
+        supabase
+          .from("subscriptions")
+          .select("*")
+          .eq("user_id", userId)
+          .single()
+          .then(({ data }) => setSubscription(data || null));
+      }, 2000);
+    }
+  }, [userId]);
 
   const activeDog = dogs.find((d) => d.id === activeId) || null;
 
@@ -5513,6 +5784,21 @@ function PawWalletInner({ session }) {
 
           <div className="flex items-center gap-2.5">
             <span className="hidden sm:inline text-[12.5px] text-[#5b6d63]">{t.greeting(displayName)}</span>
+            {isPremium ? (
+              <button
+                onClick={openBillingPortal}
+                className="flex items-center gap-1.5 rounded-full bg-[#C9A227] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-[#b8931f] transition"
+              >
+                <Crown size={13} /> <span className="hidden sm:inline">{t.premiumBadge}</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowPremiumModal(true)}
+                className="flex items-center gap-1.5 rounded-full border border-[#C9A227] px-3 py-1.5 text-[12px] font-semibold text-[#8a6d16] hover:bg-[#f3e9c8] transition"
+              >
+                <Crown size={13} /> <span className="hidden sm:inline">{t.upgradeBtn}</span>
+              </button>
+            )}
             <NotificationButton userId={userId} />
             <LanguageSwitcher />
             <button
@@ -5559,8 +5845,7 @@ function PawWalletInner({ session }) {
                     ))}
                     <button
                       onClick={() => {
-                        setAddSpecies("dog");
-                        setShowAddDog(true);
+                        handleAddPetClick("dog");
                         setDogMenuOpen(false);
                       }}
                       className="w-full flex items-center gap-2 px-3 py-2.5 text-left text-[13.5px] text-[#1B3A2F] font-semibold border-t border-[#e3d9bd] hover:bg-[#f0e9cd] transition"
@@ -5569,8 +5854,7 @@ function PawWalletInner({ session }) {
                     </button>
                     <button
                       onClick={() => {
-                        setAddSpecies("cat");
-                        setShowAddDog(true);
+                        handleAddPetClick("cat");
                         setDogMenuOpen(false);
                       }}
                       className="w-full flex items-center gap-2 px-3 py-2.5 text-left text-[13.5px] text-[#1B3A2F] font-semibold hover:bg-[#f0e9cd] transition"
@@ -5598,22 +5882,10 @@ function PawWalletInner({ session }) {
               <p className="text-[13.5px] text-[#5b6d63] max-w-sm">{t.noDogsText}</p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
-              <PrimaryButton
-                icon={Plus}
-                onClick={() => {
-                  setAddSpecies("dog");
-                  setShowAddDog(true);
-                }}
-              >
+              <PrimaryButton icon={Plus} onClick={() => handleAddPetClick("dog")}>
                 {t.addFirstDog}
               </PrimaryButton>
-              <GhostButton
-                icon={Plus}
-                onClick={() => {
-                  setAddSpecies("cat");
-                  setShowAddDog(true);
-                }}
-              >
+              <GhostButton icon={Plus} onClick={() => handleAddPetClick("cat")}>
                 {t.addFirstCat}
               </GhostButton>
             </div>
@@ -5653,7 +5925,15 @@ function PawWalletInner({ session }) {
             {tab === "passport" && (
               <PassportTab dog={activeDog} onEdit={() => setEditingDog(activeDog)} onDelete={() => setConfirmDeleteId(activeDog.id)} />
             )}
-            {tab === "documents" && <DocumentsTab dog={activeDog} onAdd={addDocument} onDelete={deleteDocument} />}
+            {tab === "documents" && (
+              <DocumentsTab
+                dog={activeDog}
+                onAdd={addDocument}
+                onDelete={deleteDocument}
+                isPremium={isPremium}
+                onRequirePremium={() => setShowPremiumModal(true)}
+              />
+            )}
             {tab === "vaccines" && <VaccineTab dog={activeDog} onAdd={addVaccine} onDelete={deleteVaccine} />}
             {tab === "health" && (
               <HealthTab
@@ -5670,8 +5950,17 @@ function PawWalletInner({ session }) {
             {tab === "weight" && (
               <WeightTab dog={activeDog} onSaveIdeal={saveIdealWeight} onAdd={addWeightEntry} onDelete={deleteWeightEntry} />
             )}
-            {tab === "vets" && <VetTab dog={activeDog} session={session} />}
-            {tab === "cv" && <PetCVTab dog={activeDog} session={session} />}
+            {tab === "vets" && (
+              <VetTab dog={activeDog} session={session} isPremium={isPremium} onRequirePremium={() => setShowPremiumModal(true)} />
+            )}
+            {tab === "cv" && (
+              <PetCVTab
+                dog={activeDog}
+                session={session}
+                isPremium={isPremium}
+                onRequirePremium={() => setShowPremiumModal(true)}
+              />
+            )}
           </>
         )}
 
@@ -5680,6 +5969,7 @@ function PawWalletInner({ session }) {
 
       {showAddDog && <AddDogModal initialSpecies={addSpecies} onClose={() => setShowAddDog(false)} onSave={addDog} />}
       {editingDog && <AddDogModal existingDog={editingDog} onClose={() => setEditingDog(null)} onSave={addDog} />}
+      {showPremiumModal && <PremiumModal session={session} onClose={() => setShowPremiumModal(false)} />}
       {confirmDeleteId && (
         <Modal
           title={t.deletePetModalTitle(dogs.find((d) => d.id === confirmDeleteId)?.species || "dog")}
