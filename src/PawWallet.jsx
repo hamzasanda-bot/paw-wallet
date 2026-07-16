@@ -108,6 +108,13 @@ const TRANSLATIONS = {
     scannableIdTitle: "Taranabilir Kimlik",
     scannableIdDesc: (name) => `Bu kod taratıldığında ${name}'in kimlik ve iletişim bilgileri anında görüntülenir.`,
     scanToReach: "Kayıp durumunda tara & ulaş",
+    lostPetCardBadge: "Bu köpeği buldunuz mu?",
+    lostPetCardTitle: (name) => `${name}'in Kimlik Kartı`,
+    lostPetCardDesc: "Bu köpeğin sahibi Paw Wallet kullanıyor. Aşağıdaki bilgilerle sahibine ulaşabilirsin.",
+    callOwnerBtn: "Sahibini Ara",
+    callEmergencyBtn: "Acil Kişiyi Ara",
+    lostCardNotFound: "Bu köpeğe ait bir kayıt bulunamadı.",
+    lostCardFooter: "Paw Wallet ile oluşturuldu",
     deleteDogModalTitle: "Köpeği Sil",
     deleteDogWarning: (name) => `${name} adlı köpeğin pasaportunu, aşı kayıtlarını ve veteriner atamalarını kalıcı olarak silmek üzeresin. Bu işlem geri alınamaz.`,
     confirmDeleteBtn: "Evet, Sil",
@@ -403,6 +410,13 @@ const TRANSLATIONS = {
     scannableIdTitle: "Scannable Identity",
     scannableIdDesc: (name) => `When scanned, ${name}'s identity and contact details appear instantly.`,
     scanToReach: "Scan & reach out if lost",
+    lostPetCardBadge: "Found this dog?",
+    lostPetCardTitle: (name) => `${name}'s ID Card`,
+    lostPetCardDesc: "This dog's owner uses Paw Wallet. You can reach them using the details below.",
+    callOwnerBtn: "Call Owner",
+    callEmergencyBtn: "Call Emergency Contact",
+    lostCardNotFound: "No record found for this dog.",
+    lostCardFooter: "Made with Paw Wallet",
     deleteDogModalTitle: "Delete Dog",
     deleteDogWarning: (name) => `You're about to permanently delete ${name}'s passport, vaccine records and vet assignments. This action cannot be undone.`,
     confirmDeleteBtn: "Yes, Delete",
@@ -698,6 +712,13 @@ const TRANSLATIONS = {
     scannableIdTitle: "Identité Scannable",
     scannableIdDesc: (name) => `Une fois scanné, ce code affiche instantanément l'identité et les coordonnées de ${name}.`,
     scanToReach: "Scanner & contacter en cas de perte",
+    lostPetCardBadge: "Vous avez trouvé ce chien ?",
+    lostPetCardTitle: (name) => `Carte d'Identité de ${name}`,
+    lostPetCardDesc: "Le propriétaire de ce chien utilise Paw Wallet. Vous pouvez le contacter ci-dessous.",
+    callOwnerBtn: "Appeler le Propriétaire",
+    callEmergencyBtn: "Appeler le Contact d'Urgence",
+    lostCardNotFound: "Aucun enregistrement trouvé pour ce chien.",
+    lostCardFooter: "Créé avec Paw Wallet",
     deleteDogModalTitle: "Supprimer le Chien",
     deleteDogWarning: (name) => `Vous êtes sur le point de supprimer définitivement le passeport, les vaccins et les vétérinaires assignés de ${name}. Cette action est irréversible.`,
     confirmDeleteBtn: "Oui, Supprimer",
@@ -970,6 +991,13 @@ const TRANSLATIONS = {
     scannableIdTitle: "Scanbare Identität",
     scannableIdDesc: (name) => `Beim Scannen werden die Identitäts- und Kontaktdaten von ${name} sofort angezeigt.`,
     scanToReach: "Bei Verlust scannen & kontaktieren",
+    lostPetCardBadge: "Diesen Hund gefunden?",
+    lostPetCardTitle: (name) => `Ausweis von ${name}`,
+    lostPetCardDesc: "Der Besitzer dieses Hundes nutzt Paw Wallet. Sie können ihn unten kontaktieren.",
+    callOwnerBtn: "Besitzer Anrufen",
+    callEmergencyBtn: "Notfallkontakt Anrufen",
+    lostCardNotFound: "Kein Eintrag für diesen Hund gefunden.",
+    lostCardFooter: "Erstellt mit Paw Wallet",
     deleteDogModalTitle: "Hund Löschen",
     deleteDogWarning: (name) => `Sie sind dabei, den Pass, die Impfdaten und die Tierarztzuweisungen von ${name} dauerhaft zu löschen. Dies kann nicht rückgängig gemacht werden.`,
     confirmDeleteBtn: "Ja, Löschen",
@@ -1242,6 +1270,13 @@ const TRANSLATIONS = {
     scannableIdTitle: "Identidad Escaneable",
     scannableIdDesc: (name) => `Al escanearlo, aparecen al instante los datos de identidad y contacto de ${name}.`,
     scanToReach: "Escanea y contacta si se pierde",
+    lostPetCardBadge: "¿Encontraste a este perro?",
+    lostPetCardTitle: (name) => `Tarjeta de Identidad de ${name}`,
+    lostPetCardDesc: "El dueño de este perro usa Paw Wallet. Puedes contactarlo con los datos de abajo.",
+    callOwnerBtn: "Llamar al Dueño",
+    callEmergencyBtn: "Llamar al Contacto de Emergencia",
+    lostCardNotFound: "No se encontró ningún registro para este perro.",
+    lostCardFooter: "Creado con Paw Wallet",
     deleteDogModalTitle: "Eliminar Perro",
     deleteDogWarning: (name) => `Estás a punto de eliminar permanentemente el pasaporte, los registros de vacunas y las asignaciones de veterinario de ${name}. Esta acción no se puede deshacer.`,
     confirmDeleteBtn: "Sí, Eliminar",
@@ -2100,16 +2135,8 @@ function PassportTab({ dog, onEdit, onDelete }) {
   const birthPlace = [dog.birthCity, dog.birthCountry].filter(Boolean).join(", ");
   const livingPlace = [dog.livingCity, dog.livingCountry].filter(Boolean).join(", ");
 
-  const qrPayload = JSON.stringify({
-    name: dog.name,
-    breed: dog.breed,
-    chip: dog.microchip,
-    passport: dog.passportNumber,
-    owner: dog.ownerName,
-    phone: ownerPhone,
-    emergency: emergencyPhone,
-  });
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=0&data=${encodeURIComponent(qrPayload)}`;
+  const publicLostPetUrl = `${window.location.origin}/?lost=${dog.id}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=0&data=${encodeURIComponent(publicLostPetUrl)}`;
 
   const Row = ({ label, value, mono }) => (
     <div className="flex items-baseline justify-between gap-4 py-2 border-b border-dotted border-[#d8cfb4]">
@@ -4896,8 +4923,115 @@ function PawWalletInner({ session }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Public "lost pet" card — no login required                          */
+/* ------------------------------------------------------------------ */
+
+function LostPetCard({ dogId }) {
+  const { t } = useI18n();
+  const [card, setCard] = useState(undefined); // undefined = loading, null = not found
+
+  useEffect(() => {
+    fetch(`/api/public-pet-card?id=${encodeURIComponent(dogId)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setCard(data))
+      .catch(() => setCard(null));
+  }, [dogId]);
+
+  const ownerPhone = card ? fmtPhone(card.ownerPhoneCode, card.ownerPhoneNumber) : "";
+  const emergencyPhone = card ? fmtPhone(card.emergencyPhoneCode, card.emergencyPhoneNumber) : "";
+
+  return (
+    <div className="min-h-screen w-full bg-[#EFE9D6] font-body flex items-center justify-center p-4 overflow-x-hidden" style={{ colorScheme: "light" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+        .font-display { font-family: 'Zilla Slab', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+      `}</style>
+
+      {card === undefined ? (
+        <Loader2 className="animate-spin text-[#5b6d63]" size={24} />
+      ) : card === null ? (
+        <div className="text-center text-[#5b6d63] text-[14px]">{t.lostCardNotFound}</div>
+      ) : (
+        <div className="w-full max-w-sm">
+          <div className="flex items-center gap-1.5 justify-center mb-4 text-[11px] font-bold tracking-wider text-white bg-[#a63d40] rounded-full px-3 py-1.5 w-fit mx-auto">
+            <ScanLine size={13} /> {t.lostPetCardBadge}
+          </div>
+
+          <div className="rounded-2xl border border-[#C9A227]/50 bg-[#FBF8EE] p-6 shadow-xl">
+            <div className="flex flex-col items-center text-center gap-3 mb-5">
+              <div className="h-28 w-28 rounded-full overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
+                {card.photo ? (
+                  <img src={card.photo} alt={card.name} className="h-full w-full object-cover" />
+                ) : (
+                  <PawPrint size={36} className="text-[#a89c6e]" />
+                )}
+              </div>
+              <div>
+                <h1 className="font-display text-[26px] text-[#1B3A2F] leading-tight">{t.lostPetCardTitle(card.name)}</h1>
+                <p className="text-[13px] text-[#5b6d63]">{card.breed}</p>
+              </div>
+              <p className="text-[13px] text-[#5b6d63]">{t.lostPetCardDesc}</p>
+            </div>
+
+            <div className="space-y-2 mb-5">
+              {card.microchip && (
+                <div className="flex items-center justify-between py-2 border-b border-dotted border-[#d8cfb4]">
+                  <span className="text-[11px] uppercase tracking-wider text-[#5b6d63] font-semibold">{t.rowMicrochip}</span>
+                  <span className="text-[13.5px] font-mono text-[#1f2a24]">{card.microchip}</span>
+                </div>
+              )}
+              {card.passportNumber && (
+                <div className="flex items-center justify-between py-2 border-b border-dotted border-[#d8cfb4]">
+                  <span className="text-[11px] uppercase tracking-wider text-[#5b6d63] font-semibold">{t.rowPassportNo}</span>
+                  <span className="text-[13.5px] font-mono text-[#1f2a24]">{card.passportNumber}</span>
+                </div>
+              )}
+              {card.ownerName && (
+                <div className="flex items-center justify-between py-2 border-b border-dotted border-[#d8cfb4]">
+                  <span className="text-[11px] uppercase tracking-wider text-[#5b6d63] font-semibold">{t.rowOwner}</span>
+                  <span className="text-[13.5px] text-[#1f2a24]">{card.ownerName}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2.5">
+              {ownerPhone.trim() && (
+                <a
+                  href={`tel:${ownerPhone.replace(/\s/g, "")}`}
+                  className="flex items-center justify-center gap-2 rounded-md bg-[#1B3A2F] text-[#F7F3E8] font-semibold text-[14px] py-3 hover:bg-[#234a3b] transition"
+                >
+                  <Phone size={16} /> {t.callOwnerBtn} · {ownerPhone}
+                </a>
+              )}
+              {emergencyPhone.trim() && (
+                <a
+                  href={`tel:${emergencyPhone.replace(/\s/g, "")}`}
+                  className="flex items-center justify-center gap-2 rounded-md border border-[#C9A227] text-[#8a6d16] font-semibold text-[14px] py-3 hover:bg-[#C9A227] hover:text-white transition"
+                >
+                  <Phone size={16} /> {t.callEmergencyBtn} · {emergencyPhone}
+                </a>
+              )}
+            </div>
+          </div>
+
+          <p className="text-center text-[11px] text-[#8d8560] mt-4 flex items-center justify-center gap-1.5">
+            <PawPrint size={12} /> {t.lostCardFooter}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function PawWallet() {
   const [lang, setLang] = useState(() => localStorage.getItem("paw-wallet-lang") || "en");
+  const [lostDogId] = useState(() => {
+    if (typeof window === "undefined") return null;
+    return new URLSearchParams(window.location.search).get("lost");
+  });
 
   useEffect(() => {
     localStorage.setItem("paw-wallet-lang", lang);
@@ -4907,7 +5041,7 @@ export default function PawWallet() {
 
   return (
     <I18nContext.Provider value={value}>
-      <AuthGate />
+      {lostDogId ? <LostPetCard dogId={lostDogId} /> : <AuthGate />}
     </I18nContext.Provider>
   );
 }
