@@ -2121,8 +2121,8 @@ function StampSeal({ qrUrl }) {
           </textPath>
         </text>
       </svg>
-      <div className="absolute inset-[22px] rounded-full bg-white p-1.5 shadow-inner border border-[#C9A227]/40">
-        <img src={qrUrl} alt="QR" className="h-full w-full rounded-full object-cover" />
+      <div className="absolute inset-[22px] rounded-full bg-white shadow-inner border border-[#C9A227]/40 grid place-items-center">
+        <img src={qrUrl} alt="QR" className="w-[70%] h-[70%] object-contain" />
       </div>
     </div>
   );
