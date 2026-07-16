@@ -3946,7 +3946,6 @@ function PetCVTab({ dog, session }) {
             </div>
           </div>
         </div>
-        </div>
 
         <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvIdentitySection}</p>
         <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
