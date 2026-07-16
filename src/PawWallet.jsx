@@ -1965,6 +1965,43 @@ const PLATFORM_VETS = [
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
+/* Subtle scattered dog-themed background pattern (paw prints + bones), used only
+   on the outer page background — never behind the actual content cards. */
+const DOG_BG_PATTERN_SVG = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>
+  <g fill='#1B3A2F' fill-opacity='0.05'>
+    <g transform='translate(24,30) rotate(-18)'>
+      <ellipse cx='0' cy='11' rx='8' ry='6.2'/>
+      <circle cx='-8' cy='-2' r='3'/>
+      <circle cx='-3' cy='-7' r='3.2'/>
+      <circle cx='3' cy='-7' r='3.2'/>
+      <circle cx='8' cy='-2' r='3'/>
+    </g>
+    <g transform='translate(150,60) rotate(24)'>
+      <rect x='-11' y='-3' width='22' height='6' rx='3'/>
+      <circle cx='-11' cy='-3.5' r='3.4'/>
+      <circle cx='-11' cy='3.5' r='3.4'/>
+      <circle cx='11' cy='-3.5' r='3.4'/>
+      <circle cx='11' cy='3.5' r='3.4'/>
+    </g>
+    <g transform='translate(60,140) rotate(10)'>
+      <ellipse cx='0' cy='9' rx='6.5' ry='5'/>
+      <circle cx='-6.5' cy='-1.5' r='2.4'/>
+      <circle cx='-2.4' cy='-5.5' r='2.6'/>
+      <circle cx='2.4' cy='-5.5' r='2.6'/>
+      <circle cx='6.5' cy='-1.5' r='2.4'/>
+    </g>
+    <g transform='translate(155,165) rotate(-30)'>
+      <rect x='-9' y='-2.5' width='18' height='5' rx='2.5'/>
+      <circle cx='-9' cy='-3' r='2.8'/>
+      <circle cx='-9' cy='3' r='2.8'/>
+      <circle cx='9' cy='-3' r='2.8'/>
+      <circle cx='9' cy='3' r='2.8'/>
+    </g>
+  </g>
+</svg>`;
+const DOG_BG_PATTERN_URL = `url("data:image/svg+xml,${encodeURIComponent(DOG_BG_PATTERN_SVG)}")`;
+
+
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
 const daysUntil = (dateStr) => {
@@ -5281,7 +5318,10 @@ function PawWalletInner({ session }) {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
+    <div
+      className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden"
+      style={{ colorScheme: "light", backgroundImage: DOG_BG_PATTERN_URL, backgroundSize: "200px 200px" }}
+    >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .font-display { font-family: 'Zilla Slab', serif; }
@@ -5382,7 +5422,7 @@ function PawWalletInner({ session }) {
             </PrimaryButton>
           </div>
         ) : (
-          <>
+          <div className="bg-[#EFE9D6] relative z-10">
             {/* tabs */}
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
               {TAB_IDS.map((tabDef) => {
@@ -5435,7 +5475,7 @@ function PawWalletInner({ session }) {
             )}
             {tab === "vets" && <VetTab dog={activeDog} session={session} />}
             {tab === "cv" && <PetCVTab dog={activeDog} session={session} />}
-          </>
+          </div>
         )}
 
         <p className="text-center text-[11px] text-[#8d8560] mt-10">{t.footerNote}</p>
