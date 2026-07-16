@@ -30,6 +30,7 @@ import {
   Bell,
   BellRing,
   FileText,
+  Award,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
@@ -40,11 +41,11 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 /* ------------------------------------------------------------------ */
 
 const LANGS = [
-  { code: "tr", label: "Türkçe", locale: "tr-TR" },
-  { code: "en", label: "English", locale: "en-US" },
-  { code: "fr", label: "Français", locale: "fr-FR" },
-  { code: "de", label: "Deutsch", locale: "de-DE" },
-  { code: "es", label: "Español", locale: "es-ES" },
+  { code: "tr", label: "Türkçe", short: "TUR", flag: "🇹🇷", locale: "tr-TR" },
+  { code: "en", label: "English", short: "ENG", flag: "🇬🇧", locale: "en-US" },
+  { code: "fr", label: "Français", short: "FRA", flag: "🇫🇷", locale: "fr-FR" },
+  { code: "de", label: "Deutsch", short: "DEU", flag: "🇩🇪", locale: "de-DE" },
+  { code: "es", label: "Español", short: "ESP", flag: "🇪🇸", locale: "es-ES" },
 ];
 
 const TRANSLATIONS = {
@@ -75,6 +76,10 @@ const TRANSLATIONS = {
     fieldLivingCountry: "Yaşadığı ülke",
     fieldLivingCity: "Yaşadığı şehir",
     fieldMicrochip: "Mikroçip numarası",
+    fieldNeutered: "Kısırlaştırıldı mı?",
+    rowNeutered: "Kısırlaştırma Durumu",
+    neuteredYes: "Evet",
+    neuteredNo: "Hayır",
     fieldOwnerName: "Sahip adı",
     fieldOwnerEmail: "Sahip e-postası (aşı hatırlatmaları buraya gider)",
     fieldOwnerPhone: "Sahip telefon",
@@ -115,6 +120,22 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Acil Kişiyi Ara",
     lostCardNotFound: "Bu köpeğe ait bir kayıt bulunamadı.",
     lostCardFooter: "Paw Wallet ile oluşturuldu",
+    colorNames: {
+      "Siyah": "Siyah",
+      "Beyaz": "Beyaz",
+      "Kahverengi": "Kahverengi",
+      "Kum Rengi (Fawn)": "Kum Rengi (Fawn)",
+      "Kızıl / Kırmızımsı": "Kızıl / Kırmızımsı",
+      "Gri": "Gri",
+      "Sarı / Krem": "Sarı / Krem",
+      "Sable (Kızıl-Siyah Karışık)": "Sable (Kızıl-Siyah Karışık)",
+      "Siyah-Beyaz": "Siyah-Beyaz",
+      "Kahverengi-Beyaz": "Kahverengi-Beyaz",
+      "Üç Renkli (Tricolor)": "Üç Renkli (Tricolor)",
+      "Benekli (Merle)": "Benekli (Merle)",
+      "Altın Sarısı": "Altın Sarısı",
+      "Diğer": "Diğer",
+    },
     deleteDogModalTitle: "Köpeği Sil",
     deleteDogWarning: (name) => `${name} adlı köpeğin pasaportunu, aşı kayıtlarını ve veteriner atamalarını kalıcı olarak silmek üzeresin. Bu işlem geri alınamaz.`,
     confirmDeleteBtn: "Evet, Sil",
@@ -342,6 +363,21 @@ const TRANSLATIONS = {
     saveClinicInfoBtn: "Bilgileri Kaydet",
     approvedByLabel: "Onaylayan",
     assignedVetsTitle: "Atanmış Veterinerler",
+    navPetCV: "CV",
+    petCvTitle: (name) => `${name} — Genel Özet (CV)`,
+    petCvSubtitle: "Tüm pasaport, sağlık, aşı ve veteriner bilgilerinin özeti",
+    downloadPdfBtn: "PDF Olarak İndir",
+    cvIdentitySection: "Kimlik Bilgileri",
+    cvHealthSection: "Sağlık Profili",
+    cvVaccinesSection: "Aşı Geçmişi",
+    cvWeightSection: "Ağırlık",
+    cvVetSection: "Atanmış Veterinerler",
+    cvNoVaccines: "Kayıtlı aşı yok.",
+    cvNoVet: "Onaylı veteriner ataması yok.",
+    cvCurrentWeight: "Güncel Ağırlık",
+    cvIdealWeight: "İdeal Ağırlık",
+    cvNoWeight: "Ağırlık ölçümü yok.",
+    cvGeneratedOn: (date) => `${date} tarihinde oluşturuldu`,
     pendingApprovalBadge: "ONAY BEKLİYOR",
     rejectedBadge: "REDDEDİLDİ",
     cancelRequestBtn: "İptal Et",
@@ -377,6 +413,10 @@ const TRANSLATIONS = {
     fieldLivingCountry: "Country of residence",
     fieldLivingCity: "City of residence",
     fieldMicrochip: "Microchip number",
+    fieldNeutered: "Neutered / Spayed?",
+    rowNeutered: "Neutered / Spayed",
+    neuteredYes: "Yes",
+    neuteredNo: "No",
     fieldOwnerName: "Owner's name",
     fieldOwnerEmail: "Owner's email (vaccine reminders go here)",
     fieldOwnerPhone: "Owner's phone",
@@ -417,6 +457,22 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Call Emergency Contact",
     lostCardNotFound: "No record found for this dog.",
     lostCardFooter: "Made with Paw Wallet",
+    colorNames: {
+      "Siyah": "Black",
+      "Beyaz": "White",
+      "Kahverengi": "Brown",
+      "Kum Rengi (Fawn)": "Fawn",
+      "Kızıl / Kırmızımsı": "Red / Reddish",
+      "Gri": "Grey",
+      "Sarı / Krem": "Yellow / Cream",
+      "Sable (Kızıl-Siyah Karışık)": "Sable",
+      "Siyah-Beyaz": "Black & White",
+      "Kahverengi-Beyaz": "Brown & White",
+      "Üç Renkli (Tricolor)": "Tricolor",
+      "Benekli (Merle)": "Merle",
+      "Altın Sarısı": "Golden",
+      "Diğer": "Other",
+    },
     deleteDogModalTitle: "Delete Dog",
     deleteDogWarning: (name) => `You're about to permanently delete ${name}'s passport, vaccine records and vet assignments. This action cannot be undone.`,
     confirmDeleteBtn: "Yes, Delete",
@@ -644,6 +700,21 @@ const TRANSLATIONS = {
     saveClinicInfoBtn: "Save Info",
     approvedByLabel: "Approved by",
     assignedVetsTitle: "Assigned Vets",
+    navPetCV: "CV",
+    petCvTitle: (name) => `${name} — Summary (CV)`,
+    petCvSubtitle: "A summary of all passport, health, vaccine, and vet information",
+    downloadPdfBtn: "Download as PDF",
+    cvIdentitySection: "Identity Details",
+    cvHealthSection: "Health Profile",
+    cvVaccinesSection: "Vaccine History",
+    cvWeightSection: "Weight",
+    cvVetSection: "Assigned Vets",
+    cvNoVaccines: "No vaccines recorded.",
+    cvNoVet: "No approved vet assignment.",
+    cvCurrentWeight: "Current Weight",
+    cvIdealWeight: "Ideal Weight",
+    cvNoWeight: "No weight measurements.",
+    cvGeneratedOn: (date) => `Generated on ${date}`,
     pendingApprovalBadge: "PENDING APPROVAL",
     rejectedBadge: "REJECTED",
     cancelRequestBtn: "Cancel",
@@ -679,6 +750,10 @@ const TRANSLATIONS = {
     fieldLivingCountry: "Pays de résidence",
     fieldLivingCity: "Ville de résidence",
     fieldMicrochip: "Numéro de puce",
+    fieldNeutered: "Stérilisé(e) ?",
+    rowNeutered: "Statut de Stérilisation",
+    neuteredYes: "Oui",
+    neuteredNo: "Non",
     fieldOwnerName: "Nom du propriétaire",
     fieldOwnerEmail: "E-mail du propriétaire (rappels de vaccins envoyés ici)",
     fieldOwnerPhone: "Téléphone du propriétaire",
@@ -719,6 +794,22 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Appeler le Contact d'Urgence",
     lostCardNotFound: "Aucun enregistrement trouvé pour ce chien.",
     lostCardFooter: "Créé avec Paw Wallet",
+    colorNames: {
+      "Siyah": "Noir",
+      "Beyaz": "Blanc",
+      "Kahverengi": "Marron",
+      "Kum Rengi (Fawn)": "Fauve",
+      "Kızıl / Kırmızımsı": "Roux / Rougeâtre",
+      "Gri": "Gris",
+      "Sarı / Krem": "Jaune / Crème",
+      "Sable (Kızıl-Siyah Karışık)": "Sable",
+      "Siyah-Beyaz": "Noir & Blanc",
+      "Kahverengi-Beyaz": "Marron & Blanc",
+      "Üç Renkli (Tricolor)": "Tricolore",
+      "Benekli (Merle)": "Merle",
+      "Altın Sarısı": "Doré",
+      "Diğer": "Autre",
+    },
     deleteDogModalTitle: "Supprimer le Chien",
     deleteDogWarning: (name) => `Vous êtes sur le point de supprimer définitivement le passeport, les vaccins et les vétérinaires assignés de ${name}. Cette action est irréversible.`,
     confirmDeleteBtn: "Oui, Supprimer",
@@ -923,6 +1014,21 @@ const TRANSLATIONS = {
     saveClinicInfoBtn: "Enregistrer",
     approvedByLabel: "Approuvé par",
     assignedVetsTitle: "Vétérinaires Assignés",
+    navPetCV: "CV",
+    petCvTitle: (name) => `${name} — Résumé (CV)`,
+    petCvSubtitle: "Un résumé de toutes les informations de passeport, santé, vaccins et vétérinaire",
+    downloadPdfBtn: "Télécharger en PDF",
+    cvIdentitySection: "Informations d'Identité",
+    cvHealthSection: "Profil de Santé",
+    cvVaccinesSection: "Historique des Vaccins",
+    cvWeightSection: "Poids",
+    cvVetSection: "Vétérinaires Assignés",
+    cvNoVaccines: "Aucun vaccin enregistré.",
+    cvNoVet: "Aucune attribution vétérinaire approuvée.",
+    cvCurrentWeight: "Poids Actuel",
+    cvIdealWeight: "Poids Idéal",
+    cvNoWeight: "Aucune mesure de poids.",
+    cvGeneratedOn: (date) => `Généré le ${date}`,
     pendingApprovalBadge: "EN ATTENTE",
     rejectedBadge: "REFUSÉ",
     cancelRequestBtn: "Annuler",
@@ -958,6 +1064,10 @@ const TRANSLATIONS = {
     fieldLivingCountry: "Wohnsitzland",
     fieldLivingCity: "Wohnort",
     fieldMicrochip: "Mikrochip-Nummer",
+    fieldNeutered: "Kastriert / Sterilisiert?",
+    rowNeutered: "Kastrationsstatus",
+    neuteredYes: "Ja",
+    neuteredNo: "Nein",
     fieldOwnerName: "Name des Besitzers",
     fieldOwnerEmail: "E-Mail des Besitzers (Impferinnerungen gehen hierhin)",
     fieldOwnerPhone: "Telefon des Besitzers",
@@ -998,6 +1108,22 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Notfallkontakt Anrufen",
     lostCardNotFound: "Kein Eintrag für diesen Hund gefunden.",
     lostCardFooter: "Erstellt mit Paw Wallet",
+    colorNames: {
+      "Siyah": "Schwarz",
+      "Beyaz": "Weiß",
+      "Kahverengi": "Braun",
+      "Kum Rengi (Fawn)": "Falbfarben",
+      "Kızıl / Kırmızımsı": "Rot / Rötlich",
+      "Gri": "Grau",
+      "Sarı / Krem": "Gelb / Creme",
+      "Sable (Kızıl-Siyah Karışık)": "Sable",
+      "Siyah-Beyaz": "Schwarz-Weiß",
+      "Kahverengi-Beyaz": "Braun-Weiß",
+      "Üç Renkli (Tricolor)": "Dreifarbig",
+      "Benekli (Merle)": "Merle",
+      "Altın Sarısı": "Golden",
+      "Diğer": "Andere",
+    },
     deleteDogModalTitle: "Hund Löschen",
     deleteDogWarning: (name) => `Sie sind dabei, den Pass, die Impfdaten und die Tierarztzuweisungen von ${name} dauerhaft zu löschen. Dies kann nicht rückgängig gemacht werden.`,
     confirmDeleteBtn: "Ja, Löschen",
@@ -1202,6 +1328,21 @@ const TRANSLATIONS = {
     saveClinicInfoBtn: "Informationen Speichern",
     approvedByLabel: "Genehmigt von",
     assignedVetsTitle: "Zugewiesene Tierärzte",
+    navPetCV: "CV",
+    petCvTitle: (name) => `${name} — Übersicht (CV)`,
+    petCvSubtitle: "Eine Zusammenfassung aller Pass-, Gesundheits-, Impf- und Tierarztinformationen",
+    downloadPdfBtn: "Als PDF Herunterladen",
+    cvIdentitySection: "Identitätsdaten",
+    cvHealthSection: "Gesundheitsprofil",
+    cvVaccinesSection: "Impfhistorie",
+    cvWeightSection: "Gewicht",
+    cvVetSection: "Zugewiesene Tierärzte",
+    cvNoVaccines: "Keine Impfungen erfasst.",
+    cvNoVet: "Keine genehmigte Tierarztzuweisung.",
+    cvCurrentWeight: "Aktuelles Gewicht",
+    cvIdealWeight: "Idealgewicht",
+    cvNoWeight: "Keine Gewichtsmessungen.",
+    cvGeneratedOn: (date) => `Erstellt am ${date}`,
     pendingApprovalBadge: "GENEHMIGUNG AUSSTEHEND",
     rejectedBadge: "ABGELEHNT",
     cancelRequestBtn: "Abbrechen",
@@ -1237,6 +1378,10 @@ const TRANSLATIONS = {
     fieldLivingCountry: "País de residencia",
     fieldLivingCity: "Ciudad de residencia",
     fieldMicrochip: "Número de microchip",
+    fieldNeutered: "¿Esterilizado/a?",
+    rowNeutered: "Estado de Esterilización",
+    neuteredYes: "Sí",
+    neuteredNo: "No",
     fieldOwnerName: "Nombre del dueño",
     fieldOwnerEmail: "Correo del dueño (los recordatorios de vacunas se envían aquí)",
     fieldOwnerPhone: "Teléfono del dueño",
@@ -1277,6 +1422,22 @@ const TRANSLATIONS = {
     callEmergencyBtn: "Llamar al Contacto de Emergencia",
     lostCardNotFound: "No se encontró ningún registro para este perro.",
     lostCardFooter: "Creado con Paw Wallet",
+    colorNames: {
+      "Siyah": "Negro",
+      "Beyaz": "Blanco",
+      "Kahverengi": "Marrón",
+      "Kum Rengi (Fawn)": "Leonado",
+      "Kızıl / Kırmızımsı": "Rojizo",
+      "Gri": "Gris",
+      "Sarı / Krem": "Amarillo / Crema",
+      "Sable (Kızıl-Siyah Karışık)": "Sable",
+      "Siyah-Beyaz": "Negro y Blanco",
+      "Kahverengi-Beyaz": "Marrón y Blanco",
+      "Üç Renkli (Tricolor)": "Tricolor",
+      "Benekli (Merle)": "Merle",
+      "Altın Sarısı": "Dorado",
+      "Diğer": "Otro",
+    },
     deleteDogModalTitle: "Eliminar Perro",
     deleteDogWarning: (name) => `Estás a punto de eliminar permanentemente el pasaporte, los registros de vacunas y las asignaciones de veterinario de ${name}. Esta acción no se puede deshacer.`,
     confirmDeleteBtn: "Sí, Eliminar",
@@ -1481,6 +1642,21 @@ const TRANSLATIONS = {
     saveClinicInfoBtn: "Guardar Información",
     approvedByLabel: "Aprobado por",
     assignedVetsTitle: "Veterinarios Asignados",
+    navPetCV: "CV",
+    petCvTitle: (name) => `${name} — Resumen (CV)`,
+    petCvSubtitle: "Un resumen de toda la información de pasaporte, salud, vacunas y veterinario",
+    downloadPdfBtn: "Descargar como PDF",
+    cvIdentitySection: "Datos de Identidad",
+    cvHealthSection: "Perfil de Salud",
+    cvVaccinesSection: "Historial de Vacunas",
+    cvWeightSection: "Peso",
+    cvVetSection: "Veterinarios Asignados",
+    cvNoVaccines: "No hay vacunas registradas.",
+    cvNoVet: "No hay asignación veterinaria aprobada.",
+    cvCurrentWeight: "Peso Actual",
+    cvIdealWeight: "Peso Ideal",
+    cvNoWeight: "No hay mediciones de peso.",
+    cvGeneratedOn: (date) => `Generado el ${date}`,
     pendingApprovalBadge: "PENDIENTE DE APROBACIÓN",
     rejectedBadge: "RECHAZADO",
     cancelRequestBtn: "Cancelar",
@@ -1560,72 +1736,199 @@ const COMMON_VACCINES = [
 
 const BREEDS = [
   "Melez / Karışık",
-  "Golden Retriever",
-  "Labrador Retriever",
-  "Kangal",
+  "Affenpinscher",
+  "Afghan Hound",
+  "Airedale Terrier",
   "Akbaş",
-  "Anadolu Çoban Köpeği",
-  "Kars Çoban Köpeği (Çakabey)",
-  "Malaklı",
-  "Fransız Bulldog",
-  "İngiliz Bulldog",
-  "Pomeranian (Spitz)",
-  "Chihuahua",
-  "Beagle",
-  "Cocker Spaniel",
-  "Alman Kurdu (German Shepherd)",
-  "Rottweiler",
-  "Doberman",
-  "Boxer",
-  "Husky (Siberian Husky)",
   "Akita",
-  "Shiba Inu",
-  "Border Collie",
-  "Avustralya Çoban Köpeği (Aussie)",
-  "Jack Russell Terrier",
-  "Yorkshire Terrier",
-  "Shih Tzu",
-  "Maltese (Malta Köpeği)",
-  "Pug",
-  "Dalmaçyalı",
-  "Rus Tazısı (Borzoi)",
-  "Grönland Köpeği",
-  "Saint Bernard",
-  "Bernese Mountain Dog",
-  "Great Dane (Danua)",
-  "Mastiff",
-  "Bull Terrier",
-  "Staffordshire Bull Terrier",
-  "American Pitbull Terrier",
-  "Rhodesian Ridgeback",
-  "Weimaraner",
-  "Vizsla",
-  "Pointer",
-  "Setter (İrlanda)",
-  "Basset Hound",
-  "Bloodhound",
-  "Dachshund (Sosis Köpek)",
-  "Schnauzer",
-  "Poodle (Standart)",
-  "Toy Poodle",
-  "Bichon Frise",
-  "Havanese",
-  "Papillon",
-  "Pekingese",
-  "Lhasa Apso",
-  "Bull Mastiff",
-  "Newfoundland",
-  "Samoyed",
   "Alaskan Malamute",
+  "American Bulldog",
+  "American Eskimo Dog",
+  "American Foxhound",
+  "American Pitbull Terrier",
+  "American Staffordshire Terrier",
+  "American Water Spaniel",
+  "Anatolian Shepherd Dog (Anadolu Çoban Köpeği)",
+  "Australian Cattle Dog",
+  "Australian Shepherd (Aussie)",
+  "Australian Terrier",
+  "Basenji",
+  "Basset Hound",
+  "Beagle",
+  "Bearded Collie",
+  "Bedlington Terrier",
+  "Belgian Malinois",
+  "Belgian Sheepdog",
+  "Belgian Tervuren",
+  "Bernese Mountain Dog",
+  "Bichon Frise",
+  "Black and Tan Coonhound",
+  "Black Russian Terrier",
+  "Bloodhound",
+  "Bluetick Coonhound",
+  "Boerboel",
+  "Border Collie",
+  "Border Terrier",
+  "Borzoi (Rus Tazısı)",
+  "Boston Terrier",
+  "Bouvier des Flandres",
+  "Boxer",
+  "Boykin Spaniel",
+  "Bracco Italiano",
+  "Briard",
+  "Brittany",
+  "Brussels Griffon",
+  "Bull Terrier",
+  "Bulldog (English Bulldog)",
+  "Bullmastiff",
+  "Cairn Terrier",
+  "Canaan Dog",
+  "Cane Corso",
+  "Cardigan Welsh Corgi",
+  "Cavalier King Charles Spaniel",
+  "Chesapeake Bay Retriever",
+  "Chihuahua",
+  "Chinese Crested",
+  "Chinese Shar-Pei",
+  "Chow Chow",
+  "Clumber Spaniel",
+  "Cocker Spaniel",
   "Collie",
-  "Sheltie (Shetland Sheepdog)",
-  "Corgi (Pembroke Welsh)",
-  "Whippet",
+  "Coton de Tulear",
+  "Curly-Coated Retriever",
+  "Dachshund (Sosis Köpek)",
+  "Dalmatian (Dalmaçyalı)",
+  "Dandie Dinmont Terrier",
+  "Doberman Pinscher",
+  "Dogo Argentino",
+  "Dogue de Bordeaux",
+  "Dutch Shepherd",
+  "English Cocker Spaniel",
+  "English Setter",
+  "English Springer Spaniel",
+  "English Toy Spaniel",
+  "Entlebucher Mountain Dog",
+  "Field Spaniel",
+  "Finnish Lapphund",
+  "Finnish Spitz",
+  "Flat-Coated Retriever",
+  "Fox Terrier (Smooth)",
+  "Fox Terrier (Wire)",
+  "French Bulldog (Fransız Bulldog)",
+  "German Pinscher",
+  "German Shepherd Dog (Alman Kurdu)",
+  "German Shorthaired Pointer",
+  "German Wirehaired Pointer",
+  "Giant Schnauzer",
+  "Glen of Imaal Terrier",
+  "Golden Retriever",
+  "Gordon Setter",
+  "Grand Basset Griffon Vendéen",
+  "Great Dane (Danua)",
+  "Great Pyrenees",
+  "Greater Swiss Mountain Dog",
   "Greyhound (Tazı)",
-  "Afgan Tazısı",
-  "Kuvasz",
-  "Sivas Kangalı",
+  "Harrier",
+  "Havanese",
+  "Ibizan Hound",
+  "Icelandic Sheepdog",
+  "Irish Red and White Setter",
+  "Irish Setter",
+  "Irish Terrier",
+  "Irish Water Spaniel",
+  "Irish Wolfhound",
+  "Italian Greyhound",
+  "Jack Russell Terrier",
+  "Japanese Chin",
+  "Japanese Spitz",
+  "Kangal",
   "Karabaş",
+  "Keeshond",
+  "Kerry Blue Terrier",
+  "Komondor",
+  "Kuvasz",
+  "Kars Çoban Köpeği (Çakabey)",
+  "Labrador Retriever",
+  "Lagotto Romagnolo",
+  "Lakeland Terrier",
+  "Lhasa Apso",
+  "Löwchen",
+  "Malaklı",
+  "Maltese (Malta Köpeği)",
+  "Manchester Terrier",
+  "Mastiff",
+  "Miniature Bull Terrier",
+  "Miniature Pinscher",
+  "Miniature Schnauzer",
+  "Neapolitan Mastiff",
+  "Newfoundland",
+  "Norfolk Terrier",
+  "Norwegian Buhund",
+  "Norwegian Elkhound",
+  "Norwegian Lundehund",
+  "Norwich Terrier",
+  "Nova Scotia Duck Tolling Retriever",
+  "Old English Sheepdog",
+  "Otterhound",
+  "Papillon",
+  "Parson Russell Terrier",
+  "Pekingese",
+  "Pembroke Welsh Corgi",
+  "Perro de Presa Canario",
+  "Petit Basset Griffon Vendéen",
+  "Pharaoh Hound",
+  "Plott Hound",
+  "Pointer",
+  "Pomeranian (Spitz)",
+  "Poodle (Standard)",
+  "Poodle (Miniature)",
+  "Portuguese Podengo",
+  "Portuguese Water Dog",
+  "Pug",
+  "Puli",
+  "Pyrenean Shepherd",
+  "Rat Terrier",
+  "Redbone Coonhound",
+  "Rhodesian Ridgeback",
+  "Rottweiler",
+  "Saint Bernard",
+  "Saluki",
+  "Samoyed",
+  "Schipperke",
+  "Scottish Deerhound",
+  "Scottish Terrier",
+  "Sealyham Terrier",
+  "Setter (İrlanda)",
+  "Shetland Sheepdog (Sheltie)",
+  "Shiba Inu",
+  "Shih Tzu",
+  "Siberian Husky",
+  "Silky Terrier",
+  "Sivas Kangalı",
+  "Skye Terrier",
+  "Sloughi",
+  "Soft Coated Wheaten Terrier",
+  "Spinone Italiano",
+  "Staffordshire Bull Terrier",
+  "Standard Schnauzer",
+  "Sussex Spaniel",
+  "Swedish Vallhund",
+  "Tibetan Mastiff",
+  "Tibetan Spaniel",
+  "Tibetan Terrier",
+  "Toy Fox Terrier",
+  "Toy Poodle",
+  "Treeing Walker Coonhound",
+  "Vizsla",
+  "Weimaraner",
+  "Welsh Springer Spaniel",
+  "Welsh Terrier",
+  "West Highland White Terrier",
+  "Whippet",
+  "Wirehaired Pointing Griffon",
+  "Xoloitzcuintli",
+  "Yakutian Laika",
+  "Yorkshire Terrier",
   "Diğer",
 ];
 
@@ -1790,13 +2093,14 @@ function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 rounded-full border border-[#d8cfb4] bg-[#FBF8EE] px-3 py-1.5 text-[12.5px] font-medium text-[#3c473f] hover:bg-[#f0e9cd] transition"
+        className="flex items-center gap-1.5 rounded-full border border-[#d8cfb4] bg-[#FBF8EE] px-2.5 py-1.5 text-[12.5px] font-medium text-[#3c473f] hover:bg-[#f0e9cd] transition"
       >
-        <Globe size={13} /> {current?.label}
+        <span>{current?.flag}</span>
+        <span>{current?.short}</span>
         <ChevronDown size={12} />
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-40 rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] shadow-lg overflow-hidden z-30">
+        <div className="absolute right-0 mt-2 w-28 rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] shadow-lg overflow-hidden z-30">
           {LANGS.map((l) => (
             <button
               key={l.code}
@@ -1804,11 +2108,12 @@ function LanguageSwitcher() {
                 setLang(l.code);
                 setOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 text-[13px] hover:bg-[#f0e9cd] transition ${
+              className={`w-full flex items-center gap-1.5 text-left px-3 py-2 text-[13px] hover:bg-[#f0e9cd] transition ${
                 l.code === lang ? "bg-[#f0e9cd] font-semibold" : ""
               }`}
             >
-              {l.label}
+              <span>{l.flag}</span>
+              <span>{l.short}</span>
             </button>
           ))}
         </div>
@@ -1908,6 +2213,61 @@ function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeho
 /*  Add / Edit Dog Modal                                               */
 /* ------------------------------------------------------------------ */
 
+/* Searchable combobox — type to filter a long list (e.g. dog breeds), free typing also allowed */
+function SearchableSelect({ value, onChange, options, placeholder }) {
+  const [query, setQuery] = useState(value || "");
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => setQuery(value || ""), [value]);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const q = query.trim().toLowerCase();
+  const filtered = q ? options.filter((o) => o.toLowerCase().includes(q)).slice(0, 60) : options.slice(0, 60);
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <input
+        className={inputCls}
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+          onChange(e.target.value);
+        }}
+        onFocus={() => setOpen(true)}
+        placeholder={placeholder}
+        autoComplete="off"
+      />
+      {open && filtered.length > 0 && (
+        <div className="absolute z-20 mt-1 w-full max-h-56 overflow-y-auto rounded-md border border-[#d8cfb4] bg-[#fdfbf4] shadow-lg">
+          {filtered.map((o) => (
+            <button
+              key={o}
+              type="button"
+              onClick={() => {
+                onChange(o);
+                setQuery(o);
+                setOpen(false);
+              }}
+              className="w-full text-left px-3 py-2 text-[13.5px] text-[#1f2a24] hover:bg-[#eee6cd] transition"
+            >
+              {o}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AddDogModal({ onClose, onSave, existingDog }) {
   const { t } = useI18n();
   const isEdit = !!existingDog;
@@ -1915,6 +2275,7 @@ function AddDogModal({ onClose, onSave, existingDog }) {
     existingDog
       ? {
           ...existingDog,
+          neutered: existingDog.neutered || "Hayır",
           customColor: !COLORS.includes(existingDog.color) ? existingDog.color : "",
           color: COLORS.includes(existingDog.color) ? existingDog.color : "Diğer",
         }
@@ -1923,6 +2284,7 @@ function AddDogModal({ onClose, onSave, existingDog }) {
           breed: BREEDS[0],
           birthDate: "",
           gender: "Erkek",
+          neutered: "Hayır",
           color: COLORS[0],
           customColor: "",
           birthCountry: "",
@@ -2003,11 +2365,12 @@ function AddDogModal({ onClose, onSave, existingDog }) {
             <input className={inputCls} value={form.name} onChange={set("name")} placeholder="Zeytin" />
           </Field>
           <Field label={t.fieldBreed}>
-            <select className={inputCls} value={form.breed} onChange={set("breed")}>
-              {BREEDS.map((b) => (
-                <option key={b}>{b}</option>
-              ))}
-            </select>
+            <SearchableSelect
+              value={form.breed}
+              onChange={(v) => setForm((f) => ({ ...f, breed: v }))}
+              options={BREEDS}
+              placeholder={t.fieldBreed}
+            />
           </Field>
           <Field label={t.fieldBirthDate}>
             <input type="date" className={inputCls} value={form.birthDate} onChange={set("birthDate")} />
@@ -2021,7 +2384,9 @@ function AddDogModal({ onClose, onSave, existingDog }) {
           <Field label={t.fieldColor}>
             <select className={inputCls} value={form.color} onChange={set("color")}>
               {COLORS.map((c) => (
-                <option key={c}>{c}</option>
+                <option key={c} value={c}>
+                  {t.colorNames?.[c] || c}
+                </option>
               ))}
             </select>
           </Field>
@@ -2033,6 +2398,13 @@ function AddDogModal({ onClose, onSave, existingDog }) {
 
           <Field label={t.fieldMicrochip}>
             <input className={monoInputCls} value={form.microchip} onChange={set("microchip")} placeholder="15 haneli numara" />
+          </Field>
+
+          <Field label={t.fieldNeutered}>
+            <select className={inputCls} value={form.neutered} onChange={set("neutered")}>
+              <option value="Evet">{t.neuteredYes}</option>
+              <option value="Hayır">{t.neuteredNo}</option>
+            </select>
           </Field>
 
           <CountryCityPicker
@@ -2190,7 +2562,8 @@ function PassportTab({ dog, onEdit, onDelete }) {
         <div className="mt-4">
           <Row label={t.rowBirthDate} value={fmtDate(dog.birthDate, locale)} />
           <Row label={t.rowGender} value={dog.gender === "Dişi" ? t.female : t.male} />
-          <Row label={t.rowColor} value={dog.color} />
+          <Row label={t.rowNeutered} value={dog.neutered === "Evet" ? t.neuteredYes : t.neuteredNo} />
+          <Row label={t.rowColor} value={t.colorNames?.[dog.color] || dog.color} />
           <Row label={t.rowBirthPlace} value={birthPlace} />
           <Row label={t.rowLivingPlace} value={livingPlace} />
           <Row label={t.rowMicrochip} value={dog.microchip} mono />
@@ -3194,6 +3567,9 @@ function WeightChart({ entries, idealWeight, t }) {
     .sort((a, b) => (a.date > b.date ? 1 : -1))
     .map((e) => ({ date: e.date, weight: e.weight, label: e.date.slice(5) }));
 
+  const maxRecorded = Math.max(...data.map((d) => d.weight), 0);
+  const upperBound = Math.ceil(Math.max(maxRecorded * 1.5, idealWeight || 0));
+
   return (
     <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4 mb-5" style={{ height: 260 }}>
       <p className="font-display text-[15px] text-[#1B3A2F] mb-2">{t.weightChartTitle}</p>
@@ -3201,7 +3577,7 @@ function WeightChart({ entries, idealWeight, t }) {
         <LineChart data={data} margin={{ top: 8, right: 16, left: -12, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e3d9bd" />
           <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#5b6d63" }} />
-          <YAxis tick={{ fontSize: 11, fill: "#5b6d63" }} domain={["auto", "auto"]} />
+          <YAxis tick={{ fontSize: 11, fill: "#5b6d63" }} domain={[0, upperBound]} />
           <Tooltip
             contentStyle={{ background: "#FBF8EE", border: "1px solid #d8cfb4", borderRadius: 8, fontSize: 12 }}
             formatter={(value) => [`${value} kg`, ""]}
@@ -3468,8 +3844,152 @@ function VetTab({ dog, session }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Empty state                                                         */
+/*  Pet CV — printable full summary                                     */
 /* ------------------------------------------------------------------ */
+
+function PetCVTab({ dog, session }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const [assignedVets, setAssignedVets] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data: reqData } = await supabase
+        .from("vet_assignment_requests")
+        .select("*")
+        .eq("dog_id", dog.id)
+        .eq("status", "approved");
+      if (reqData && reqData.length > 0) {
+        const vetIds = reqData.map((r) => r.vet_id);
+        const { data: vetsData } = await supabase.from("vets").select("*").in("id", vetIds);
+        const merged = reqData.map((r) => ({ ...r, vet: vetsData?.find((v) => v.id === r.vet_id) }));
+        setAssignedVets(merged);
+      }
+      setLoaded(true);
+    })();
+  }, [dog.id]);
+
+  const sortedVaccines = [...(dog.vaccines || [])].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const sortedWeights = [...(dog.weightEntries || [])].sort((a, b) => (a.date < b.date ? -1 : 1));
+  const currentWeight = sortedWeights[sortedWeights.length - 1];
+  const ownerPhone = fmtPhone(dog.ownerPhoneCode, dog.ownerPhoneNumber);
+  const birthPlace = [dog.birthCity, dog.birthCountry].filter(Boolean).join(", ");
+  const livingPlace = [dog.livingCity, dog.livingCountry].filter(Boolean).join(", ");
+
+  const CvRow = ({ label, value }) => (
+    <div className="flex items-baseline justify-between gap-4 py-1.5 border-b border-dotted border-[#d8cfb4]">
+      <span className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold shrink-0">{label}</span>
+      <span className="text-right text-[13.5px] text-[#1f2a24]">{value || "—"}</span>
+    </div>
+  );
+
+  return (
+    <div>
+      <style>{`
+        @media print {
+          body * { visibility: hidden; }
+          #pet-cv-printable, #pet-cv-printable * { visibility: visible; }
+          #pet-cv-printable { position: absolute; left: 0; top: 0; width: 100%; padding: 24px; }
+        }
+      `}</style>
+
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+        <div>
+          <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.petCvTitle(dog.name)}</h3>
+          <p className="text-[13px] text-[#5b6d63]">{t.petCvSubtitle}</p>
+        </div>
+        <PrimaryButton icon={FileText} onClick={() => window.print()}>
+          {t.downloadPdfBtn}
+        </PrimaryButton>
+      </div>
+
+      <div id="pet-cv-printable" className="rounded-2xl border border-[#C9A227]/50 bg-[#FBF8EE] p-6 sm:p-8">
+        <div className="flex items-center gap-2 text-[#1B3A2F] mb-5">
+          <Award size={18} />
+          <span className="font-display text-[13px] tracking-[0.18em] uppercase">Paw Wallet — Pet CV</span>
+        </div>
+
+        <div className="flex gap-4 sm:gap-6 mb-6">
+          <div className="shrink-0">
+            <div className="h-24 w-24 rounded-lg overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center">
+              {dog.photo ? (
+                <img src={dog.photo} alt={dog.name} className="h-full w-full object-cover" />
+              ) : (
+                <PawPrint size={30} className="text-[#a89c6e]" />
+              )}
+            </div>
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <h2 className="font-display text-[26px] text-[#1B3A2F] leading-tight">{dog.name}</h2>
+            <p className="text-[13px] text-[#5b6d63]">{dog.breed}</p>
+          </div>
+        </div>
+
+        <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvIdentitySection}</p>
+        <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+          <div>
+            <CvRow label={t.rowBirthDate} value={fmtDate(dog.birthDate, locale)} />
+            <CvRow label={t.rowGender} value={dog.gender === "Dişi" ? t.female : t.male} />
+            <CvRow label={t.rowNeutered} value={dog.neutered === "Evet" ? t.neuteredYes : t.neuteredNo} />
+            <CvRow label={t.rowColor} value={t.colorNames?.[dog.color] || dog.color} />
+          </div>
+          <div>
+            <CvRow label={t.rowMicrochip} value={dog.microchip} />
+            <CvRow label={t.rowPassportNo} value={dog.passportNumber} />
+            <CvRow label={t.rowBirthPlace} value={birthPlace} />
+            <CvRow label={t.rowLivingPlace} value={livingPlace} />
+          </div>
+        </div>
+
+        <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvHealthSection}</p>
+        <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+          <CvRow label={t.fieldChronicConditions} value={dog.chronicConditions} />
+          <CvRow label={t.fieldAllergies} value={dog.allergies} />
+        </div>
+
+        <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvWeightSection}</p>
+        <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+          <CvRow label={t.cvCurrentWeight} value={currentWeight ? `${currentWeight.weight} kg (${fmtDate(currentWeight.date, locale)})` : t.cvNoWeight} />
+          <CvRow label={t.cvIdealWeight} value={dog.idealWeight ? `${dog.idealWeight} kg` : "—"} />
+        </div>
+
+        <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvVaccinesSection}</p>
+        {sortedVaccines.length === 0 ? (
+          <p className="text-[13px] text-[#5b6d63] mb-5">{t.cvNoVaccines}</p>
+        ) : (
+          <div className="mb-5 space-y-1">
+            {sortedVaccines.map((v) => (
+              <div key={v.id} className="flex items-center justify-between text-[13px] py-1 border-b border-dotted border-[#d8cfb4]">
+                <span className="text-[#1f2a24] font-medium">{v.name}</span>
+                <span className="text-[#5b6d63]">{fmtDate(v.date, locale)}{v.vet ? ` · ${v.vet}` : ""}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvVetSection}</p>
+        {!loaded ? (
+          <Loader2 className="animate-spin text-[#5b6d63]" size={16} />
+        ) : assignedVets.length === 0 ? (
+          <p className="text-[13px] text-[#5b6d63] mb-2">{t.cvNoVet}</p>
+        ) : (
+          <div className="space-y-1 mb-2">
+            {assignedVets.map((a) => (
+              <div key={a.id} className="flex items-center justify-between text-[13px] py-1 border-b border-dotted border-[#d8cfb4]">
+                <span className="text-[#1f2a24] font-medium">{a.vet?.clinic_name || "—"}</span>
+                <span className="text-[#5b6d63]">{a.role}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <p className="text-[10.5px] text-[#8d8560] mt-6">{t.cvGeneratedOn(fmtDate(todayISO(), locale))}</p>
+      </div>
+    </div>
+  );
+}
+
 
 function EmptyState({ icon: Icon, text }) {
   return (
@@ -4515,6 +5035,7 @@ const TAB_IDS = [
   { id: "appointments", key: "navAppointments", icon: CalendarClock },
   { id: "weight", key: "navWeight", icon: Scale },
   { id: "vets", key: "navVets", icon: Stethoscope },
+  { id: "cv", key: "navPetCV", icon: Award },
 ];
 
 function NotificationButton({ userId }) {
@@ -4892,6 +5413,7 @@ function PawWalletInner({ session }) {
               <WeightTab dog={activeDog} onSaveIdeal={saveIdealWeight} onAdd={addWeightEntry} onDelete={deleteWeightEntry} />
             )}
             {tab === "vets" && <VetTab dog={activeDog} session={session} />}
+            {tab === "cv" && <PetCVTab dog={activeDog} session={session} />}
           </>
         )}
 
