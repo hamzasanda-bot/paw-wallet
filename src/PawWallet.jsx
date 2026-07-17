@@ -446,6 +446,7 @@ const TRANSLATIONS = {
     vetBookedApptBadge: "Vet Onaylı Randevu",
     apptNoteLabel: "Not (opsiyonel)",
     loadingSlotsText: "Müsait saatler yükleniyor…",
+    noBookableVets: "Şu anda müsaitlik tanımlamış bir veteriner yok.",
     vaccineNames: {
       "Kuduz / Rabies": "Kuduz / Rabies",
       "Karma (DHPPi)": "Karma (DHPPi)",
@@ -929,6 +930,7 @@ const TRANSLATIONS = {
     vetBookedApptBadge: "Vet-Confirmed Appointment",
     apptNoteLabel: "Note (optional)",
     loadingSlotsText: "Loading available times…",
+    noBookableVets: "No vets have set up availability yet.",
     vaccineNames: {
       "Kuduz / Rabies": "Rabies",
       "Karma (DHPPi)": "DHPPi (Combination)",
@@ -1392,6 +1394,7 @@ const TRANSLATIONS = {
     vetBookedApptBadge: "Rendez-vous Confirmé par le Vétérinaire",
     apptNoteLabel: "Note (facultatif)",
     loadingSlotsText: "Chargement des créneaux disponibles…",
+    noBookableVets: "Aucun vétérinaire n'a encore défini de disponibilité.",
     vaccineNames: {
       "Kuduz / Rabies": "Rage",
       "Karma (DHPPi)": "CHPPI (Combiné)",
@@ -1855,6 +1858,7 @@ const TRANSLATIONS = {
     vetBookedApptBadge: "Vom Tierarzt Bestätigter Termin",
     apptNoteLabel: "Notiz (optional)",
     loadingSlotsText: "Verfügbare Zeiten werden geladen…",
+    noBookableVets: "Noch kein Tierarzt hat eine Verfügbarkeit festgelegt.",
     vaccineNames: {
       "Kuduz / Rabies": "Tollwut",
       "Karma (DHPPi)": "Mehrfachimpfung (DHPPi)",
@@ -2320,6 +2324,7 @@ const TRANSLATIONS = {
     vetBookedApptBadge: "Cita Confirmada por el Veterinario",
     apptNoteLabel: "Nota (opcional)",
     loadingSlotsText: "Cargando horarios disponibles…",
+    noBookableVets: "Ningún veterinario ha configurado disponibilidad todavía.",
     vaccineNames: {
       "Kuduz / Rabies": "Rabia",
       "Karma (DHPPi)": "Vacuna Combinada (DHPPi)",
@@ -4552,6 +4557,202 @@ function AddAppointmentModal({ onClose, onSave }) {
   );
 }
 
+function BookAppointmentModal({ dog, session, onClose, onBooked }) {
+  const { t } = useI18n();
+  const [myVets, setMyVets] = useState(undefined);
+  const [selectedVet, setSelectedVet] = useState(null);
+  const [bookDate, setBookDate] = useState(todayISO());
+  const [slots, setSlots] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [note, setNote] = useState("");
+  const [booking, setBooking] = useState(false);
+  const [bookMsg, setBookMsg] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const { data: reqRows } = await supabase
+        .from("vet_assignment_requests")
+        .select("vet_id, role")
+        .eq("dog_id", dog.id)
+        .eq("status", "approved");
+      const roleByVetId = {};
+      (reqRows || []).forEach((r) => {
+        roleByVetId[r.vet_id] = r.role;
+      });
+
+      const { data: vetRows } = await supabase.from("vets").select("*").eq("approved", true).order("clinic_name");
+      const bookable = (vetRows || []).filter((v) => (v.availability || []).length > 0);
+      const withRole = bookable.map((v) => ({ ...v, myRole: roleByVetId[v.id] || null }));
+      withRole.sort((a, b) => {
+        const aAssigned = a.myRole ? 0 : 1;
+        const bAssigned = b.myRole ? 0 : 1;
+        if (aAssigned !== bAssigned) return aAssigned - bAssigned;
+        if (a.myRole && b.myRole) return a.myRole === "Birincil" ? -1 : 1;
+        return 0;
+      });
+
+      setMyVets(withRole);
+      if (withRole.length === 1) setSelectedVet(withRole[0]);
+    })();
+  }, [dog.id]);
+
+  const loadSlots = useCallback(
+    async (date) => {
+      if (!selectedVet) return;
+      setSlots(null);
+      setSelectedSlot(null);
+      const res = await fetch("/api/vet-availability-slots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ vetId: selectedVet.id, date }),
+      });
+      const data = await res.json();
+      setSlots(data.slots || []);
+    },
+    [selectedVet]
+  );
+
+  useEffect(() => {
+    if (selectedVet) loadSlots(bookDate);
+  }, [selectedVet, bookDate, loadSlots]);
+
+  const confirmBooking = async () => {
+    setBooking(true);
+    setBookMsg("");
+    try {
+      const res = await fetch("/api/book-appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ vetId: selectedVet.id, dogId: dog.id, date: bookDate, time: selectedSlot, note }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onBooked();
+        onClose();
+      } else if (data.error === "SLOT_TAKEN") {
+        setBookMsg(t.slotTakenErrorMsg);
+        loadSlots(bookDate);
+      } else {
+        setBookMsg(data.error || t.authError);
+      }
+    } catch {
+      setBookMsg(t.authError);
+    }
+    setBooking(false);
+  };
+
+  return (
+    <Modal title={t.bookApptBtn} onClose={onClose}>
+      {myVets === undefined ? (
+        <div className="py-8 grid place-items-center text-[#5b6d63]">
+          <Loader2 className="animate-spin" size={20} />
+        </div>
+      ) : myVets.length === 0 ? (
+        <p className="text-[13px] text-[#5b6d63]">{t.noBookableVets}</p>
+      ) : (
+        <div className="space-y-3">
+          {myVets.length > 1 && (
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.fieldApptVet}</p>
+              <div className="max-h-52 overflow-y-auto space-y-1.5 rounded-md border border-[#d8cfb4] p-2">
+                {myVets.map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => setSelectedVet(v)}
+                    className={`w-full flex items-center justify-between text-left rounded-md px-3 py-2 text-[13px] border transition ${
+                      selectedVet?.id === v.id
+                        ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                        : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
+                    }`}
+                  >
+                    <span>
+                      <span className="font-medium">{v.clinic_name}</span>
+                      <span className={selectedVet?.id === v.id ? "text-[#F7F3E8]/70" : "text-[#8d8560]"}>
+                        {" "}
+                        · {v.city}
+                        {v.city && v.country ? ", " : ""}
+                        {v.country}
+                      </span>
+                    </span>
+                    {v.myRole && (
+                      <span
+                        className={`shrink-0 text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full ${
+                          selectedVet?.id === v.id ? "bg-[#C9A227] text-white" : "bg-[#f3e9c8] text-[#8a6d16]"
+                        }`}
+                      >
+                        {v.myRole.toUpperCase()}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedVet && (
+            <>
+              <p className="text-[13px] text-[#5b6d63]">
+                {t.bookApptBtn}: <span className="font-semibold text-[#1B3A2F]">{selectedVet.clinic_name}</span>
+              </p>
+              <Field label={t.selectDateLabel}>
+                <input
+                  type="date"
+                  min={todayISO()}
+                  className={inputCls}
+                  value={bookDate}
+                  onChange={(e) => setBookDate(e.target.value)}
+                />
+              </Field>
+
+              {slots === null ? (
+                <p className="text-[13px] text-[#5b6d63]">{t.loadingSlotsText}</p>
+              ) : slots.length === 0 ? (
+                <p className="text-[13px] text-[#5b6d63]">{t.noSlotsAvailable}</p>
+              ) : (
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.selectTimeLabel}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {slots.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => setSelectedSlot(s)}
+                        className={`text-[12.5px] font-mono rounded-md px-2.5 py-1.5 border transition ${
+                          selectedSlot === s
+                            ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                            : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedSlot && (
+                <Field label={t.apptNoteLabel}>
+                  <input className={inputCls} value={note} onChange={(e) => setNote(e.target.value)} />
+                </Field>
+              )}
+            </>
+          )}
+
+          {bookMsg && <p className="text-[12.5px] text-[#a63d40]">{bookMsg}</p>}
+        </div>
+      )}
+
+      <div className="mt-6 flex justify-end gap-2">
+        <GhostButton onClick={onClose}>{t.cancel}</GhostButton>
+        {selectedSlot && (
+          <PrimaryButton disabled={booking} onClick={confirmBooking} icon={Check}>
+            {t.confirmBookingBtn}
+          </PrimaryButton>
+        )}
+      </div>
+    </Modal>
+  );
+}
+
 function AppointmentCard({ appt, onDelete }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
@@ -4642,9 +4843,10 @@ function VetBookedApptCard({ appt, onCancel }) {
   );
 }
 
-function AppointmentTab({ dog, onAdd, onDelete }) {
+function AppointmentTab({ dog, session, onAdd, onDelete }) {
   const { t } = useI18n();
   const [showAdd, setShowAdd] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
   const [vetAppts, setVetAppts] = useState([]);
   const appts = [...(dog.appointments || [])].sort((a, b) => (a.date < b.date ? 1 : -1));
 
@@ -4670,14 +4872,19 @@ function AppointmentTab({ dog, onAdd, onDelete }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
           <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.appointmentsTitle}</h3>
           <p className="text-[13px] text-[#5b6d63]">{t.appointmentsSubtitle(dog.name, totalCount)}</p>
         </div>
-        <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
-          {t.addAppointmentBtn}
-        </PrimaryButton>
+        <div className="flex gap-2">
+          <GhostButton icon={CalendarClock} onClick={() => setShowBooking(true)}>
+            {t.bookApptBtn}
+          </GhostButton>
+          <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
+            {t.addAppointmentBtn}
+          </PrimaryButton>
+        </div>
       </div>
 
       {totalCount === 0 ? (
@@ -4691,6 +4898,15 @@ function AppointmentTab({ dog, onAdd, onDelete }) {
             <AppointmentCard key={a.id} appt={a} onDelete={onDelete} />
           ))}
         </div>
+      )}
+
+      {showBooking && (
+        <BookAppointmentModal
+          dog={dog}
+          session={session}
+          onClose={() => setShowBooking(false)}
+          onBooked={loadVetAppts}
+        />
       )}
 
       {showAdd && (
@@ -7793,7 +8009,7 @@ function PawWalletInner({ session }) {
             )}
             {tab === "medications" && <MedicationTab dog={activeDog} onAdd={addMedication} onDelete={deleteMedication} />}
             {tab === "appointments" && (
-              <AppointmentTab dog={activeDog} onAdd={addAppointment} onDelete={deleteAppointment} />
+              <AppointmentTab dog={activeDog} session={session} onAdd={addAppointment} onDelete={deleteAppointment} />
             )}
             {tab === "weight" && (
               <WeightTab dog={activeDog} onSaveIdeal={saveIdealWeight} onAdd={addWeightEntry} onDelete={deleteWeightEntry} />
