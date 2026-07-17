@@ -415,6 +415,13 @@ const TRANSLATIONS = {
     maxSpecialtiesNote: (max) => `en fazla ${max}`,
     commercialInfoTitle: "Ticari Bilgiler",
     bankInfoTitle: "Banka Bilgileri",
+    fieldWebsite: "Web Adresi",
+    uploadLogo: "Logo yükle",
+    changeLogo: "Logoyu değiştir",
+    viewDetailsBtn: "Detayları Gör",
+    vetServicesTitle: "Sunulan Hizmetler",
+    noServicesListed: "Henüz hizmet eklenmemiş.",
+    websiteLabel: "Web Sitesi",
     fieldLegalBusinessName: "Resmi (Ticari) Ünvan",
     fieldTaxId: "Vergi Numarası",
     fieldClinicAddress: "Açık Adres",
@@ -832,6 +839,13 @@ const TRANSLATIONS = {
     maxSpecialtiesNote: (max) => `up to ${max}`,
     commercialInfoTitle: "Business Info",
     bankInfoTitle: "Bank Details",
+    fieldWebsite: "Website",
+    uploadLogo: "Upload logo",
+    changeLogo: "Change logo",
+    viewDetailsBtn: "View Details",
+    vetServicesTitle: "Services Offered",
+    noServicesListed: "No services listed yet.",
+    websiteLabel: "Website",
     fieldLegalBusinessName: "Legal Business Name",
     fieldTaxId: "Tax ID Number",
     fieldClinicAddress: "Full Address",
@@ -1229,6 +1243,13 @@ const TRANSLATIONS = {
     maxSpecialtiesNote: (max) => `jusqu'à ${max}`,
     commercialInfoTitle: "Informations Commerciales",
     bankInfoTitle: "Coordonnées Bancaires",
+    fieldWebsite: "Site Web",
+    uploadLogo: "Télécharger le logo",
+    changeLogo: "Changer le logo",
+    viewDetailsBtn: "Voir les Détails",
+    vetServicesTitle: "Services Proposés",
+    noServicesListed: "Aucun service répertorié.",
+    websiteLabel: "Site Web",
     fieldLegalBusinessName: "Raison Sociale",
     fieldTaxId: "Numéro d'Identification Fiscale",
     fieldClinicAddress: "Adresse Complète",
@@ -1626,6 +1647,13 @@ const TRANSLATIONS = {
     maxSpecialtiesNote: (max) => `max. ${max}`,
     commercialInfoTitle: "Geschäftsinformationen",
     bankInfoTitle: "Bankverbindung",
+    fieldWebsite: "Webseite",
+    uploadLogo: "Logo hochladen",
+    changeLogo: "Logo ändern",
+    viewDetailsBtn: "Details Ansehen",
+    vetServicesTitle: "Angebotene Dienstleistungen",
+    noServicesListed: "Noch keine Dienstleistungen gelistet.",
+    websiteLabel: "Webseite",
     fieldLegalBusinessName: "Offizieller Firmenname",
     fieldTaxId: "Steuernummer",
     fieldClinicAddress: "Vollständige Adresse",
@@ -2025,6 +2053,13 @@ const TRANSLATIONS = {
     maxSpecialtiesNote: (max) => `hasta ${max}`,
     commercialInfoTitle: "Información Comercial",
     bankInfoTitle: "Datos Bancarios",
+    fieldWebsite: "Sitio Web",
+    uploadLogo: "Subir logo",
+    changeLogo: "Cambiar logo",
+    viewDetailsBtn: "Ver Detalles",
+    vetServicesTitle: "Servicios Ofrecidos",
+    noServicesListed: "Aún no hay servicios listados.",
+    websiteLabel: "Sitio Web",
     fieldLegalBusinessName: "Razón Social",
     fieldTaxId: "Número de Identificación Fiscal",
     fieldClinicAddress: "Dirección Completa",
@@ -4304,11 +4339,102 @@ function WeightTab({ dog, onSaveIdeal, onAdd, onDelete }) {
   );
 }
 
+function VetDetailModal({ vet, onClose }) {
+  const { t } = useI18n();
+  const specialties = Array.isArray(vet.specialty) ? vet.specialty : vet.specialty ? [vet.specialty] : [];
+
+  return (
+    <Modal title={vet.clinic_name} onClose={onClose} wide>
+      <div className="flex items-center gap-4 mb-5">
+        <div className="h-16 w-16 rounded-lg overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center shrink-0">
+          {vet.logo ? (
+            <img src={vet.logo} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <Building2 size={22} className="text-[#8d8560]" />
+          )}
+        </div>
+        <div>
+          <p className="font-display text-[19px] text-[#1B3A2F] leading-tight">{vet.clinic_name}</p>
+          <p className="text-[12.5px] text-[#5b6d63]">
+            {vet.city}
+            {vet.city && vet.country ? ", " : ""}
+            {vet.country}
+          </p>
+        </div>
+      </div>
+
+      {specialties.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {specialties.map((s) => (
+            <span key={s} className="text-[11.5px] font-medium text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2.5 py-1">
+              {s}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-1.5 mb-5">
+        {vet.address && (
+          <p className="text-[13px] text-[#3c473f] flex items-start gap-2">
+            <MapPin size={14} className="mt-0.5 shrink-0 text-[#8d8560]" /> {vet.address}
+          </p>
+        )}
+        {vet.phone && (
+          <p className="text-[13px] text-[#3c473f] flex items-center gap-2 font-mono">
+            <Phone size={14} className="shrink-0 text-[#8d8560]" /> {vet.phone}
+          </p>
+        )}
+        {vet.email && (
+          <p className="text-[13px] text-[#3c473f] flex items-center gap-2">
+            <User size={14} className="shrink-0 text-[#8d8560]" /> {vet.email}
+          </p>
+        )}
+        {vet.website && (
+          <p className="text-[13px] flex items-center gap-2">
+            <Globe size={14} className="shrink-0 text-[#8d8560]" />
+            <a
+              href={vet.website.startsWith("http") ? vet.website : `https://${vet.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#1B3A2F] underline underline-offset-2"
+            >
+              {vet.website}
+            </a>
+          </p>
+        )}
+      </div>
+
+      <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.vetServicesTitle}</p>
+      {(vet.services || []).length === 0 ? (
+        <p className="text-[13px] text-[#5b6d63] mb-2">{t.noServicesListed}</p>
+      ) : (
+        <div className="space-y-1 mb-2">
+          {vet.services.map((s) => (
+            <div key={s.id} className="flex items-center justify-between text-[13px] py-1.5 px-3 rounded-md bg-white/50">
+              <span className="text-[#1f2a24] font-medium">{s.name}</span>
+              {s.price && (
+                <span className="text-[#8a6d16] font-semibold">
+                  {s.price} {s.currency || "EUR"}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6 flex justify-end">
+        <GhostButton onClick={onClose}>{t.closeBtn}</GhostButton>
+      </div>
+    </Modal>
+  );
+}
+
 function VetTab({ dog, session, isPremium, onRequirePremium }) {
   const { t } = useI18n();
   const [vetsList, setVetsList] = useState([]);
   const [requests, setRequests] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [selectedVetDetail, setSelectedVetDetail] = useState(null);
 
   const load = useCallback(async () => {
     const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).order("clinic_name");
@@ -4425,22 +4551,34 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
           const isSecondary = secondaryReq?.vet_id === vet.id;
           return (
             <div key={vet.id} className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4 flex flex-col gap-2.5">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.clinic_name}</p>
-                  <p className="text-[11.5px] text-[#8d8560] flex items-center gap-1 mt-0.5">
-                    <MapPin size={11} />
-                    {vet.city}
-                    {vet.city && vet.country ? ", " : ""}
-                    {vet.country}
-                  </p>
+              <button
+                onClick={() => setSelectedVetDetail(vet)}
+                className="flex items-start justify-between gap-2 text-left"
+              >
+                <div className="flex items-start gap-2.5 min-w-0">
+                  <div className="h-9 w-9 rounded-md overflow-hidden bg-[#eee6cd] grid place-items-center shrink-0">
+                    {vet.logo ? (
+                      <img src={vet.logo} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <Building2 size={16} className="text-[#8d8560]" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[14px] font-semibold text-[#1B3A2F] truncate">{vet.clinic_name}</p>
+                    <p className="text-[11.5px] text-[#8d8560] flex items-center gap-1 mt-0.5">
+                      <MapPin size={11} />
+                      {vet.city}
+                      {vet.city && vet.country ? ", " : ""}
+                      {vet.country}
+                    </p>
+                  </div>
                 </div>
                 {vet.rating > 0 && (
                   <span className="flex items-center gap-1 text-[12px] text-[#8a6d16] font-semibold shrink-0">
                     <Star size={12} className="fill-[#C9A227] text-[#C9A227]" /> {vet.rating}
                   </span>
                 )}
-              </div>
+              </button>
               {vet.specialty && vet.specialty.length > 0 && (
                 <p className="text-[12px] text-[#5b6d63] flex items-center gap-1">
                   <Stethoscope size={12} /> {Array.isArray(vet.specialty) ? vet.specialty.join(", ") : vet.specialty}
@@ -4451,6 +4589,12 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
                   <Phone size={12} /> {vet.phone}
                 </p>
               )}
+              <button
+                onClick={() => setSelectedVetDetail(vet)}
+                className="text-[12px] text-[#5b6d63] underline underline-offset-2 text-left w-fit"
+              >
+                {t.viewDetailsBtn}
+              </button>
               <div className="flex gap-2 mt-1">
                 <button
                   disabled={isPrimary}
@@ -4471,6 +4615,7 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
           );
         })}
       </div>
+      {selectedVetDetail && <VetDetailModal vet={selectedVetDetail} onClose={() => setSelectedVetDetail(null)} />}
     </div>
   );
 }
@@ -5398,6 +5543,18 @@ function VetPortal({ session }) {
   const [newService, setNewService] = useState({ name: "", price: "", currency: "EUR" });
   const [clinicForm, setClinicForm] = useState(null);
   const tradeDocRef = useRef(null);
+  const logoRef = useRef(null);
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const dataUrl = await resizeImageFile(file, 400, 0.85);
+      setClinicForm((f) => ({ ...f, logo: dataUrl }));
+    } catch {
+      /* ignore */
+    }
+  };
 
   const handleTradeDocUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -5447,6 +5604,8 @@ function VetPortal({ session }) {
         swift_code: vetRow.swift_code || "",
         bank_name: vetRow.bank_name || "",
         account_holder_name: vetRow.account_holder_name || "",
+        website: vetRow.website || "",
+        logo: vetRow.logo || null,
       });
     }
     const { data: reqRows } = await supabase
@@ -5703,6 +5862,24 @@ function VetPortal({ session }) {
             {clinicForm && (
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.clinicInfoTitle}</p>
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="h-16 w-16 rounded-lg border-2 border-dashed border-[#c7bb95] bg-[#efe8d1] grid place-items-center overflow-hidden cursor-pointer shrink-0"
+                    onClick={() => logoRef.current?.click()}
+                  >
+                    {clinicForm.logo ? (
+                      <img src={clinicForm.logo} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <Building2 size={22} className="text-[#8d8560]" />
+                    )}
+                  </div>
+                  <button onClick={() => logoRef.current?.click()} className="text-[12px] text-[#5b6d63] underline underline-offset-2">
+                    {clinicForm.logo ? t.changeLogo : t.uploadLogo}
+                  </button>
+                  <input ref={logoRef} type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+                </div>
+
                 <div className="grid sm:grid-cols-2 gap-3.5 mb-3">
                   <Field label={t.fieldClinicName}>
                     <input
@@ -5733,6 +5910,14 @@ function VetPortal({ session }) {
                     onCodeChange={(v) => setClinicForm((f) => ({ ...f, phoneCode: v }))}
                     onNumberChange={(v) => setClinicForm((f) => ({ ...f, phoneNumber: v }))}
                   />
+                  <Field label={t.fieldWebsite}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.website}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, website: e.target.value }))}
+                      placeholder="https://..."
+                    />
+                  </Field>
                   <div className="sm:col-span-2">
                     <Field label={t.fieldClinicAddress}>
                       <input
