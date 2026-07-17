@@ -3819,6 +3819,7 @@ function VaccineCard({ v, onDelete, onEdit, onToggleConfirmed }) {
     else status = { label: t.statusCurrent, cls: "bg-[#1B3A2F] text-[#F7F3E8]" };
   }
   const isLocked = !!v.addedByVet;
+  const vetPending = isLocked && v.confirmed === false;
   const notConfirmed = !isLocked && v.confirmed === false;
   return (
     <div className="relative rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] overflow-hidden">
@@ -3828,9 +3829,14 @@ function VaccineCard({ v, onDelete, onEdit, onToggleConfirmed }) {
         <div className="flex items-center gap-2.5 flex-wrap">
           <Syringe size={16} className="text-[#1B3A2F]" />
           <span className="font-display text-[16px] text-[#1B3A2F]">{t.vaccineNames?.[v.name] || v.name}</span>
-          {isLocked && (
+          {isLocked && !vetPending && (
             <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#1B3A2F] bg-[#dcefe3] rounded-full px-2 py-0.5">
               <Check size={10} /> {t.addedByVetLabel(v.vet)}
+            </span>
+          )}
+          {vetPending && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#8d8560] bg-[#efe8d1] rounded-full px-2 py-0.5">
+              {t.notYetGivenLabel} · {v.vet}
             </span>
           )}
           {notConfirmed && (
@@ -5813,6 +5819,24 @@ function PatientDetailModal({ dogId, session, onClose }) {
     setSaving(false);
   };
 
+  const toggleVaccineConfirmed = async (vId, newConfirmed) => {
+    try {
+      const res = await fetch("/api/vet-add-record", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ dogId, action: "toggle_confirm", vaccineId: vId, confirmed: newConfirmed }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        loadDog();
+      } else {
+        setSaveMsg(data.error || t.authError);
+      }
+    } catch {
+      setSaveMsg(t.authError);
+    }
+  };
+
   const vaccineOptions = dog?.species === "cat" ? CAT_VACCINES : COMMON_VACCINES;
 
   const sortedVaccines = dog ? [...(dog.vaccines || [])].sort((a, b) => (a.date < b.date ? 1 : -1)) : [];
@@ -5937,6 +5961,7 @@ function PatientDetailModal({ dogId, session, onClose }) {
                     date: vaccineForm.date,
                     nextDate: vaccineForm.nextDate,
                     batch: vaccineForm.batch,
+                    confirmed: true,
                   })
                 }
               >
@@ -5950,13 +5975,21 @@ function PatientDetailModal({ dogId, session, onClose }) {
           ) : (
             <div className="space-y-1 mb-2">
               {sortedVaccines.map((v) => (
-                <div key={v.id} className="flex items-center justify-between text-[13px] py-1 border-b border-dotted border-[#d8cfb4]">
+                <div key={v.id} className="flex items-center justify-between text-[13px] py-1 border-b border-dotted border-[#d8cfb4] flex-wrap gap-1">
                   <span className="text-[#1f2a24] font-medium">
                     {t.vaccineNames?.[v.name] || v.name}
                     {v.addedByVet && (
-                      <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-semibold text-[#1B3A2F] bg-[#dcefe3] rounded-full px-2 py-0.5">
-                        <Check size={10} /> {t.addedByVetLabel(v.vet)}
-                      </span>
+                      <button
+                        onClick={() => toggleVaccineConfirmed(v.id, !(v.confirmed !== false))}
+                        className={`ml-2 inline-flex items-center gap-1 text-[10px] font-semibold rounded-full px-2 py-0.5 transition ${
+                          v.confirmed !== false
+                            ? "text-[#1B3A2F] bg-[#dcefe3] hover:bg-[#c9e5d4]"
+                            : "text-[#8d8560] bg-[#efe8d1] hover:bg-[#e3d9bd]"
+                        }`}
+                      >
+                        {v.confirmed !== false ? <Check size={10} /> : null}
+                        {v.confirmed !== false ? t.addedByVetLabel(v.vet) : `${t.notYetGivenLabel} · ${v.vet}`}
+                      </button>
                     )}
                   </span>
                   <span className="text-[#5b6d63]">

@@ -1,8 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Bir veterinerin, ONAYLI hastasının dosyasına aşı ya da sağlık kaydı
-// EKLEYEBİLMESİNİ sağlayan uç nokta. Başka hiçbir alana (isim, sahip
-// bilgisi, mikroçip vb.) dokunmaz — sadece ilgili listeye yeni bir satır ekler.
+// Bir veterinerin, ONAYLI hastasının dosyasına aşı/sağlık/ilaç kaydı
+// EKLEYEBİLMESİNİ ve KENDİ EKLEDİĞİ aşıların "yapıldı/yapılmadı" durumunu
+// değiştirebilmesini sağlayan uç nokta. Başka hiçbir alana dokunmaz.
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -15,10 +15,8 @@ export default async function handler(req, res) {
   const { data: userData, error: userError } = await anon.auth.getUser(token);
   if (userError || !userData?.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const { dogId, type, entry } = req.body || {};
-  if (!dogId || !["vaccine", "health", "medication"].includes(type) || !entry) {
-    return res.status(400).json({ error: "Invalid request" });
-  }
+  const { dogId, action, type, entry, vaccineId, confirmed } = req.body || {};
+  if (!dogId) return res.status(400).json({ error: "Invalid request" });
 
   const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -48,12 +46,34 @@ export default async function handler(req, res) {
   if (dogError || !dogRow) return res.status(404).json({ error: "Patient not found" });
 
   const payload = dogRow.payload || {};
+
+  // --- Vetin KENDİ eklediği bir aşının yapıldı/yapılmadı durumunu değiştirmesi ---
+  if (action === "toggle_confirm") {
+    const vaccines = payload.vaccines || [];
+    const target = vaccines.find((v) => v.id === vaccineId);
+    if (!target) return res.status(404).json({ error: "Vaccine record not found" });
+    if (!target.addedByVet || target.vet !== vetRow.clinic_name) {
+      return res.status(403).json({ error: "You can only confirm vaccines you added yourself" });
+    }
+    const updatedVaccines = vaccines.map((v) => (v.id === vaccineId ? { ...v, confirmed } : v));
+    const { error: updateError } = await admin
+      .from("dogs")
+      .update({ payload: { ...payload, vaccines: updatedVaccines } })
+      .eq("id", dogId);
+    if (updateError) return res.status(500).json({ error: updateError.message });
+    return res.status(200).json({ success: true });
+  }
+
+  // --- Yeni bir aşı / sağlık kaydı / ilaç ekleme ---
+  if (!["vaccine", "health", "medication"].includes(type) || !entry) {
+    return res.status(400).json({ error: "Invalid request" });
+  }
+
   const newEntry = {
     ...entry,
     id: `v${Date.now()}${Math.random().toString(36).slice(2, 6)}`,
     vet: vetRow.clinic_name,
     addedByVet: true,
-    ...(type === "vaccine" ? { confirmed: true } : {}),
   };
 
   const fieldMap = { vaccine: "vaccines", health: "healthRecords", medication: "medications" };
@@ -71,3 +91,4 @@ export default async function handler(req, res) {
 
   return res.status(200).json({ success: true });
 }
+
