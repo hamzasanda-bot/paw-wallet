@@ -5673,12 +5673,14 @@ function VetPortal({ session }) {
                     ))}
                   </select>
                   <div className="flex gap-2">
-                    <input
-                      className={inputCls + " flex-1 min-w-0"}
-                      placeholder={t.fieldServicePrice}
-                      value={newService.price}
-                      onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
-                    />
+                    <div className="flex-1 min-w-0">
+                      <input
+                        className={inputCls}
+                        placeholder={t.fieldServicePrice}
+                        value={newService.price}
+                        onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
+                      />
+                    </div>
                     <select
                       className={inputCls + " w-[88px] shrink-0"}
                       value={newService.currency}
