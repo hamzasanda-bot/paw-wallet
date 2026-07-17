@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   if (userError || !userData?.user) return res.status(401).json({ error: "Unauthorized" });
 
   const { dogId, type, entry } = req.body || {};
-  if (!dogId || !["vaccine", "health"].includes(type) || !entry) {
+  if (!dogId || !["vaccine", "health", "medication"].includes(type) || !entry) {
     return res.status(400).json({ error: "Invalid request" });
   }
 
@@ -48,19 +48,24 @@ export default async function handler(req, res) {
   if (dogError || !dogRow) return res.status(404).json({ error: "Patient not found" });
 
   const payload = dogRow.payload || {};
-  const newEntry = { ...entry, id: `v${Date.now()}${Math.random().toString(36).slice(2, 6)}`, vet: vetRow.clinic_name, addedByVet: true };
+  const newEntry = {
+    ...entry,
+    id: `v${Date.now()}${Math.random().toString(36).slice(2, 6)}`,
+    vet: vetRow.clinic_name,
+    addedByVet: true,
+    ...(type === "vaccine" ? { confirmed: true } : {}),
+  };
 
-  const updatedPayload =
-    type === "vaccine"
-      ? { ...payload, vaccines: [...(payload.vaccines || []), newEntry] }
-      : { ...payload, healthRecords: [...(payload.healthRecords || []), newEntry] };
+  const fieldMap = { vaccine: "vaccines", health: "healthRecords", medication: "medications" };
+  const field = fieldMap[type];
+  const updatedPayload = { ...payload, [field]: [...(payload[field] || []), newEntry] };
 
   const { error: updateError } = await admin.from("dogs").update({ payload: updatedPayload }).eq("id", dogId);
   if (updateError) return res.status(500).json({ error: updateError.message });
 
   await admin.from("activity_logs").insert({
     user_id: dogRow.user_id,
-    action: type === "vaccine" ? "vaccine_added" : "health_record_added",
+    action: type === "vaccine" ? "vaccine_added" : type === "health" ? "health_record_added" : "medication_added",
     details: `${vetRow.clinic_name} tarafından eklendi — ${payload.name || ""}`,
   });
 
