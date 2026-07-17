@@ -422,6 +422,30 @@ const TRANSLATIONS = {
     markAsDoneBtn: "Yapıldı Olarak İşaretle",
     markAsNotDoneBtn: "Yapılmadı Olarak İşaretle",
     addMedicationForPatientBtn: "İlaç/Takviye Öner",
+    availabilityTitle: "Müsaitlik Takvimi",
+    availabilitySubtitle: "Hastaların randevu alabileceği gün ve saatleri belirle.",
+    dayNames: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
+    fieldStartTime: "Başlangıç",
+    fieldEndTime: "Bitiş",
+    addAvailabilityBtn: "Blok Ekle",
+    noAvailabilitySet: "Henüz müsaitlik tanımlanmadı.",
+    myAppointmentsTitle: "Randevularım",
+    noAppointmentsYet: "Henüz randevu yok.",
+    apptStatusBooked: "Beklemede",
+    apptStatusCompleted: "Tamamlandı",
+    apptStatusCancelled: "İptal Edildi",
+    markCompletedBtn: "Tamamlandı İşaretle",
+    cancelApptBtn: "İptal Et",
+    bookApptBtn: "Randevu Al",
+    selectDateLabel: "Tarih Seç",
+    selectTimeLabel: "Saat Seç",
+    noSlotsAvailable: "Bu tarihte müsait saat yok.",
+    confirmBookingBtn: "Randevuyu Onayla",
+    bookingSuccessMsg: "Randevun alındı!",
+    slotTakenErrorMsg: "Bu saat az önce doldu, başka bir saat seç.",
+    vetBookedApptBadge: "Vet Onaylı Randevu",
+    apptNoteLabel: "Not (opsiyonel)",
+    loadingSlotsText: "Müsait saatler yükleniyor…",
     vaccineNames: {
       "Kuduz / Rabies": "Kuduz / Rabies",
       "Karma (DHPPi)": "Karma (DHPPi)",
@@ -881,6 +905,30 @@ const TRANSLATIONS = {
     markAsDoneBtn: "Mark as Done",
     markAsNotDoneBtn: "Mark as Not Done",
     addMedicationForPatientBtn: "Prescribe Medication",
+    availabilityTitle: "Availability Schedule",
+    availabilitySubtitle: "Set the days and times patients can book appointments.",
+    dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    fieldStartTime: "Start",
+    fieldEndTime: "End",
+    addAvailabilityBtn: "Add Block",
+    noAvailabilitySet: "No availability set yet.",
+    myAppointmentsTitle: "My Appointments",
+    noAppointmentsYet: "No appointments yet.",
+    apptStatusBooked: "Upcoming",
+    apptStatusCompleted: "Completed",
+    apptStatusCancelled: "Cancelled",
+    markCompletedBtn: "Mark Completed",
+    cancelApptBtn: "Cancel",
+    bookApptBtn: "Book Appointment",
+    selectDateLabel: "Select Date",
+    selectTimeLabel: "Select Time",
+    noSlotsAvailable: "No slots available on this date.",
+    confirmBookingBtn: "Confirm Booking",
+    bookingSuccessMsg: "Your appointment is booked!",
+    slotTakenErrorMsg: "This slot was just taken, please pick another.",
+    vetBookedApptBadge: "Vet-Confirmed Appointment",
+    apptNoteLabel: "Note (optional)",
+    loadingSlotsText: "Loading available times…",
     vaccineNames: {
       "Kuduz / Rabies": "Rabies",
       "Karma (DHPPi)": "DHPPi (Combination)",
@@ -1320,6 +1368,30 @@ const TRANSLATIONS = {
     markAsDoneBtn: "Marquer comme Fait",
     markAsNotDoneBtn: "Marquer comme Non Fait",
     addMedicationForPatientBtn: "Prescrire un Médicament",
+    availabilityTitle: "Horaires de Disponibilité",
+    availabilitySubtitle: "Définissez les jours et heures où les patients peuvent prendre rendez-vous.",
+    dayNames: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+    fieldStartTime: "Début",
+    fieldEndTime: "Fin",
+    addAvailabilityBtn: "Ajouter un Créneau",
+    noAvailabilitySet: "Aucune disponibilité définie.",
+    myAppointmentsTitle: "Mes Rendez-vous",
+    noAppointmentsYet: "Aucun rendez-vous pour le moment.",
+    apptStatusBooked: "À Venir",
+    apptStatusCompleted: "Terminé",
+    apptStatusCancelled: "Annulé",
+    markCompletedBtn: "Marquer Terminé",
+    cancelApptBtn: "Annuler",
+    bookApptBtn: "Prendre Rendez-vous",
+    selectDateLabel: "Choisir une Date",
+    selectTimeLabel: "Choisir une Heure",
+    noSlotsAvailable: "Aucun créneau disponible à cette date.",
+    confirmBookingBtn: "Confirmer le Rendez-vous",
+    bookingSuccessMsg: "Votre rendez-vous est confirmé !",
+    slotTakenErrorMsg: "Ce créneau vient d'être pris, veuillez en choisir un autre.",
+    vetBookedApptBadge: "Rendez-vous Confirmé par le Vétérinaire",
+    apptNoteLabel: "Note (facultatif)",
+    loadingSlotsText: "Chargement des créneaux disponibles…",
     vaccineNames: {
       "Kuduz / Rabies": "Rage",
       "Karma (DHPPi)": "CHPPI (Combiné)",
@@ -1759,6 +1831,30 @@ const TRANSLATIONS = {
     markAsDoneBtn: "Als Erledigt Markieren",
     markAsNotDoneBtn: "Als Nicht Erledigt Markieren",
     addMedicationForPatientBtn: "Medikament Verschreiben",
+    availabilityTitle: "Verfügbarkeitsplan",
+    availabilitySubtitle: "Legen Sie fest, an welchen Tagen und Uhrzeiten Patienten Termine buchen können.",
+    dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+    fieldStartTime: "Start",
+    fieldEndTime: "Ende",
+    addAvailabilityBtn: "Zeitblock Hinzufügen",
+    noAvailabilitySet: "Noch keine Verfügbarkeit festgelegt.",
+    myAppointmentsTitle: "Meine Termine",
+    noAppointmentsYet: "Noch keine Termine.",
+    apptStatusBooked: "Bevorstehend",
+    apptStatusCompleted: "Abgeschlossen",
+    apptStatusCancelled: "Storniert",
+    markCompletedBtn: "Als Abgeschlossen Markieren",
+    cancelApptBtn: "Stornieren",
+    bookApptBtn: "Termin Buchen",
+    selectDateLabel: "Datum Wählen",
+    selectTimeLabel: "Uhrzeit Wählen",
+    noSlotsAvailable: "An diesem Tag sind keine Termine verfügbar.",
+    confirmBookingBtn: "Buchung Bestätigen",
+    bookingSuccessMsg: "Ihr Termin wurde gebucht!",
+    slotTakenErrorMsg: "Dieser Termin wurde gerade vergeben, bitte wählen Sie einen anderen.",
+    vetBookedApptBadge: "Vom Tierarzt Bestätigter Termin",
+    apptNoteLabel: "Notiz (optional)",
+    loadingSlotsText: "Verfügbare Zeiten werden geladen…",
     vaccineNames: {
       "Kuduz / Rabies": "Tollwut",
       "Karma (DHPPi)": "Mehrfachimpfung (DHPPi)",
@@ -2200,6 +2296,30 @@ const TRANSLATIONS = {
     markAsDoneBtn: "Marcar como Hecho",
     markAsNotDoneBtn: "Marcar como No Hecho",
     addMedicationForPatientBtn: "Recetar Medicamento",
+    availabilityTitle: "Horario de Disponibilidad",
+    availabilitySubtitle: "Define los días y horas en que los pacientes pueden reservar citas.",
+    dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    fieldStartTime: "Inicio",
+    fieldEndTime: "Fin",
+    addAvailabilityBtn: "Añadir Bloque",
+    noAvailabilitySet: "Aún no hay disponibilidad definida.",
+    myAppointmentsTitle: "Mis Citas",
+    noAppointmentsYet: "Aún no hay citas.",
+    apptStatusBooked: "Próxima",
+    apptStatusCompleted: "Completada",
+    apptStatusCancelled: "Cancelada",
+    markCompletedBtn: "Marcar como Completada",
+    cancelApptBtn: "Cancelar",
+    bookApptBtn: "Reservar Cita",
+    selectDateLabel: "Seleccionar Fecha",
+    selectTimeLabel: "Seleccionar Hora",
+    noSlotsAvailable: "No hay horarios disponibles en esta fecha.",
+    confirmBookingBtn: "Confirmar Reserva",
+    bookingSuccessMsg: "¡Tu cita ha sido reservada!",
+    slotTakenErrorMsg: "Este horario acaba de ser reservado, elige otro.",
+    vetBookedApptBadge: "Cita Confirmada por el Veterinario",
+    apptNoteLabel: "Nota (opcional)",
+    loadingSlotsText: "Cargando horarios disponibles…",
     vaccineNames: {
       "Kuduz / Rabies": "Rabia",
       "Karma (DHPPi)": "Vacuna Combinada (DHPPi)",
@@ -4477,27 +4597,96 @@ function AppointmentCard({ appt, onDelete }) {
   );
 }
 
+function VetBookedApptCard({ appt, onCancel }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const statusCfg = {
+    booked: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
+    completed: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
+    cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
+  }[appt.status];
+
+  return (
+    <div className="rounded-xl border border-[#C9A227]/40 bg-[#FBF8EE] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-dashed border-[#d8cfb4]">
+        <div className="flex items-center gap-2.5">
+          <CalendarClock size={16} className="text-[#1B3A2F]" />
+          <span className="font-display text-[16px] text-[#1B3A2F]">{t.vetBookedApptBadge}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${statusCfg.cls}`}>{statusCfg.label}</span>
+          {appt.status === "booked" && (
+            <button onClick={() => onCancel(appt.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
+              <Trash2 size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="px-5 py-3.5 grid grid-cols-2 sm:grid-cols-3 gap-3 text-[13px]">
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldApptDate}</p>
+          <p className="text-[#1f2a24]">{fmtDate(appt.appt_date, locale)}</p>
+        </div>
+        <div>
+          <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldApptTime}</p>
+          <p className="text-[#1f2a24] font-mono">{appt.appt_time}</p>
+        </div>
+        {appt.note && (
+          <div>
+            <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.apptNoteLabel}</p>
+            <p className="text-[#1f2a24]">{appt.note}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AppointmentTab({ dog, onAdd, onDelete }) {
   const { t } = useI18n();
   const [showAdd, setShowAdd] = useState(false);
+  const [vetAppts, setVetAppts] = useState([]);
   const appts = [...(dog.appointments || [])].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  const loadVetAppts = useCallback(async () => {
+    const { data } = await supabase
+      .from("vet_appointments")
+      .select("*")
+      .eq("dog_id", dog.id)
+      .order("appt_date", { ascending: false });
+    if (data) setVetAppts(data);
+  }, [dog.id]);
+
+  useEffect(() => {
+    loadVetAppts();
+  }, [loadVetAppts]);
+
+  const cancelVetAppt = async (id) => {
+    await supabase.from("vet_appointments").update({ status: "cancelled" }).eq("id", id);
+    loadVetAppts();
+  };
+
+  const totalCount = appts.length + vetAppts.length;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.appointmentsTitle}</h3>
-          <p className="text-[13px] text-[#5b6d63]">{t.appointmentsSubtitle(dog.name, appts.length)}</p>
+          <p className="text-[13px] text-[#5b6d63]">{t.appointmentsSubtitle(dog.name, totalCount)}</p>
         </div>
         <PrimaryButton icon={Plus} onClick={() => setShowAdd(true)}>
           {t.addAppointmentBtn}
         </PrimaryButton>
       </div>
 
-      {appts.length === 0 ? (
+      {totalCount === 0 ? (
         <EmptyState icon={CalendarClock} text={t.appointmentsEmpty} />
       ) : (
         <div className="space-y-3">
+          {vetAppts.map((a) => (
+            <VetBookedApptCard key={a.id} appt={a} onCancel={cancelVetAppt} />
+          ))}
           {appts.map((a) => (
             <AppointmentCard key={a.id} appt={a} onDelete={onDelete} />
           ))}
@@ -4674,9 +4863,60 @@ function WeightTab({ dog, onSaveIdeal, onAdd, onDelete }) {
   );
 }
 
-function VetDetailModal({ vet, onClose }) {
-  const { t } = useI18n();
+function VetDetailModal({ vet, dog, session, onClose }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
   const specialties = Array.isArray(vet.specialty) ? vet.specialty : vet.specialty ? [vet.specialty] : [];
+  const [showBooking, setShowBooking] = useState(false);
+  const [bookDate, setBookDate] = useState(todayISO());
+  const [slots, setSlots] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [note, setNote] = useState("");
+  const [booking, setBooking] = useState(false);
+  const [bookMsg, setBookMsg] = useState("");
+
+  const loadSlots = useCallback(async (date) => {
+    setSlots(null);
+    setSelectedSlot(null);
+    const res = await fetch("/api/vet-availability-slots", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vetId: vet.id, date }),
+    });
+    const data = await res.json();
+    setSlots(data.slots || []);
+  }, [vet.id]);
+
+  useEffect(() => {
+    if (showBooking) loadSlots(bookDate);
+  }, [showBooking, bookDate, loadSlots]);
+
+  const confirmBooking = async () => {
+    setBooking(true);
+    setBookMsg("");
+    try {
+      const res = await fetch("/api/book-appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ vetId: vet.id, dogId: dog.id, date: bookDate, time: selectedSlot, note }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setBookMsg(t.bookingSuccessMsg);
+        setSelectedSlot(null);
+        setNote("");
+        loadSlots(bookDate);
+      } else if (data.error === "SLOT_TAKEN") {
+        setBookMsg(t.slotTakenErrorMsg);
+        loadSlots(bookDate);
+      } else {
+        setBookMsg(data.error || t.authError);
+      }
+    } catch {
+      setBookMsg(t.authError);
+    }
+    setBooking(false);
+  };
 
   return (
     <Modal title={vet.clinic_name} onClose={onClose} wide>
@@ -4754,6 +4994,66 @@ function VetDetailModal({ vet, onClose }) {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {(vet.availability || []).length > 0 && (
+        <div className="mb-2">
+          {!showBooking ? (
+            <PrimaryButton icon={CalendarClock} onClick={() => setShowBooking(true)}>
+              {t.bookApptBtn}
+            </PrimaryButton>
+          ) : (
+            <div className="rounded-md border border-[#C9A227]/40 bg-[#FBF8EE] p-3.5 space-y-2.5">
+              <Field label={t.selectDateLabel}>
+                <input
+                  type="date"
+                  min={todayISO()}
+                  className={inputCls}
+                  value={bookDate}
+                  onChange={(e) => setBookDate(e.target.value)}
+                />
+              </Field>
+
+              {slots === null ? (
+                <p className="text-[13px] text-[#5b6d63]">{t.loadingSlotsText}</p>
+              ) : slots.length === 0 ? (
+                <p className="text-[13px] text-[#5b6d63]">{t.noSlotsAvailable}</p>
+              ) : (
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.selectTimeLabel}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {slots.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => setSelectedSlot(s)}
+                        className={`text-[12.5px] font-mono rounded-md px-2.5 py-1.5 border transition ${
+                          selectedSlot === s
+                            ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                            : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedSlot && (
+                <>
+                  <Field label={t.apptNoteLabel}>
+                    <input className={inputCls} value={note} onChange={(e) => setNote(e.target.value)} />
+                  </Field>
+                  <PrimaryButton disabled={booking} onClick={confirmBooking} icon={Check}>
+                    {t.confirmBookingBtn}
+                  </PrimaryButton>
+                </>
+              )}
+
+              {bookMsg && <p className="text-[12.5px] text-[#8a6d16]">{bookMsg}</p>}
+            </div>
+          )}
         </div>
       )}
 
@@ -4951,7 +5251,9 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
           );
         })}
       </div>
-      {selectedVetDetail && <VetDetailModal vet={selectedVetDetail} onClose={() => setSelectedVetDetail(null)} />}
+      {selectedVetDetail && (
+        <VetDetailModal vet={selectedVetDetail} dog={dog} session={session} onClose={() => setSelectedVetDetail(null)} />
+      )}
     </div>
   );
 }
@@ -6170,7 +6472,7 @@ function PatientDetailModal({ dogId, session, onClose }) {
 }
 
 function VetPortal({ session }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const vetId = session.user.user_metadata?.vet_id;
   const [vet, setVet] = useState(null);
   const [requests, setRequests] = useState([]);
@@ -6213,6 +6515,8 @@ function VetPortal({ session }) {
     }
   };
   const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [newAvailability, setNewAvailability] = useState({ day: 1, start: "09:00", end: "17:00" });
+  const [appointments, setAppointments] = useState([]);
 
   const load = useCallback(async () => {
     if (!vetId) {
@@ -6250,6 +6554,13 @@ function VetPortal({ session }) {
       .eq("vet_id", vetId)
       .order("created_at", { ascending: false });
     if (reqRows) setRequests(reqRows);
+    const { data: apptRows } = await supabase
+      .from("vet_appointments")
+      .select("*")
+      .eq("vet_id", vetId)
+      .order("appt_date", { ascending: true })
+      .order("appt_time", { ascending: true });
+    if (apptRows) setAppointments(apptRows);
     setLoaded(true);
   }, [vetId]);
 
@@ -6259,6 +6570,23 @@ function VetPortal({ session }) {
 
   const respondToRequest = async (id, status) => {
     await supabase.from("vet_assignment_requests").update({ status }).eq("id", id);
+    load();
+  };
+
+  const addAvailabilityBlock = async () => {
+    const blocks = [...(vet.availability || []), { id: uid(), ...newAvailability }];
+    await supabase.from("vets").update({ availability: blocks }).eq("id", vetId);
+    load();
+  };
+
+  const removeAvailabilityBlock = async (id) => {
+    const blocks = (vet.availability || []).filter((b) => b.id !== id);
+    await supabase.from("vets").update({ availability: blocks }).eq("id", vetId);
+    load();
+  };
+
+  const markApptStatus = async (id, status) => {
+    await supabase.from("vet_appointments").update({ status }).eq("id", id);
     load();
   };
 
@@ -6400,6 +6728,113 @@ function VetPortal({ session }) {
                   ))}
                 </div>
               )}
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-6 mb-8">
+              <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
+                <p className="font-display text-[16px] text-[#1B3A2F] mb-1">{t.availabilityTitle}</p>
+                <p className="text-[12.5px] text-[#5b6d63] mb-3">{t.availabilitySubtitle}</p>
+                <div className="space-y-1.5 mb-3">
+                  {(vet.availability || []).length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noAvailabilitySet}</p>
+                  ) : (
+                    [...(vet.availability || [])]
+                      .sort((a, b) => a.day - b.day || a.start.localeCompare(b.start))
+                      .map((b) => (
+                        <div key={b.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
+                          <span>
+                            <span className="font-medium">{t.dayNames[b.day]}</span>{" "}
+                            <span className="font-mono text-[#5b6d63]">
+                              {b.start}–{b.end}
+                            </span>
+                          </span>
+                          <button onClick={() => removeAvailabilityBlock(b.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      ))
+                  )}
+                </div>
+                <div className="grid grid-cols-[1fr_1fr_1fr_40px] gap-2 items-stretch">
+                  <select
+                    className={inputCls}
+                    value={newAvailability.day}
+                    onChange={(e) => setNewAvailability((f) => ({ ...f, day: Number(e.target.value) }))}
+                  >
+                    {t.dayNames.map((d, i) => (
+                      <option key={d} value={i}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="time"
+                    className={inputCls}
+                    value={newAvailability.start}
+                    onChange={(e) => setNewAvailability((f) => ({ ...f, start: e.target.value }))}
+                  />
+                  <input
+                    type="time"
+                    className={inputCls}
+                    value={newAvailability.end}
+                    onChange={(e) => setNewAvailability((f) => ({ ...f, end: e.target.value }))}
+                  />
+                  <button
+                    onClick={addAvailabilityBlock}
+                    className="rounded-md border border-[#d8cfb4] text-[#3c473f] hover:bg-[#eee6cd] transition grid place-items-center"
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
+                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myAppointmentsTitle}</p>
+                {appointments.length === 0 ? (
+                  <p className="text-[13px] text-[#5b6d63]">{t.noAppointmentsYet}</p>
+                ) : (
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                    {appointments.map((a) => {
+                      const locale = LANGS.find((l) => l.code === lang)?.locale;
+                      const statusCfg = {
+                        booked: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
+                        completed: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
+                        cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
+                      }[a.status];
+                      return (
+                        <div key={a.id} className="rounded-md bg-white/50 px-3 py-2.5">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[13.5px] font-medium text-[#1f2a24]">{a.dog_name}</span>
+                            <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full ${statusCfg.cls}`}>
+                              {statusCfg.label}
+                            </span>
+                          </div>
+                          <p className="text-[12.5px] text-[#5b6d63] font-mono mb-1.5">
+                            {fmtDate(a.appt_date, locale)} · {a.appt_time}
+                          </p>
+                          {a.note && <p className="text-[12.5px] text-[#5b6d63] mb-1.5">{a.note}</p>}
+                          {a.status === "booked" && (
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => markApptStatus(a.id, "completed")}
+                                className="text-[11px] font-semibold text-[#1B3A2F] underline underline-offset-2"
+                              >
+                                {t.markCompletedBtn}
+                              </button>
+                              <button
+                                onClick={() => markApptStatus(a.id, "cancelled")}
+                                className="text-[11px] font-semibold text-[#a63d40] underline underline-offset-2"
+                              >
+                                {t.cancelApptBtn}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
