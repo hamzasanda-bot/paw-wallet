@@ -406,6 +406,12 @@ const TRANSLATIONS = {
     ],
     noServices: "Henüz hizmet eklenmedi.",
     clinicInfoTitle: "Klinik Bilgileri",
+    myPatientsTitle: "Hastalarım",
+    myPatientsSubtitle: (count) => `${count} onaylı hasta`,
+    noPatientsYet: "Henüz onaylı hastan yok.",
+    viewPatientBtn: "Görüntüle",
+    patientDetailTitle: (name) => `${name} — Hasta Kaydı`,
+    closeBtn: "Kapat",
     saveClinicInfoBtn: "Bilgileri Kaydet",
     approvedByLabel: "Onaylayan",
     assignedVetsTitle: "Atanmış Veterinerler",
@@ -806,6 +812,12 @@ const TRANSLATIONS = {
     ],
     noServices: "No services added yet.",
     clinicInfoTitle: "Clinic Info",
+    myPatientsTitle: "My Patients",
+    myPatientsSubtitle: (count) => `${count} approved patients`,
+    noPatientsYet: "No approved patients yet.",
+    viewPatientBtn: "View",
+    patientDetailTitle: (name) => `${name} — Patient Record`,
+    closeBtn: "Close",
     saveClinicInfoBtn: "Save Info",
     approvedByLabel: "Approved by",
     assignedVetsTitle: "Assigned Vets",
@@ -1186,6 +1198,12 @@ const TRANSLATIONS = {
     ],
     noServices: "Aucun service ajouté.",
     clinicInfoTitle: "Infos de la Clinique",
+    myPatientsTitle: "Mes Patients",
+    myPatientsSubtitle: (count) => `${count} patients approuvés`,
+    noPatientsYet: "Aucun patient approuvé pour le moment.",
+    viewPatientBtn: "Voir",
+    patientDetailTitle: (name) => `${name} — Dossier Patient`,
+    closeBtn: "Fermer",
     saveClinicInfoBtn: "Enregistrer",
     approvedByLabel: "Approuvé par",
     assignedVetsTitle: "Vétérinaires Assignés",
@@ -1566,6 +1584,12 @@ const TRANSLATIONS = {
     ],
     noServices: "Noch keine Dienstleistungen hinzugefügt.",
     clinicInfoTitle: "Klinikinformationen",
+    myPatientsTitle: "Meine Patienten",
+    myPatientsSubtitle: (count) => `${count} genehmigte Patienten`,
+    noPatientsYet: "Noch keine genehmigten Patienten.",
+    viewPatientBtn: "Ansehen",
+    patientDetailTitle: (name) => `${name} — Patientenakte`,
+    closeBtn: "Schließen",
     saveClinicInfoBtn: "Informationen Speichern",
     approvedByLabel: "Genehmigt von",
     assignedVetsTitle: "Zugewiesene Tierärzte",
@@ -1948,6 +1972,12 @@ const TRANSLATIONS = {
     ],
     noServices: "Aún no hay servicios añadidos.",
     clinicInfoTitle: "Información de la Clínica",
+    myPatientsTitle: "Mis Pacientes",
+    myPatientsSubtitle: (count) => `${count} pacientes aprobados`,
+    noPatientsYet: "Aún no hay pacientes aprobados.",
+    viewPatientBtn: "Ver",
+    patientDetailTitle: (name) => `${name} — Ficha del Paciente`,
+    closeBtn: "Cerrar",
     saveClinicInfoBtn: "Guardar Información",
     approvedByLabel: "Aprobado por",
     assignedVetsTitle: "Veterinarios Asignados",
@@ -5163,6 +5193,110 @@ function AdminPanel({ session }) {
 }
 /* ------------------------------------------------------------------ */
 
+function PatientDetailModal({ dogId, onClose }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const [dog, setDog] = useState(undefined);
+
+  useEffect(() => {
+    supabase
+      .from("dogs")
+      .select("payload")
+      .eq("id", dogId)
+      .single()
+      .then(({ data }) => setDog(data?.payload || null));
+  }, [dogId]);
+
+  const sortedVaccines = dog ? [...(dog.vaccines || [])].sort((a, b) => (a.date < b.date ? 1 : -1)) : [];
+  const sortedWeights = dog ? [...(dog.weightEntries || [])].sort((a, b) => (a.date < b.date ? -1 : 1)) : [];
+  const currentWeight = sortedWeights[sortedWeights.length - 1];
+
+  const Row = ({ label, value }) => (
+    <div className="flex items-baseline justify-between gap-4 py-1.5 border-b border-dotted border-[#d8cfb4]">
+      <span className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold shrink-0">{label}</span>
+      <span className="text-right text-[13.5px] text-[#1f2a24]">{value || "—"}</span>
+    </div>
+  );
+
+  return (
+    <Modal title={dog ? t.patientDetailTitle(dog.name) : "…"} onClose={onClose} wide>
+      {dog === undefined ? (
+        <div className="py-10 grid place-items-center text-[#5b6d63]">
+          <Loader2 className="animate-spin" size={20} />
+        </div>
+      ) : dog === null ? (
+        <p className="text-[13px] text-[#5b6d63]">—</p>
+      ) : (
+        <div>
+          <div className="flex items-center gap-4 mb-5">
+            <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-[#1B3A2F]/15 bg-[#eee6cd] grid place-items-center shrink-0">
+              {dog.photo ? (
+                <img src={dog.photo} alt={dog.name} className="h-full w-full object-cover" />
+              ) : (
+                <PawPrint size={22} className="text-[#a89c6e]" />
+              )}
+            </div>
+            <div>
+              <p className="font-display text-[20px] text-[#1B3A2F] leading-tight">{dog.name}</p>
+              <p className="text-[12.5px] text-[#5b6d63]">{dog.breed}</p>
+            </div>
+          </div>
+
+          <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvIdentitySection}</p>
+          <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+            <div>
+              <Row label={t.rowBirthDate} value={fmtDate(dog.birthDate, locale)} />
+              <Row label={t.rowGender} value={dog.gender === "Dişi" ? t.female : t.male} />
+              <Row label={t.rowNeutered} value={dog.neutered === "Evet" ? t.neuteredYes : t.neuteredNo} />
+            </div>
+            <div>
+              <Row label={t.rowColor} value={t.colorNames?.[dog.color] || dog.color} />
+              <Row label={t.rowMicrochip} value={dog.microchip} />
+              <Row label={t.rowPassportNo} value={dog.passportNumber} />
+            </div>
+          </div>
+
+          <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvHealthSection}</p>
+          <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+            <Row label={t.fieldChronicConditions} value={dog.chronicConditions} />
+            <Row label={t.fieldAllergies} value={dog.allergies} />
+          </div>
+
+          <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvWeightSection}</p>
+          <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+            <Row
+              label={t.cvCurrentWeight}
+              value={currentWeight ? `${currentWeight.weight} kg (${fmtDate(currentWeight.date, locale)})` : t.cvNoWeight}
+            />
+            <Row label={t.cvIdealWeight} value={dog.idealWeight ? `${dog.idealWeight} kg` : "—"} />
+          </div>
+
+          <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvVaccinesSection}</p>
+          {sortedVaccines.length === 0 ? (
+            <p className="text-[13px] text-[#5b6d63] mb-2">{t.cvNoVaccines}</p>
+          ) : (
+            <div className="space-y-1 mb-2">
+              {sortedVaccines.map((v) => (
+                <div key={v.id} className="flex items-center justify-between text-[13px] py-1 border-b border-dotted border-[#d8cfb4]">
+                  <span className="text-[#1f2a24] font-medium">{v.name}</span>
+                  <span className="text-[#5b6d63]">
+                    {fmtDate(v.date, locale)}
+                    {v.nextDate ? ` → ${fmtDate(v.nextDate, locale)}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="mt-6 flex justify-end">
+        <GhostButton onClick={onClose}>{t.closeBtn}</GhostButton>
+      </div>
+    </Modal>
+  );
+}
+
 function VetPortal({ session }) {
   const { t } = useI18n();
   const vetId = session.user.user_metadata?.vet_id;
@@ -5170,8 +5304,9 @@ function VetPortal({ session }) {
   const [requests, setRequests] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [newDoctor, setNewDoctor] = useState({ name: "", title: "" });
-  const [newService, setNewService] = useState({ name: "", price: "" });
+  const [newService, setNewService] = useState({ name: "", price: "", currency: "EUR" });
   const [clinicForm, setClinicForm] = useState(null);
+  const [selectedPatientId, setSelectedPatientId] = useState(null);
 
   const load = useCallback(async () => {
     if (!vetId) {
@@ -5237,7 +5372,7 @@ function VetPortal({ session }) {
     if (!newService.name.trim()) return;
     const services = [...(vet.services || []), { id: uid(), ...newService }];
     await supabase.from("vets").update({ services }).eq("id", vetId);
-    setNewService({ name: "", price: "" });
+    setNewService({ name: "", price: "", currency: "EUR" });
     load();
   };
 
@@ -5248,6 +5383,9 @@ function VetPortal({ session }) {
   };
 
   const pendingRequests = requests.filter((r) => r.status === "pending");
+  const approvedPatients = Array.from(
+    new Map(requests.filter((r) => r.status === "approved").map((r) => [r.dog_id, r])).values()
+  );
 
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
@@ -5322,6 +5460,31 @@ function VetPortal({ session }) {
               )}
             </div>
 
+            <div className="mb-8">
+              <h3 className="font-display text-[18px] text-[#1B3A2F] mb-1">{t.myPatientsTitle}</h3>
+              <p className="text-[13px] text-[#5b6d63] mb-3">{t.myPatientsSubtitle(approvedPatients.length)}</p>
+              {approvedPatients.length === 0 ? (
+                <EmptyState icon={PawPrint} text={t.noPatientsYet} />
+              ) : (
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {approvedPatients.map((r) => (
+                    <div
+                      key={r.dog_id}
+                      className="flex items-center justify-between rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] px-4 py-3"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-8 w-8 rounded-full bg-[#1B3A2F] text-[#F7F3E8] grid place-items-center font-display text-[13px]">
+                          {r.dog_name?.[0] || "?"}
+                        </div>
+                        <span className="text-[14px] text-[#1f2a24] font-medium">{r.dog_name}</span>
+                      </div>
+                      <GhostButton onClick={() => setSelectedPatientId(r.dog_id)}>{t.viewPatientBtn}</GhostButton>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myDoctorsTitle}</p>
@@ -5367,7 +5530,7 @@ function VetPortal({ session }) {
                     (vet.services || []).map((s) => (
                       <div key={s.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
                         <span>
-                          {s.name} {s.price && <span className="text-[#8d8560]">· {s.price}</span>}
+                          {s.name} {s.price && <span className="text-[#8d8560]">· {s.price} {s.currency || "EUR"}</span>}
                         </span>
                         <button onClick={() => removeService(s.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
                           <Trash2 size={13} />
@@ -5388,11 +5551,21 @@ function VetPortal({ session }) {
                     ))}
                   </select>
                   <input
-                    className={inputCls}
+                    className={inputCls + " w-24"}
                     placeholder={t.fieldServicePrice}
                     value={newService.price}
                     onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
                   />
+                  <select
+                    className={inputCls + " w-24 shrink-0"}
+                    value={newService.currency}
+                    onChange={(e) => setNewService((f) => ({ ...f, currency: e.target.value }))}
+                  >
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                    <option value="GBP">GBP</option>
+                    <option value="TRY">TRY</option>
+                  </select>
                   <GhostButton onClick={addService} icon={Plus} />
                 </div>
               </div>
@@ -5446,6 +5619,7 @@ function VetPortal({ session }) {
           </>
         )}
       </div>
+      {selectedPatientId && <PatientDetailModal dogId={selectedPatientId} onClose={() => setSelectedPatientId(null)} />}
     </div>
   );
 }
