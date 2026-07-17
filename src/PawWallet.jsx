@@ -5672,17 +5672,15 @@ function VetPortal({ session }) {
                       <option key={s}>{s}</option>
                     ))}
                   </select>
-                  <div className="flex gap-2">
-                    <div className="flex-1 min-w-0">
-                      <input
-                        className={inputCls}
-                        placeholder={t.fieldServicePrice}
-                        value={newService.price}
-                        onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
-                      />
-                    </div>
+                  <div className="grid grid-cols-[1fr_84px_40px] gap-2 items-stretch">
+                    <input
+                      className={inputCls}
+                      placeholder={t.fieldServicePrice}
+                      value={newService.price}
+                      onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
+                    />
                     <select
-                      className={inputCls + " w-[88px] shrink-0"}
+                      className={inputCls + " px-1.5"}
                       value={newService.currency}
                       onChange={(e) => setNewService((f) => ({ ...f, currency: e.target.value }))}
                     >
@@ -5691,7 +5689,12 @@ function VetPortal({ session }) {
                       <option value="GBP">GBP</option>
                       <option value="TRY">TRY</option>
                     </select>
-                    <GhostButton onClick={addService} icon={Plus} />
+                    <button
+                      onClick={addService}
+                      className="rounded-md border border-[#d8cfb4] text-[#3c473f] hover:bg-[#eee6cd] transition grid place-items-center"
+                    >
+                      <Plus size={16} />
+                    </button>
                   </div>
                 </div>
               </div>
