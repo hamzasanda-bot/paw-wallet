@@ -417,6 +417,10 @@ const TRANSLATIONS = {
     noServices: "Henüz hizmet eklenmedi.",
     clinicInfoTitle: "Klinik Bilgileri",
     myPatientsTitle: "Hastalarım",
+    addVaccineForPatientBtn: "Aşı Ekle",
+    addHealthNoteForPatientBtn: "Sağlık Notu Ekle",
+    addedByVetLabel: (clinic) => `${clinic} tarafından eklendi`,
+    vetRecordSuccess: "Kayıt hastanın dosyasına eklendi.",
     myPatientsSubtitle: (count) => `${count} onaylı hasta`,
     noPatientsYet: "Henüz onaylı hastan yok.",
     viewPatientBtn: "Görüntüle",
@@ -851,6 +855,10 @@ const TRANSLATIONS = {
     noServices: "No services added yet.",
     clinicInfoTitle: "Clinic Info",
     myPatientsTitle: "My Patients",
+    addVaccineForPatientBtn: "Add Vaccine",
+    addHealthNoteForPatientBtn: "Add Health Note",
+    addedByVetLabel: (clinic) => `Added by ${clinic}`,
+    vetRecordSuccess: "Record added to the patient's file.",
     myPatientsSubtitle: (count) => `${count} approved patients`,
     noPatientsYet: "No approved patients yet.",
     viewPatientBtn: "View",
@@ -1265,6 +1273,10 @@ const TRANSLATIONS = {
     noServices: "Aucun service ajouté.",
     clinicInfoTitle: "Infos de la Clinique",
     myPatientsTitle: "Mes Patients",
+    addVaccineForPatientBtn: "Ajouter un Vaccin",
+    addHealthNoteForPatientBtn: "Ajouter une Note de Santé",
+    addedByVetLabel: (clinic) => `Ajouté par ${clinic}`,
+    vetRecordSuccess: "Enregistrement ajouté au dossier du patient.",
     myPatientsSubtitle: (count) => `${count} patients approuvés`,
     noPatientsYet: "Aucun patient approuvé pour le moment.",
     viewPatientBtn: "Voir",
@@ -1679,6 +1691,10 @@ const TRANSLATIONS = {
     noServices: "Noch keine Dienstleistungen hinzugefügt.",
     clinicInfoTitle: "Klinikinformationen",
     myPatientsTitle: "Meine Patienten",
+    addVaccineForPatientBtn: "Impfung Hinzufügen",
+    addHealthNoteForPatientBtn: "Gesundheitsnotiz Hinzufügen",
+    addedByVetLabel: (clinic) => `Hinzugefügt von ${clinic}`,
+    vetRecordSuccess: "Eintrag zur Patientenakte hinzugefügt.",
     myPatientsSubtitle: (count) => `${count} genehmigte Patienten`,
     noPatientsYet: "Noch keine genehmigten Patienten.",
     viewPatientBtn: "Ansehen",
@@ -2095,6 +2111,10 @@ const TRANSLATIONS = {
     noServices: "Aún no hay servicios añadidos.",
     clinicInfoTitle: "Información de la Clínica",
     myPatientsTitle: "Mis Pacientes",
+    addVaccineForPatientBtn: "Añadir Vacuna",
+    addHealthNoteForPatientBtn: "Añadir Nota de Salud",
+    addedByVetLabel: (clinic) => `Añadido por ${clinic}`,
+    vetRecordSuccess: "Registro añadido al expediente del paciente.",
     myPatientsSubtitle: (count) => `${count} pacientes aprobados`,
     noPatientsYet: "Aún no hay pacientes aprobados.",
     viewPatientBtn: "Ver",
@@ -2740,12 +2760,15 @@ function Modal({ title, onClose, children, wide }) {
   );
 }
 
-function PrimaryButton({ children, onClick, type = "button", full, icon: Icon }) {
+function PrimaryButton({ children, onClick, type = "button", full, icon: Icon, disabled }) {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`${full ? "w-full" : ""} inline-flex items-center justify-center gap-2 rounded-md bg-[#1B3A2F] px-4 py-2.5 text-[13.5px] font-semibold text-[#F7F3E8] tracking-wide hover:bg-[#234a3b] active:scale-[0.98] transition shadow-sm`}
+      disabled={disabled}
+      className={`${
+        full ? "w-full" : ""
+      } inline-flex items-center justify-center gap-2 rounded-md bg-[#1B3A2F] px-4 py-2.5 text-[13.5px] font-semibold text-[#F7F3E8] tracking-wide hover:bg-[#234a3b] active:scale-[0.98] transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100`}
     >
       {Icon && <Icon size={16} />}
       {children}
@@ -3666,6 +3689,11 @@ function VaccineCard({ v, onDelete }) {
         <div className="flex items-center gap-2.5">
           <Syringe size={16} className="text-[#1B3A2F]" />
           <span className="font-display text-[16px] text-[#1B3A2F]">{v.name}</span>
+          {v.addedByVet && (
+            <span className="text-[10px] font-semibold text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2 py-0.5">
+              {t.addedByVetLabel(v.vet)}
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {status && <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${status.cls}`}>{status.label}</span>}
@@ -3882,6 +3910,11 @@ function HealthRecordCard({ record, onDelete }) {
           {record.isSurgery && (
             <span className="text-[10px] font-bold tracking-wider px-2 py-1 rounded-full bg-[#a63d40] text-white">
               {t.fieldSurgery.split(" ")[0]}
+            </span>
+          )}
+          {record.addedByVet && (
+            <span className="text-[10px] font-semibold text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2 py-0.5">
+              {t.addedByVetLabel(record.vet)}
             </span>
           )}
         </div>
@@ -5524,12 +5557,18 @@ function AdminPanel({ session }) {
 }
 /* ------------------------------------------------------------------ */
 
-function PatientDetailModal({ dogId, onClose }) {
+function PatientDetailModal({ dogId, session, onClose }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const [dog, setDog] = useState(undefined);
+  const [showAddVaccine, setShowAddVaccine] = useState(false);
+  const [showAddHealth, setShowAddHealth] = useState(false);
+  const [vaccineForm, setVaccineForm] = useState({ name: "", date: todayISO() });
+  const [healthForm, setHealthForm] = useState({ date: todayISO(), diagnosis: "", examNotes: "" });
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState("");
 
-  useEffect(() => {
+  const loadDog = useCallback(() => {
     supabase
       .from("dogs")
       .select("payload")
@@ -5537,6 +5576,38 @@ function PatientDetailModal({ dogId, onClose }) {
       .single()
       .then(({ data }) => setDog(data?.payload || null));
   }, [dogId]);
+
+  useEffect(() => {
+    loadDog();
+  }, [loadDog]);
+
+  const submitRecord = async (type, entry) => {
+    setSaving(true);
+    setSaveMsg("");
+    try {
+      const res = await fetch("/api/vet-add-record", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ dogId, type, entry }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSaveMsg(t.vetRecordSuccess);
+        setShowAddVaccine(false);
+        setShowAddHealth(false);
+        setVaccineForm({ name: "", date: todayISO() });
+        setHealthForm({ date: todayISO(), diagnosis: "", examNotes: "" });
+        loadDog();
+      } else {
+        setSaveMsg(data.error || t.authError);
+      }
+    } catch {
+      setSaveMsg(t.authError);
+    }
+    setSaving(false);
+  };
+
+  const vaccineOptions = dog?.species === "cat" ? CAT_VACCINES : COMMON_VACCINES;
 
   const sortedVaccines = dog ? [...(dog.vaccines || [])].sort((a, b) => (a.date < b.date ? 1 : -1)) : [];
   const sortedWeights = dog ? [...(dog.weightEntries || [])].sort((a, b) => (a.date < b.date ? -1 : 1)) : [];
@@ -5602,14 +5673,57 @@ function PatientDetailModal({ dogId, onClose }) {
             <Row label={t.cvIdealWeight} value={dog.idealWeight ? `${dog.idealWeight} kg` : "—"} />
           </div>
 
-          <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvVaccinesSection}</p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16]">{t.cvVaccinesSection}</p>
+            <button
+              onClick={() => setShowAddVaccine((s) => !s)}
+              className="text-[11.5px] text-[#1B3A2F] underline underline-offset-2"
+            >
+              + {t.addVaccineForPatientBtn}
+            </button>
+          </div>
+
+          {showAddVaccine && (
+            <div className="rounded-md border border-[#d8cfb4] bg-white/60 p-3 mb-3 flex flex-col sm:flex-row gap-2">
+              <select
+                className={inputCls}
+                value={vaccineForm.name}
+                onChange={(e) => setVaccineForm((f) => ({ ...f, name: e.target.value }))}
+              >
+                <option value="">{t.fieldVaccineName}</option>
+                {vaccineOptions.map((v) => (
+                  <option key={v}>{v}</option>
+                ))}
+              </select>
+              <input
+                type="date"
+                className={inputCls}
+                value={vaccineForm.date}
+                onChange={(e) => setVaccineForm((f) => ({ ...f, date: e.target.value }))}
+              />
+              <PrimaryButton
+                disabled={saving || !vaccineForm.name}
+                onClick={() => submitRecord("vaccine", { name: vaccineForm.name, date: vaccineForm.date, nextDate: "", batch: "" })}
+              >
+                {t.saveBtn}
+              </PrimaryButton>
+            </div>
+          )}
+
           {sortedVaccines.length === 0 ? (
             <p className="text-[13px] text-[#5b6d63] mb-2">{t.cvNoVaccines}</p>
           ) : (
             <div className="space-y-1 mb-2">
               {sortedVaccines.map((v) => (
                 <div key={v.id} className="flex items-center justify-between text-[13px] py-1 border-b border-dotted border-[#d8cfb4]">
-                  <span className="text-[#1f2a24] font-medium">{v.name}</span>
+                  <span className="text-[#1f2a24] font-medium">
+                    {v.name}
+                    {v.addedByVet && (
+                      <span className="ml-2 text-[10px] font-semibold text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2 py-0.5">
+                        {t.addedByVetLabel(v.vet)}
+                      </span>
+                    )}
+                  </span>
                   <span className="text-[#5b6d63]">
                     {fmtDate(v.date, locale)}
                     {v.nextDate ? ` → ${fmtDate(v.nextDate, locale)}` : ""}
@@ -5618,6 +5732,84 @@ function PatientDetailModal({ dogId, onClose }) {
               ))}
             </div>
           )}
+
+          <div className="flex items-center justify-between mb-2 mt-5">
+            <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16]">{t.cvHealthSection}</p>
+            <button
+              onClick={() => setShowAddHealth((s) => !s)}
+              className="text-[11.5px] text-[#1B3A2F] underline underline-offset-2"
+            >
+              + {t.addHealthNoteForPatientBtn}
+            </button>
+          </div>
+
+          {showAddHealth && (
+            <div className="rounded-md border border-[#d8cfb4] bg-white/60 p-3 mb-3 space-y-2">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="date"
+                  className={inputCls}
+                  value={healthForm.date}
+                  onChange={(e) => setHealthForm((f) => ({ ...f, date: e.target.value }))}
+                />
+                <input
+                  className={inputCls}
+                  placeholder={t.fieldDiagnosis}
+                  value={healthForm.diagnosis}
+                  onChange={(e) => setHealthForm((f) => ({ ...f, diagnosis: e.target.value }))}
+                />
+              </div>
+              <textarea
+                className={inputCls}
+                rows={2}
+                placeholder={t.fieldExamNotes}
+                value={healthForm.examNotes}
+                onChange={(e) => setHealthForm((f) => ({ ...f, examNotes: e.target.value }))}
+              />
+              <PrimaryButton
+                disabled={saving || !healthForm.diagnosis}
+                onClick={() =>
+                  submitRecord("health", {
+                    date: healthForm.date,
+                    diagnosis: healthForm.diagnosis,
+                    examNotes: healthForm.examNotes,
+                    treatment: "",
+                    prescription: "",
+                    labResults: "",
+                    isSurgery: false,
+                    surgeryNotes: "",
+                  })
+                }
+              >
+                {t.saveBtn}
+              </PrimaryButton>
+            </div>
+          )}
+
+          {(dog.healthRecords || []).length === 0 ? (
+            <p className="text-[13px] text-[#5b6d63] mb-2">—</p>
+          ) : (
+            <div className="space-y-1 mb-2">
+              {[...dog.healthRecords].reverse().map((r) => (
+                <div key={r.id} className="text-[13px] py-1.5 border-b border-dotted border-[#d8cfb4]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#1f2a24] font-medium">
+                      {r.diagnosis}
+                      {r.addedByVet && (
+                        <span className="ml-2 text-[10px] font-semibold text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2 py-0.5">
+                          {t.addedByVetLabel(r.vet)}
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-[#5b6d63]">{fmtDate(r.date, locale)}</span>
+                  </div>
+                  {r.examNotes && <p className="text-[#5b6d63] text-[12.5px] mt-0.5">{r.examNotes}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {saveMsg && <p className="text-[12.5px] text-[#8a6d16] mt-2">{saveMsg}</p>}
         </div>
       )}
 
@@ -6107,7 +6299,9 @@ function VetPortal({ session }) {
           </>
         )}
       </div>
-      {selectedPatientId && <PatientDetailModal dogId={selectedPatientId} onClose={() => setSelectedPatientId(null)} />}
+      {selectedPatientId && (
+        <PatientDetailModal dogId={selectedPatientId} session={session} onClose={() => setSelectedPatientId(null)} />
+      )}
     </div>
   );
 }
