@@ -412,6 +412,17 @@ const TRANSLATIONS = {
     viewPatientBtn: "Görüntüle",
     patientDetailTitle: (name) => `${name} — Hasta Kaydı`,
     closeBtn: "Kapat",
+    maxSpecialtiesNote: (max) => `en fazla ${max}`,
+    commercialInfoTitle: "Ticari Bilgiler",
+    bankInfoTitle: "Banka Bilgileri",
+    fieldLegalBusinessName: "Resmi (Ticari) Ünvan",
+    fieldTaxId: "Vergi Numarası",
+    fieldClinicAddress: "Açık Adres",
+    fieldTradeRegistryDoc: "Ticari Sicil Belgesi",
+    fieldIban: "IBAN No",
+    fieldSwiftCode: "SWIFT Kodu",
+    fieldBankName: "Banka Adı",
+    fieldAccountHolderName: "Hesap Sahibi Adı",
     saveClinicInfoBtn: "Bilgileri Kaydet",
     approvedByLabel: "Onaylayan",
     assignedVetsTitle: "Atanmış Veterinerler",
@@ -818,6 +829,17 @@ const TRANSLATIONS = {
     viewPatientBtn: "View",
     patientDetailTitle: (name) => `${name} — Patient Record`,
     closeBtn: "Close",
+    maxSpecialtiesNote: (max) => `up to ${max}`,
+    commercialInfoTitle: "Business Info",
+    bankInfoTitle: "Bank Details",
+    fieldLegalBusinessName: "Legal Business Name",
+    fieldTaxId: "Tax ID Number",
+    fieldClinicAddress: "Full Address",
+    fieldTradeRegistryDoc: "Trade Registry Document",
+    fieldIban: "IBAN",
+    fieldSwiftCode: "SWIFT Code",
+    fieldBankName: "Bank Name",
+    fieldAccountHolderName: "Account Holder Name",
     saveClinicInfoBtn: "Save Info",
     approvedByLabel: "Approved by",
     assignedVetsTitle: "Assigned Vets",
@@ -1204,6 +1226,17 @@ const TRANSLATIONS = {
     viewPatientBtn: "Voir",
     patientDetailTitle: (name) => `${name} — Dossier Patient`,
     closeBtn: "Fermer",
+    maxSpecialtiesNote: (max) => `jusqu'à ${max}`,
+    commercialInfoTitle: "Informations Commerciales",
+    bankInfoTitle: "Coordonnées Bancaires",
+    fieldLegalBusinessName: "Raison Sociale",
+    fieldTaxId: "Numéro d'Identification Fiscale",
+    fieldClinicAddress: "Adresse Complète",
+    fieldTradeRegistryDoc: "Extrait Kbis / Registre du Commerce",
+    fieldIban: "IBAN",
+    fieldSwiftCode: "Code SWIFT",
+    fieldBankName: "Nom de la Banque",
+    fieldAccountHolderName: "Nom du Titulaire du Compte",
     saveClinicInfoBtn: "Enregistrer",
     approvedByLabel: "Approuvé par",
     assignedVetsTitle: "Vétérinaires Assignés",
@@ -1590,6 +1623,17 @@ const TRANSLATIONS = {
     viewPatientBtn: "Ansehen",
     patientDetailTitle: (name) => `${name} — Patientenakte`,
     closeBtn: "Schließen",
+    maxSpecialtiesNote: (max) => `max. ${max}`,
+    commercialInfoTitle: "Geschäftsinformationen",
+    bankInfoTitle: "Bankverbindung",
+    fieldLegalBusinessName: "Offizieller Firmenname",
+    fieldTaxId: "Steuernummer",
+    fieldClinicAddress: "Vollständige Adresse",
+    fieldTradeRegistryDoc: "Handelsregisterauszug",
+    fieldIban: "IBAN",
+    fieldSwiftCode: "SWIFT-Code",
+    fieldBankName: "Bankname",
+    fieldAccountHolderName: "Kontoinhaber",
     saveClinicInfoBtn: "Informationen Speichern",
     approvedByLabel: "Genehmigt von",
     assignedVetsTitle: "Zugewiesene Tierärzte",
@@ -1978,6 +2022,17 @@ const TRANSLATIONS = {
     viewPatientBtn: "Ver",
     patientDetailTitle: (name) => `${name} — Ficha del Paciente`,
     closeBtn: "Cerrar",
+    maxSpecialtiesNote: (max) => `hasta ${max}`,
+    commercialInfoTitle: "Información Comercial",
+    bankInfoTitle: "Datos Bancarios",
+    fieldLegalBusinessName: "Razón Social",
+    fieldTaxId: "Número de Identificación Fiscal",
+    fieldClinicAddress: "Dirección Completa",
+    fieldTradeRegistryDoc: "Documento de Registro Mercantil",
+    fieldIban: "IBAN",
+    fieldSwiftCode: "Código SWIFT",
+    fieldBankName: "Nombre del Banco",
+    fieldAccountHolderName: "Titular de la Cuenta",
     saveClinicInfoBtn: "Guardar Información",
     approvedByLabel: "Aprobado por",
     assignedVetsTitle: "Veterinarios Asignados",
@@ -2704,6 +2759,48 @@ function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeho
           onChange={(e) => onNumberChange(e.target.value)}
           placeholder={placeholder || "5xx xxx xx xx"}
         />
+      </div>
+    </Field>
+  );
+}
+
+/* Uzmanlık alanı — en fazla 3 tane seçilebilen etiket (pill) seçici */
+function SpecialtyMultiSelect({ label, value, onChange, options, max = 3 }) {
+  const { t } = useI18n();
+  const selected = value || [];
+
+  const toggle = (opt) => {
+    if (selected.includes(opt)) {
+      onChange(selected.filter((s) => s !== opt));
+    } else if (selected.length < max) {
+      onChange([...selected, opt]);
+    }
+  };
+
+  return (
+    <Field label={`${label} (${t.maxSpecialtiesNote(max)})`}>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map((opt) => {
+          const isSelected = selected.includes(opt);
+          const disabled = !isSelected && selected.length >= max;
+          return (
+            <button
+              key={opt}
+              type="button"
+              disabled={disabled}
+              onClick={() => toggle(opt)}
+              className={`rounded-full px-3 py-1.5 text-[12.5px] font-medium border transition ${
+                isSelected
+                  ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                  : disabled
+                  ? "border-[#e3d9bd] text-[#c7bb95] cursor-not-allowed"
+                  : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
+              }`}
+            >
+              {opt}
+            </button>
+          );
+        })}
       </div>
     </Field>
   );
@@ -4344,9 +4441,9 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
                   </span>
                 )}
               </div>
-              {vet.specialty && (
+              {vet.specialty && vet.specialty.length > 0 && (
                 <p className="text-[12px] text-[#5b6d63] flex items-center gap-1">
-                  <Stethoscope size={12} /> {vet.specialty}
+                  <Stethoscope size={12} /> {Array.isArray(vet.specialty) ? vet.specialty.join(", ") : vet.specialty}
                 </p>
               )}
               {vet.phone && (
@@ -4798,7 +4895,7 @@ function AdminPanel({ session }) {
     clinicName: "",
     city: "",
     country: "",
-    specialty: "",
+    specialty: [],
     phoneCode: "",
     phoneNumber: "",
     email: "",
@@ -4875,7 +4972,7 @@ function AdminPanel({ session }) {
       const data = await res.json();
       if (res.ok) {
         setVetMsg(t.vetInviteSuccess(vetForm.email));
-        setVetForm({ clinicName: "", city: "", country: "", specialty: "", phoneCode: "", phoneNumber: "", email: "" });
+        setVetForm({ clinicName: "", city: "", country: "", specialty: [], phoneCode: "", phoneNumber: "", email: "" });
         loadStats();
         loadVets();
       } else {
@@ -4986,18 +5083,12 @@ function AdminPanel({ session }) {
                 onCountryChange={(v) => setVetForm((f) => ({ ...f, country: v }))}
                 onCityChange={(v) => setVetForm((f) => ({ ...f, city: v }))}
               />
-              <Field label={t.fieldVetSpecialty}>
-                <select
-                  className={inputCls}
-                  value={vetForm.specialty}
-                  onChange={(e) => setVetForm((f) => ({ ...f, specialty: e.target.value }))}
-                >
-                  <option value="">{t.selectVetSpecialty}</option>
-                  {t.vetSpecialtyOptions.map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
-                </select>
-              </Field>
+              <SpecialtyMultiSelect
+                label={t.fieldVetSpecialty}
+                value={vetForm.specialty}
+                onChange={(v) => setVetForm((f) => ({ ...f, specialty: v }))}
+                options={t.vetSpecialtyOptions}
+              />
               <PhoneField
                 label={t.fieldVetPhone}
                 code={vetForm.phoneCode}
@@ -5306,6 +5397,28 @@ function VetPortal({ session }) {
   const [newDoctor, setNewDoctor] = useState({ name: "", title: "" });
   const [newService, setNewService] = useState({ name: "", price: "", currency: "EUR" });
   const [clinicForm, setClinicForm] = useState(null);
+  const tradeDocRef = useRef(null);
+
+  const handleTradeDocUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      let dataUrl;
+      if (file.type.startsWith("image/")) {
+        dataUrl = await resizeImageFile(file, 1200, 0.85);
+      } else {
+        dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+      setClinicForm((f) => ({ ...f, trade_registry_doc: dataUrl, trade_registry_doc_name: file.name }));
+    } catch {
+      /* ignore */
+    }
+  };
   const [selectedPatientId, setSelectedPatientId] = useState(null);
 
   const load = useCallback(async () => {
@@ -5322,9 +5435,18 @@ function VetPortal({ session }) {
         clinic_name: vetRow.clinic_name || "",
         city: vetRow.city || "",
         country: vetRow.country || "",
-        specialty: vetRow.specialty || "",
+        specialty: Array.isArray(vetRow.specialty) ? vetRow.specialty : vetRow.specialty ? [vetRow.specialty] : [],
         phoneCode: firstSpace > 0 ? existingPhone.slice(0, firstSpace) : "",
         phoneNumber: firstSpace > 0 ? existingPhone.slice(firstSpace + 1) : existingPhone,
+        legal_business_name: vetRow.legal_business_name || "",
+        tax_id: vetRow.tax_id || "",
+        address: vetRow.address || "",
+        trade_registry_doc: vetRow.trade_registry_doc || null,
+        trade_registry_doc_name: vetRow.trade_registry_doc_name || "",
+        iban: vetRow.iban || "",
+        swift_code: vetRow.swift_code || "",
+        bank_name: vetRow.bank_name || "",
+        account_holder_name: vetRow.account_holder_name || "",
       });
     }
     const { data: reqRows } = await supabase
@@ -5539,7 +5661,7 @@ function VetPortal({ session }) {
                     ))
                   )}
                 </div>
-                <div className="flex gap-2">
+                <div className="space-y-2">
                   <select
                     className={inputCls}
                     value={newService.name}
@@ -5550,23 +5672,25 @@ function VetPortal({ session }) {
                       <option key={s}>{s}</option>
                     ))}
                   </select>
-                  <input
-                    className={inputCls + " w-24"}
-                    placeholder={t.fieldServicePrice}
-                    value={newService.price}
-                    onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
-                  />
-                  <select
-                    className={inputCls + " w-24 shrink-0"}
-                    value={newService.currency}
-                    onChange={(e) => setNewService((f) => ({ ...f, currency: e.target.value }))}
-                  >
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                    <option value="GBP">GBP</option>
-                    <option value="TRY">TRY</option>
-                  </select>
-                  <GhostButton onClick={addService} icon={Plus} />
+                  <div className="flex gap-2">
+                    <input
+                      className={inputCls + " flex-1 min-w-0"}
+                      placeholder={t.fieldServicePrice}
+                      value={newService.price}
+                      onChange={(e) => setNewService((f) => ({ ...f, price: e.target.value }))}
+                    />
+                    <select
+                      className={inputCls + " w-[88px] shrink-0"}
+                      value={newService.currency}
+                      onChange={(e) => setNewService((f) => ({ ...f, currency: e.target.value }))}
+                    >
+                      <option value="EUR">EUR</option>
+                      <option value="USD">USD</option>
+                      <option value="GBP">GBP</option>
+                      <option value="TRY">TRY</option>
+                    </select>
+                    <GhostButton onClick={addService} icon={Plus} />
+                  </div>
                 </div>
               </div>
             </div>
@@ -5582,18 +5706,12 @@ function VetPortal({ session }) {
                       onChange={(e) => setClinicForm((f) => ({ ...f, clinic_name: e.target.value }))}
                     />
                   </Field>
-                  <Field label={t.fieldVetSpecialty}>
-                    <select
-                      className={inputCls}
-                      value={clinicForm.specialty}
-                      onChange={(e) => setClinicForm((f) => ({ ...f, specialty: e.target.value }))}
-                    >
-                      <option value="">{t.selectVetSpecialty}</option>
-                      {t.vetSpecialtyOptions.map((s) => (
-                        <option key={s}>{s}</option>
-                      ))}
-                    </select>
-                  </Field>
+                  <SpecialtyMultiSelect
+                    label={t.fieldVetSpecialty}
+                    value={clinicForm.specialty}
+                    onChange={(v) => setClinicForm((f) => ({ ...f, specialty: v }))}
+                    options={t.vetSpecialtyOptions}
+                  />
                   <CountryCityPicker
                     t={t}
                     countryLabel={t.fieldVetCountry}
@@ -5610,7 +5728,83 @@ function VetPortal({ session }) {
                     onCodeChange={(v) => setClinicForm((f) => ({ ...f, phoneCode: v }))}
                     onNumberChange={(v) => setClinicForm((f) => ({ ...f, phoneNumber: v }))}
                   />
+                  <div className="sm:col-span-2">
+                    <Field label={t.fieldClinicAddress}>
+                      <input
+                        className={inputCls}
+                        value={clinicForm.address}
+                        onChange={(e) => setClinicForm((f) => ({ ...f, address: e.target.value }))}
+                      />
+                    </Field>
+                  </div>
                 </div>
+
+                <div className="h-px bg-[#e3d9bd] my-4" />
+                <p className="text-[13px] font-semibold text-[#1B3A2F] mb-3">{t.commercialInfoTitle}</p>
+                <div className="grid sm:grid-cols-2 gap-3.5 mb-3">
+                  <Field label={t.fieldLegalBusinessName}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.legal_business_name}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, legal_business_name: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldTaxId}>
+                    <input
+                      className={monoInputCls}
+                      value={clinicForm.tax_id}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, tax_id: e.target.value }))}
+                    />
+                  </Field>
+                  <div className="sm:col-span-2">
+                    <Field label={t.fieldTradeRegistryDoc}>
+                      <div
+                        className="flex items-center gap-3 rounded-md border border-dashed border-[#c7bb95] bg-[#efe8d1] px-3 py-2.5 cursor-pointer"
+                        onClick={() => tradeDocRef.current?.click()}
+                      >
+                        <Upload size={15} className="text-[#5b6d63]" />
+                        <span className="text-[13px] text-[#5b6d63] truncate">
+                          {clinicForm.trade_registry_doc_name || t.chooseFileText}
+                        </span>
+                      </div>
+                      <input ref={tradeDocRef} type="file" className="hidden" onChange={handleTradeDocUpload} />
+                    </Field>
+                  </div>
+                </div>
+
+                <div className="h-px bg-[#e3d9bd] my-4" />
+                <p className="text-[13px] font-semibold text-[#1B3A2F] mb-3">{t.bankInfoTitle}</p>
+                <div className="grid sm:grid-cols-2 gap-3.5 mb-3">
+                  <Field label={t.fieldAccountHolderName}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.account_holder_name}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, account_holder_name: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldBankName}>
+                    <input
+                      className={inputCls}
+                      value={clinicForm.bank_name}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, bank_name: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldIban}>
+                    <input
+                      className={monoInputCls}
+                      value={clinicForm.iban}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, iban: e.target.value }))}
+                    />
+                  </Field>
+                  <Field label={t.fieldSwiftCode}>
+                    <input
+                      className={monoInputCls}
+                      value={clinicForm.swift_code}
+                      onChange={(e) => setClinicForm((f) => ({ ...f, swift_code: e.target.value }))}
+                    />
+                  </Field>
+                </div>
+
                 <PrimaryButton onClick={saveClinicInfo} icon={Check}>
                   {t.saveClinicInfoBtn}
                 </PrimaryButton>
