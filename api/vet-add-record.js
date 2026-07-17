@@ -23,18 +23,26 @@ export default async function handler(req, res) {
   const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
   // Bu kullanıcı gerçekten bir vet mi, hangi kliniğe ait?
-  const { data: vetRow } = await admin.from("vets").select("id, clinic_name").eq("user_id", userData.user.id).single();
-  if (!vetRow) return res.status(403).json({ error: "Not a vet account" });
+  const { data: vetRow, error: vetError } = await admin
+    .from("vets")
+    .select("id, clinic_name")
+    .eq("user_id", userData.user.id)
+    .single();
+  if (vetError || !vetRow) return res.status(403).json({ error: "Not a vet account" });
 
-  // Bu hayvana ONAYLI bir ataması var mı?
-  const { data: assignment } = await admin
+  // Bu hayvana ONAYLI bir ataması var mı? (Birincil + İkincil ikisi de olabilir,
+  // bu yüzden tekil değil, liste olarak sorguluyoruz)
+  const { data: assignments, error: assignmentError } = await admin
     .from("vet_assignment_requests")
     .select("id")
     .eq("vet_id", vetRow.id)
     .eq("dog_id", dogId)
     .eq("status", "approved")
-    .maybeSingle();
-  if (!assignment) return res.status(403).json({ error: "No approved assignment for this patient" });
+    .limit(1);
+  if (assignmentError) return res.status(500).json({ error: assignmentError.message });
+  if (!assignments || assignments.length === 0) {
+    return res.status(403).json({ error: "No approved assignment for this patient" });
+  }
 
   const { data: dogRow, error: dogError } = await admin.from("dogs").select("user_id, payload").eq("id", dogId).single();
   if (dogError || !dogRow) return res.status(404).json({ error: "Patient not found" });

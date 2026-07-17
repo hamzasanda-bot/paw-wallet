@@ -5677,9 +5677,9 @@ function PatientDetailModal({ dogId, session, onClose }) {
             <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16]">{t.cvVaccinesSection}</p>
             <button
               onClick={() => setShowAddVaccine((s) => !s)}
-              className="text-[11.5px] text-[#1B3A2F] underline underline-offset-2"
+              className="flex items-center gap-1 text-[12px] font-bold text-white bg-[#C9A227] hover:bg-[#b8931f] rounded-full px-3 py-1.5 transition shadow-sm"
             >
-              + {t.addVaccineForPatientBtn}
+              <Plus size={13} /> {t.addVaccineForPatientBtn}
             </button>
           </div>
 
@@ -5737,9 +5737,9 @@ function PatientDetailModal({ dogId, session, onClose }) {
             <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16]">{t.cvHealthSection}</p>
             <button
               onClick={() => setShowAddHealth((s) => !s)}
-              className="text-[11.5px] text-[#1B3A2F] underline underline-offset-2"
+              className="flex items-center gap-1 text-[12px] font-bold text-white bg-[#C9A227] hover:bg-[#b8931f] rounded-full px-3 py-1.5 transition shadow-sm"
             >
-              + {t.addHealthNoteForPatientBtn}
+              <Plus size={13} /> {t.addHealthNoteForPatientBtn}
             </button>
           </div>
 
