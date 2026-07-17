@@ -312,20 +312,20 @@ const TRANSLATIONS = {
     fieldVetSpecialty: "Uzmanlık",
     fieldVetPhone: "Telefon",
     selectVetSpecialty: "Uzmanlık seçin",
-    vetSpecialtyOptions: [
-      "İç Hastalıkları",
-      "Cerrahi",
-      "Diş & Ağız Sağlığı",
-      "Dermatoloji",
-      "Kardiyoloji",
-      "Ortopedi",
-      "Göz Hastalıkları",
-      "Onkoloji",
-      "Acil & Yoğun Bakım",
-      "Egzotik Hayvan Sağlığı",
-      "Beslenme",
-      "Genel Bakım",
-    ],
+    specialtyNames: {
+      "İç Hastalıkları": "İç Hastalıkları",
+      "Cerrahi": "Cerrahi",
+      "Diş & Ağız Sağlığı": "Diş & Ağız Sağlığı",
+      "Dermatoloji": "Dermatoloji",
+      "Kardiyoloji": "Kardiyoloji",
+      "Ortopedi": "Ortopedi",
+      "Göz Hastalıkları": "Göz Hastalıkları",
+      "Onkoloji": "Onkoloji",
+      "Acil & Yoğun Bakım": "Acil & Yoğun Bakım",
+      "Egzotik Hayvan Sağlığı": "Egzotik Hayvan Sağlığı",
+      "Beslenme": "Beslenme",
+      "Genel Bakım": "Genel Bakım",
+    },
     fieldVetEmail: "Veterinerin e-postası (davet buraya gider)",
     createVetAccountBtn: "Hesap Oluştur & Davet Gönder",
     vetInviteSuccess: (email) => `${email} adresine davet gönderildi.`,
@@ -387,23 +387,33 @@ const TRANSLATIONS = {
     fieldServiceNameShort: "Hizmet adı",
     fieldServicePrice: "Fiyat",
     selectServiceType: "Hizmet seçin",
-    vetServiceOptions: [
-      "Muayene",
-      "Aşılama",
-      "Kısırlaştırma",
-      "Diş Temizliği",
-      "Röntgen",
-      "Kan Tahlili",
-      "Ameliyat",
-      "Ultrason",
-      "Mikroçip Takma",
-      "Tırnak Kesimi",
-      "Yıkama & Tıraş",
-      "Ev Ziyareti",
-      "Acil Müdahale",
-      "Laboratuvar Testi",
-      "Diğer",
-    ],
+    serviceNames: {
+      "Muayene": "Muayene",
+      "Aşılama": "Aşılama",
+      "Kısırlaştırma": "Kısırlaştırma",
+      "Diş Temizliği": "Diş Temizliği",
+      "Röntgen": "Röntgen",
+      "Kan Tahlili": "Kan Tahlili",
+      "Ameliyat": "Ameliyat",
+      "Ultrason": "Ultrason",
+      "Mikroçip Takma": "Mikroçip Takma",
+      "Tırnak Kesimi": "Tırnak Kesimi",
+      "Yıkama & Tıraş": "Yıkama & Tıraş",
+      "Ev Ziyareti": "Ev Ziyareti",
+      "Acil Müdahale": "Acil Müdahale",
+      "Laboratuvar Testi": "Laboratuvar Testi",
+      "Diğer": "Diğer",
+    },
+    doctorTitleNames: {
+      "Veteriner Hekim": "Veteriner Hekim",
+      "Klinik Şefi": "Klinik Şefi",
+      "Uzman Veteriner Hekim": "Uzman Veteriner Hekim",
+      "Cerrah": "Cerrah",
+      "Baş Veteriner": "Baş Veteriner",
+      "Asistan Veteriner": "Asistan Veteriner",
+      "Stajyer": "Stajyer",
+      "Veteriner Teknisyeni": "Veteriner Teknisyeni",
+    },
     noServices: "Henüz hizmet eklenmedi.",
     clinicInfoTitle: "Klinik Bilgileri",
     myPatientsTitle: "Hastalarım",
@@ -736,20 +746,20 @@ const TRANSLATIONS = {
     fieldVetSpecialty: "Specialty",
     fieldVetPhone: "Phone",
     selectVetSpecialty: "Select specialty",
-    vetSpecialtyOptions: [
-      "Internal Medicine",
-      "Surgery",
-      "Dentistry",
-      "Dermatology",
-      "Cardiology",
-      "Orthopedics",
-      "Ophthalmology",
-      "Oncology",
-      "Emergency & Critical Care",
-      "Exotic Animal Medicine",
-      "Nutrition",
-      "General Care",
-    ],
+    specialtyNames: {
+      "İç Hastalıkları": "Internal Medicine",
+      "Cerrahi": "Surgery",
+      "Diş & Ağız Sağlığı": "Dentistry",
+      "Dermatoloji": "Dermatology",
+      "Kardiyoloji": "Cardiology",
+      "Ortopedi": "Orthopedics",
+      "Göz Hastalıkları": "Ophthalmology",
+      "Onkoloji": "Oncology",
+      "Acil & Yoğun Bakım": "Emergency & Critical Care",
+      "Egzotik Hayvan Sağlığı": "Exotic Animal Medicine",
+      "Beslenme": "Nutrition",
+      "Genel Bakım": "General Care",
+    },
     fieldVetEmail: "Vet's email (invite is sent here)",
     createVetAccountBtn: "Create Account & Send Invite",
     vetInviteSuccess: (email) => `Invite sent to ${email}.`,
@@ -811,23 +821,33 @@ const TRANSLATIONS = {
     fieldServiceNameShort: "Service name",
     fieldServicePrice: "Price",
     selectServiceType: "Select service",
-    vetServiceOptions: [
-      "Consultation",
-      "Vaccination",
-      "Spay/Neuter",
-      "Dental Cleaning",
-      "X-Ray",
-      "Blood Test",
-      "Surgery",
-      "Ultrasound",
-      "Microchipping",
-      "Nail Trim",
-      "Grooming",
-      "House Call",
-      "Emergency Care",
-      "Lab Test",
-      "Other",
-    ],
+    serviceNames: {
+      "Muayene": "Consultation",
+      "Aşılama": "Vaccination",
+      "Kısırlaştırma": "Spay/Neuter",
+      "Diş Temizliği": "Dental Cleaning",
+      "Röntgen": "X-Ray",
+      "Kan Tahlili": "Blood Test",
+      "Ameliyat": "Surgery",
+      "Ultrason": "Ultrasound",
+      "Mikroçip Takma": "Microchipping",
+      "Tırnak Kesimi": "Nail Trim",
+      "Yıkama & Tıraş": "Grooming",
+      "Ev Ziyareti": "House Call",
+      "Acil Müdahale": "Emergency Care",
+      "Laboratuvar Testi": "Lab Test",
+      "Diğer": "Other",
+    },
+    doctorTitleNames: {
+      "Veteriner Hekim": "Veterinarian",
+      "Klinik Şefi": "Head of Clinic",
+      "Uzman Veteriner Hekim": "Specialist Veterinarian",
+      "Cerrah": "Surgeon",
+      "Baş Veteriner": "Chief Veterinarian",
+      "Asistan Veteriner": "Assistant Veterinarian",
+      "Stajyer": "Intern",
+      "Veteriner Teknisyeni": "Veterinary Technician",
+    },
     noServices: "No services added yet.",
     clinicInfoTitle: "Clinic Info",
     myPatientsTitle: "My Patients",
@@ -1163,20 +1183,20 @@ const TRANSLATIONS = {
     fieldVetSpecialty: "Spécialité",
     fieldVetPhone: "Téléphone",
     selectVetSpecialty: "Choisir une spécialité",
-    vetSpecialtyOptions: [
-      "Médecine Interne",
-      "Chirurgie",
-      "Dentisterie",
-      "Dermatologie",
-      "Cardiologie",
-      "Orthopédie",
-      "Ophtalmologie",
-      "Oncologie",
-      "Urgences et Soins Intensifs",
-      "Médecine des Animaux Exotiques",
-      "Nutrition",
-      "Soins Généraux",
-    ],
+    specialtyNames: {
+      "İç Hastalıkları": "Médecine Interne",
+      "Cerrahi": "Chirurgie",
+      "Diş & Ağız Sağlığı": "Dentisterie",
+      "Dermatoloji": "Dermatologie",
+      "Kardiyoloji": "Cardiologie",
+      "Ortopedi": "Orthopédie",
+      "Göz Hastalıkları": "Ophtalmologie",
+      "Onkoloji": "Oncologie",
+      "Acil & Yoğun Bakım": "Urgences et Soins Intensifs",
+      "Egzotik Hayvan Sağlığı": "Médecine des Animaux Exotiques",
+      "Beslenme": "Nutrition",
+      "Genel Bakım": "Soins Généraux",
+    },
     fieldVetEmail: "E-mail du vétérinaire (invitation envoyée ici)",
     createVetAccountBtn: "Créer le Compte & Envoyer l'Invitation",
     vetInviteSuccess: (email) => `Invitation envoyée à ${email}.`,
@@ -1215,23 +1235,33 @@ const TRANSLATIONS = {
     fieldServiceNameShort: "Nom du service",
     fieldServicePrice: "Prix",
     selectServiceType: "Choisir un service",
-    vetServiceOptions: [
-      "Consultation",
-      "Vaccination",
-      "Stérilisation/Castration",
-      "Nettoyage Dentaire",
-      "Radiographie",
-      "Analyse de Sang",
-      "Chirurgie",
-      "Échographie",
-      "Puce Électronique",
-      "Coupe des Griffes",
-      "Toilettage",
-      "Visite à Domicile",
-      "Soins d'Urgence",
-      "Test de Laboratoire",
-      "Autre",
-    ],
+    serviceNames: {
+      "Muayene": "Consultation",
+      "Aşılama": "Vaccination",
+      "Kısırlaştırma": "Stérilisation/Castration",
+      "Diş Temizliği": "Nettoyage Dentaire",
+      "Röntgen": "Radiographie",
+      "Kan Tahlili": "Analyse de Sang",
+      "Ameliyat": "Chirurgie",
+      "Ultrason": "Échographie",
+      "Mikroçip Takma": "Puce Électronique",
+      "Tırnak Kesimi": "Coupe des Griffes",
+      "Yıkama & Tıraş": "Toilettage",
+      "Ev Ziyareti": "Visite à Domicile",
+      "Acil Müdahale": "Soins d'Urgence",
+      "Laboratuvar Testi": "Test de Laboratoire",
+      "Diğer": "Autre",
+    },
+    doctorTitleNames: {
+      "Veteriner Hekim": "Vétérinaire",
+      "Klinik Şefi": "Chef de Clinique",
+      "Uzman Veteriner Hekim": "Vétérinaire Spécialiste",
+      "Cerrah": "Chirurgien",
+      "Baş Veteriner": "Vétérinaire en Chef",
+      "Asistan Veteriner": "Vétérinaire Assistant",
+      "Stajyer": "Stagiaire",
+      "Veteriner Teknisyeni": "Technicien Vétérinaire",
+    },
     noServices: "Aucun service ajouté.",
     clinicInfoTitle: "Infos de la Clinique",
     myPatientsTitle: "Mes Patients",
@@ -1567,20 +1597,20 @@ const TRANSLATIONS = {
     fieldVetSpecialty: "Spezialisierung",
     fieldVetPhone: "Telefon",
     selectVetSpecialty: "Fachgebiet wählen",
-    vetSpecialtyOptions: [
-      "Innere Medizin",
-      "Chirurgie",
-      "Zahnmedizin",
-      "Dermatologie",
-      "Kardiologie",
-      "Orthopädie",
-      "Augenheilkunde",
-      "Onkologie",
-      "Notfall- und Intensivmedizin",
-      "Exotenmedizin",
-      "Ernährung",
-      "Allgemeinmedizin",
-    ],
+    specialtyNames: {
+      "İç Hastalıkları": "Innere Medizin",
+      "Cerrahi": "Chirurgie",
+      "Diş & Ağız Sağlığı": "Zahnmedizin",
+      "Dermatoloji": "Dermatologie",
+      "Kardiyoloji": "Kardiologie",
+      "Ortopedi": "Orthopädie",
+      "Göz Hastalıkları": "Augenheilkunde",
+      "Onkoloji": "Onkologie",
+      "Acil & Yoğun Bakım": "Notfall- und Intensivmedizin",
+      "Egzotik Hayvan Sağlığı": "Exotenmedizin",
+      "Beslenme": "Ernährung",
+      "Genel Bakım": "Allgemeinmedizin",
+    },
     fieldVetEmail: "E-Mail des Tierarztes (Einladung geht hierhin)",
     createVetAccountBtn: "Konto Erstellen & Einladung Senden",
     vetInviteSuccess: (email) => `Einladung an ${email} gesendet.`,
@@ -1619,23 +1649,33 @@ const TRANSLATIONS = {
     fieldServiceNameShort: "Name der Dienstleistung",
     fieldServicePrice: "Preis",
     selectServiceType: "Dienstleistung wählen",
-    vetServiceOptions: [
-      "Beratung",
-      "Impfung",
-      "Kastration/Sterilisation",
-      "Zahnreinigung",
-      "Röntgen",
-      "Bluttest",
-      "Operation",
-      "Ultraschall",
-      "Mikrochip-Implantation",
-      "Krallenschneiden",
-      "Fellpflege",
-      "Hausbesuch",
-      "Notfallversorgung",
-      "Labortest",
-      "Andere",
-    ],
+    serviceNames: {
+      "Muayene": "Beratung",
+      "Aşılama": "Impfung",
+      "Kısırlaştırma": "Kastration/Sterilisation",
+      "Diş Temizliği": "Zahnreinigung",
+      "Röntgen": "Röntgen",
+      "Kan Tahlili": "Bluttest",
+      "Ameliyat": "Operation",
+      "Ultrason": "Ultraschall",
+      "Mikroçip Takma": "Mikrochip-Implantation",
+      "Tırnak Kesimi": "Krallenschneiden",
+      "Yıkama & Tıraş": "Fellpflege",
+      "Ev Ziyareti": "Hausbesuch",
+      "Acil Müdahale": "Notfallversorgung",
+      "Laboratuvar Testi": "Labortest",
+      "Diğer": "Andere",
+    },
+    doctorTitleNames: {
+      "Veteriner Hekim": "Tierarzt",
+      "Klinik Şefi": "Klinikleiter",
+      "Uzman Veteriner Hekim": "Fachtierarzt",
+      "Cerrah": "Chirurg",
+      "Baş Veteriner": "Chefarzt",
+      "Asistan Veteriner": "Assistenztierarzt",
+      "Stajyer": "Praktikant",
+      "Veteriner Teknisyeni": "Tiermedizinischer Techniker",
+    },
     noServices: "Noch keine Dienstleistungen hinzugefügt.",
     clinicInfoTitle: "Klinikinformationen",
     myPatientsTitle: "Meine Patienten",
@@ -1973,20 +2013,20 @@ const TRANSLATIONS = {
     fieldVetSpecialty: "Especialidad",
     fieldVetPhone: "Teléfono",
     selectVetSpecialty: "Seleccionar especialidad",
-    vetSpecialtyOptions: [
-      "Medicina Interna",
-      "Cirugía",
-      "Odontología",
-      "Dermatología",
-      "Cardiología",
-      "Ortopedia",
-      "Oftalmología",
-      "Oncología",
-      "Emergencias y Cuidados Intensivos",
-      "Medicina de Animales Exóticos",
-      "Nutrición",
-      "Atención General",
-    ],
+    specialtyNames: {
+      "İç Hastalıkları": "Medicina Interna",
+      "Cerrahi": "Cirugía",
+      "Diş & Ağız Sağlığı": "Odontología",
+      "Dermatoloji": "Dermatología",
+      "Kardiyoloji": "Cardiología",
+      "Ortopedi": "Ortopedia",
+      "Göz Hastalıkları": "Oftalmología",
+      "Onkoloji": "Oncología",
+      "Acil & Yoğun Bakım": "Emergencias y Cuidados Intensivos",
+      "Egzotik Hayvan Sağlığı": "Medicina de Animales Exóticos",
+      "Beslenme": "Nutrición",
+      "Genel Bakım": "Atención General",
+    },
     fieldVetEmail: "Correo del veterinario (la invitación se envía aquí)",
     createVetAccountBtn: "Crear Cuenta y Enviar Invitación",
     vetInviteSuccess: (email) => `Invitación enviada a ${email}.`,
@@ -2025,23 +2065,33 @@ const TRANSLATIONS = {
     fieldServiceNameShort: "Nombre del servicio",
     fieldServicePrice: "Precio",
     selectServiceType: "Seleccionar servicio",
-    vetServiceOptions: [
-      "Consulta",
-      "Vacunación",
-      "Esterilización/Castración",
-      "Limpieza Dental",
-      "Radiografía",
-      "Análisis de Sangre",
-      "Cirugía",
-      "Ecografía",
-      "Microchip",
-      "Corte de Uñas",
-      "Peluquería",
-      "Visita a Domicilio",
-      "Atención de Emergencia",
-      "Prueba de Laboratorio",
-      "Otro",
-    ],
+    serviceNames: {
+      "Muayene": "Consulta",
+      "Aşılama": "Vacunación",
+      "Kısırlaştırma": "Esterilización/Castración",
+      "Diş Temizliği": "Limpieza Dental",
+      "Röntgen": "Radiografía",
+      "Kan Tahlili": "Análisis de Sangre",
+      "Ameliyat": "Cirugía",
+      "Ultrason": "Ecografía",
+      "Mikroçip Takma": "Microchip",
+      "Tırnak Kesimi": "Corte de Uñas",
+      "Yıkama & Tıraş": "Peluquería",
+      "Ev Ziyareti": "Visita a Domicilio",
+      "Acil Müdahale": "Atención de Emergencia",
+      "Laboratuvar Testi": "Prueba de Laboratorio",
+      "Diğer": "Otro",
+    },
+    doctorTitleNames: {
+      "Veteriner Hekim": "Veterinario",
+      "Klinik Şefi": "Jefe de Clínica",
+      "Uzman Veteriner Hekim": "Veterinario Especialista",
+      "Cerrah": "Cirujano",
+      "Baş Veteriner": "Veterinario Jefe",
+      "Asistan Veteriner": "Veterinario Asistente",
+      "Stajyer": "Interno",
+      "Veteriner Teknisyeni": "Técnico Veterinario",
+    },
     noServices: "Aún no hay servicios añadidos.",
     clinicInfoTitle: "Información de la Clínica",
     myPatientsTitle: "Mis Pacientes",
@@ -2184,6 +2234,50 @@ const COMMON_VACCINES = [
   "Leishmania",
   "Corona virüsü",
   "Diğer",
+];
+
+const VET_SPECIALTY_KEYS = [
+  "İç Hastalıkları",
+  "Cerrahi",
+  "Diş & Ağız Sağlığı",
+  "Dermatoloji",
+  "Kardiyoloji",
+  "Ortopedi",
+  "Göz Hastalıkları",
+  "Onkoloji",
+  "Acil & Yoğun Bakım",
+  "Egzotik Hayvan Sağlığı",
+  "Beslenme",
+  "Genel Bakım",
+];
+
+const VET_SERVICE_KEYS = [
+  "Muayene",
+  "Aşılama",
+  "Kısırlaştırma",
+  "Diş Temizliği",
+  "Röntgen",
+  "Kan Tahlili",
+  "Ameliyat",
+  "Ultrason",
+  "Mikroçip Takma",
+  "Tırnak Kesimi",
+  "Yıkama & Tıraş",
+  "Ev Ziyareti",
+  "Acil Müdahale",
+  "Laboratuvar Testi",
+  "Diğer",
+];
+
+const DOCTOR_TITLE_KEYS = [
+  "Veteriner Hekim",
+  "Klinik Şefi",
+  "Uzman Veteriner Hekim",
+  "Cerrah",
+  "Baş Veteriner",
+  "Asistan Veteriner",
+  "Stajyer",
+  "Veteriner Teknisyeni",
 ];
 
 const CAT_VACCINES = [
@@ -2832,7 +2926,7 @@ function SpecialtyMultiSelect({ label, value, onChange, options, max = 3 }) {
                   : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
               }`}
             >
-              {opt}
+              {t.specialtyNames?.[opt] || opt}
             </button>
           );
         })}
@@ -4367,7 +4461,7 @@ function VetDetailModal({ vet, onClose }) {
         <div className="flex flex-wrap gap-1.5 mb-4">
           {specialties.map((s) => (
             <span key={s} className="text-[11.5px] font-medium text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2.5 py-1">
-              {s}
+              {t.specialtyNames?.[s] || s}
             </span>
           ))}
         </div>
@@ -4411,7 +4505,7 @@ function VetDetailModal({ vet, onClose }) {
         <div className="space-y-1 mb-2">
           {vet.services.map((s) => (
             <div key={s.id} className="flex items-center justify-between text-[13px] py-1.5 px-3 rounded-md bg-white/50">
-              <span className="text-[#1f2a24] font-medium">{s.name}</span>
+              <span className="text-[#1f2a24] font-medium">{t.serviceNames?.[s.name] || s.name}</span>
               {s.price && (
                 <span className="text-[#8a6d16] font-semibold">
                   {s.price} {s.currency || "EUR"}
@@ -4581,7 +4675,8 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
               </button>
               {vet.specialty && vet.specialty.length > 0 && (
                 <p className="text-[12px] text-[#5b6d63] flex items-center gap-1">
-                  <Stethoscope size={12} /> {Array.isArray(vet.specialty) ? vet.specialty.join(", ") : vet.specialty}
+                  <Stethoscope size={12} />{" "}
+                  {(Array.isArray(vet.specialty) ? vet.specialty : [vet.specialty]).map((s) => t.specialtyNames?.[s] || s).join(", ")}
                 </p>
               )}
               {vet.phone && (
@@ -5232,7 +5327,7 @@ function AdminPanel({ session }) {
                 label={t.fieldVetSpecialty}
                 value={vetForm.specialty}
                 onChange={(v) => setVetForm((f) => ({ ...f, specialty: v }))}
-                options={t.vetSpecialtyOptions}
+                options={VET_SPECIALTY_KEYS}
               />
               <PhoneField
                 label={t.fieldVetPhone}
@@ -5776,7 +5871,7 @@ function VetPortal({ session }) {
                     (vet.doctors || []).map((d) => (
                       <div key={d.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
                         <span>
-                          {d.name} {d.title && <span className="text-[#8d8560]">· {d.title}</span>}
+                          {d.name} {d.title && <span className="text-[#8d8560]">· {t.doctorTitleNames?.[d.title] || d.title}</span>}
                         </span>
                         <button onClick={() => removeDoctor(d.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
                           <Trash2 size={13} />
@@ -5792,12 +5887,18 @@ function VetPortal({ session }) {
                     value={newDoctor.name}
                     onChange={(e) => setNewDoctor((f) => ({ ...f, name: e.target.value }))}
                   />
-                  <input
+                  <select
                     className={inputCls}
-                    placeholder={t.fieldDoctorTitle}
                     value={newDoctor.title}
                     onChange={(e) => setNewDoctor((f) => ({ ...f, title: e.target.value }))}
-                  />
+                  >
+                    <option value="">{t.fieldDoctorTitle}</option>
+                    {DOCTOR_TITLE_KEYS.map((k) => (
+                      <option key={k} value={k}>
+                        {t.doctorTitleNames?.[k] || k}
+                      </option>
+                    ))}
+                  </select>
                   <GhostButton onClick={addDoctor} icon={Plus} />
                 </div>
               </div>
@@ -5811,7 +5912,8 @@ function VetPortal({ session }) {
                     (vet.services || []).map((s) => (
                       <div key={s.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
                         <span>
-                          {s.name} {s.price && <span className="text-[#8d8560]">· {s.price} {s.currency || "EUR"}</span>}
+                          {t.serviceNames?.[s.name] || s.name}{" "}
+                          {s.price && <span className="text-[#8d8560]">· {s.price} {s.currency || "EUR"}</span>}
                         </span>
                         <button onClick={() => removeService(s.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
                           <Trash2 size={13} />
@@ -5827,8 +5929,10 @@ function VetPortal({ session }) {
                     onChange={(e) => setNewService((f) => ({ ...f, name: e.target.value }))}
                   >
                     <option value="">{t.selectServiceType}</option>
-                    {t.vetServiceOptions.map((s) => (
-                      <option key={s}>{s}</option>
+                    {VET_SERVICE_KEYS.map((s) => (
+                      <option key={s} value={s}>
+                        {t.serviceNames?.[s] || s}
+                      </option>
                     ))}
                   </select>
                   <div className="grid grid-cols-[1fr_84px_40px] gap-2 items-stretch">
@@ -5892,7 +5996,7 @@ function VetPortal({ session }) {
                     label={t.fieldVetSpecialty}
                     value={clinicForm.specialty}
                     onChange={(v) => setClinicForm((f) => ({ ...f, specialty: v }))}
-                    options={t.vetSpecialtyOptions}
+                    options={VET_SPECIALTY_KEYS}
                   />
                   <CountryCityPicker
                     t={t}
