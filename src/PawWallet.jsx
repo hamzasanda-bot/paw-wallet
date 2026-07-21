@@ -5940,7 +5940,7 @@ function AdminPanel({ session }) {
     async (emailFilter = "") => {
       setLogsLoading(true);
       try {
-        const url = emailFilter ? `/api/admin-logs?email=${encodeURIComponent(emailFilter)}` : "/api/admin-logs";
+        const url = emailFilter ? `/api/admin?action=logs&email=${encodeURIComponent(emailFilter)}` : "/api/admin?action=logs";
         const res = await fetch(url, { headers: { Authorization: `Bearer ${session.access_token}` } });
         const data = await res.json();
         setLogs(data.logs || []);
@@ -5954,7 +5954,7 @@ function AdminPanel({ session }) {
 
   const loadStats = useCallback(async () => {
     try {
-      const res = await fetch("/api/admin-stats", {
+      const res = await fetch("/api/admin?action=stats", {
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       const data = await res.json();
@@ -5980,7 +5980,7 @@ function AdminPanel({ session }) {
     setVetBusy(true);
     setVetMsg("");
     try {
-      const res = await fetch("/api/admin-create-vet", {
+      const res = await fetch("/api/admin?action=create-vet", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify({
@@ -6027,7 +6027,7 @@ function AdminPanel({ session }) {
     setPwBusy(true);
     setPwMsg("");
     try {
-      const res = await fetch("/api/admin-set-password", {
+      const res = await fetch("/api/admin?action=set-password", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify({ email: pwForm.email, newPassword: pwForm.newPassword }),
@@ -6050,7 +6050,7 @@ function AdminPanel({ session }) {
     setNewUserBusy(true);
     setNewUserMsg("");
     try {
-      const res = await fetch("/api/admin-create-user", {
+      const res = await fetch("/api/admin?action=create-user", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify(newUserForm),
