@@ -25,6 +25,7 @@ import {
   CalendarClock,
   Scale,
   UserCog,
+  UserPlus,
   Building2,
   ShieldAlert,
   Bell,
@@ -303,6 +304,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Onay Bekleyen Atama",
     adminStatsServiceProviders: "Hizmet Firması",
     addVetSectionTitle: "Yeni Veteriner Hesabı Aç",
+    createUserSectionTitle: "Yeni Kullanıcı Oluştur",
+    createUserSectionSubtitle: "Test için hızlıca e-posta + şifre ile hesap aç, davet e-postası beklemeden.",
+    createUserBtn: "Kullanıcı Oluştur",
+    userCreateSuccess: (email) => `${email} için hesap oluşturuldu.`,
     changePasswordSectionTitle: "Kullanıcı Şifresi Değiştir",
     fieldUserEmail: "Kullanıcı e-postası",
     changePasswordBtn: "Şifreyi Değiştir",
@@ -787,6 +792,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Pending Assignments",
     adminStatsServiceProviders: "Service Providers",
     addVetSectionTitle: "Create New Vet Account",
+    createUserSectionTitle: "Create New User",
+    createUserSectionSubtitle: "Quickly create a test account with email + password, no invite email needed.",
+    createUserBtn: "Create User",
+    userCreateSuccess: (email) => `Account created for ${email}.`,
     changePasswordSectionTitle: "Change User Password",
     fieldUserEmail: "User's email",
     changePasswordBtn: "Change Password",
@@ -1274,6 +1283,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Attributions en Attente",
     adminStatsServiceProviders: "Prestataires de Services",
     addVetSectionTitle: "Créer un Nouveau Compte Vétérinaire",
+    createUserSectionTitle: "Créer un Nouvel Utilisateur",
+    createUserSectionSubtitle: "Créez rapidement un compte de test avec e-mail + mot de passe, sans e-mail d'invitation.",
+    createUserBtn: "Créer l'Utilisateur",
+    userCreateSuccess: (email) => `Compte créé pour ${email}.`,
     changePasswordSectionTitle: "Changer le Mot de Passe d'un Utilisateur",
     fieldUserEmail: "E-mail de l'utilisateur",
     changePasswordBtn: "Changer le Mot de Passe",
@@ -1738,6 +1751,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Ausstehende Zuweisungen",
     adminStatsServiceProviders: "Dienstleister",
     addVetSectionTitle: "Neues Tierarztkonto Erstellen",
+    createUserSectionTitle: "Neuen Benutzer Erstellen",
+    createUserSectionSubtitle: "Erstellen Sie schnell ein Testkonto mit E-Mail + Passwort, ohne Einladungs-E-Mail.",
+    createUserBtn: "Benutzer Erstellen",
+    userCreateSuccess: (email) => `Konto für ${email} erstellt.`,
     changePasswordSectionTitle: "Benutzerpasswort Ändern",
     fieldUserEmail: "E-Mail des Benutzers",
     changePasswordBtn: "Passwort Ändern",
@@ -2204,6 +2221,10 @@ const TRANSLATIONS = {
     adminStatsPendingRequests: "Asignaciones Pendientes",
     adminStatsServiceProviders: "Proveedores de Servicios",
     addVetSectionTitle: "Crear Nueva Cuenta Veterinaria",
+    createUserSectionTitle: "Crear Nuevo Usuario",
+    createUserSectionSubtitle: "Crea rápidamente una cuenta de prueba con correo + contraseña, sin correo de invitación.",
+    createUserBtn: "Crear Usuario",
+    userCreateSuccess: (email) => `Cuenta creada para ${email}.`,
     changePasswordSectionTitle: "Cambiar Contraseña de Usuario",
     fieldUserEmail: "Correo del usuario",
     changePasswordBtn: "Cambiar Contraseña",
@@ -5905,6 +5926,9 @@ function AdminPanel({ session }) {
   const [svcBusy, setSvcBusy] = useState(false);
   const [svcMsg, setSvcMsg] = useState("");
   const [pwForm, setPwForm] = useState({ email: "", newPassword: "" });
+  const [newUserForm, setNewUserForm] = useState({ email: "", password: "", firstName: "", lastName: "" });
+  const [newUserBusy, setNewUserBusy] = useState(false);
+  const [newUserMsg, setNewUserMsg] = useState("");
   const [pwBusy, setPwBusy] = useState(false);
   const [pwMsg, setPwMsg] = useState("");
   const [vetsList, setVetsList] = useState([]);
@@ -6019,6 +6043,30 @@ function AdminPanel({ session }) {
       setPwMsg(t.authError);
     }
     setPwBusy(false);
+  };
+
+  const submitCreateUser = async () => {
+    if (!newUserForm.email.trim() || newUserForm.password.length < 6) return;
+    setNewUserBusy(true);
+    setNewUserMsg("");
+    try {
+      const res = await fetch("/api/admin-create-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify(newUserForm),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNewUserMsg(t.userCreateSuccess(newUserForm.email));
+        setNewUserForm({ email: "", password: "", firstName: "", lastName: "" });
+        loadStats();
+      } else {
+        setNewUserMsg(data.error || t.authError);
+      }
+    } catch {
+      setNewUserMsg(t.authError);
+    }
+    setNewUserBusy(false);
   };
 
   return (
@@ -6188,6 +6236,51 @@ function AdminPanel({ session }) {
               {pwMsg && <p className="text-[12.5px] text-[#5b6d63]">{pwMsg}</p>}
               <PrimaryButton full onClick={submitPasswordChange} icon={pwBusy ? Loader2 : Check}>
                 {t.changePasswordBtn}
+              </PrimaryButton>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5">
+            <p className="font-display text-[16px] text-[#1B3A2F] mb-1 flex items-center gap-2">
+              <UserPlus size={16} /> {t.createUserSectionTitle}
+            </p>
+            <p className="text-[12px] text-[#5b6d63] mb-3">{t.createUserSectionSubtitle}</p>
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <Field label={t.fieldFirstName}>
+                  <input
+                    className={inputCls}
+                    value={newUserForm.firstName}
+                    onChange={(e) => setNewUserForm((f) => ({ ...f, firstName: e.target.value }))}
+                  />
+                </Field>
+                <Field label={t.fieldLastName}>
+                  <input
+                    className={inputCls}
+                    value={newUserForm.lastName}
+                    onChange={(e) => setNewUserForm((f) => ({ ...f, lastName: e.target.value }))}
+                  />
+                </Field>
+              </div>
+              <Field label={t.fieldUserEmail}>
+                <input
+                  type="email"
+                  className={inputCls}
+                  value={newUserForm.email}
+                  onChange={(e) => setNewUserForm((f) => ({ ...f, email: e.target.value }))}
+                />
+              </Field>
+              <Field label={t.fieldPassword}>
+                <input
+                  type="text"
+                  className={monoInputCls}
+                  value={newUserForm.password}
+                  onChange={(e) => setNewUserForm((f) => ({ ...f, password: e.target.value }))}
+                />
+              </Field>
+              {newUserMsg && <p className="text-[12.5px] text-[#5b6d63]">{newUserMsg}</p>}
+              <PrimaryButton full onClick={submitCreateUser} icon={newUserBusy ? Loader2 : Check}>
+                {t.createUserBtn}
               </PrimaryButton>
             </div>
           </div>
