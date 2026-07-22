@@ -303,7 +303,14 @@ const TRANSLATIONS = {
     adminStatsVetListings: "Veteriner Kaydı",
     adminStatsPendingRequests: "Onay Bekleyen Atama",
     adminStatsServiceProviders: "Hizmet Firması",
-    addVetSectionTitle: "Yeni Veteriner Hesabı Aç",
+    addVetSectionTitle: "Yeni İşletme Hesabı Aç",
+    fieldBusinessType: "İşletme Türü",
+    businessTypeNames: { vet: "Veteriner", groomer: "Kuaför / Bakım" },
+    myPatientsTitleFor: (type) => (type === "groomer" ? "Müşterilerim" : "Hastalarım"),
+    myPatientsSubtitleFor: (type, count) => (type === "groomer" ? `${count} onaylı müşteri` : `${count} onaylı hasta`),
+    todaysApptsTitle: "Bugünkü Randevular",
+    noApptsToday: "Bugün için randevu yok.",
+    quickSearchPlaceholder: "Hasta, sahip ya da mikroçip no ara…",
     createUserSectionTitle: "Yeni Kullanıcı Oluştur",
     createUserSectionSubtitle: "Test için hızlıca e-posta + şifre ile hesap aç, davet e-postası beklemeden.",
     createUserBtn: "Kullanıcı Oluştur",
@@ -791,7 +798,14 @@ const TRANSLATIONS = {
     adminStatsVetListings: "Vet Listings",
     adminStatsPendingRequests: "Pending Assignments",
     adminStatsServiceProviders: "Service Providers",
-    addVetSectionTitle: "Create New Vet Account",
+    addVetSectionTitle: "Create New Business Account",
+    fieldBusinessType: "Business Type",
+    businessTypeNames: { vet: "Veterinarian", groomer: "Grooming / Care" },
+    myPatientsTitleFor: (type) => (type === "groomer" ? "My Customers" : "My Patients"),
+    myPatientsSubtitleFor: (type, count) => (type === "groomer" ? `${count} approved customers` : `${count} approved patients`),
+    todaysApptsTitle: "Today's Appointments",
+    noApptsToday: "No appointments today.",
+    quickSearchPlaceholder: "Search patient, owner, or microchip no…",
     createUserSectionTitle: "Create New User",
     createUserSectionSubtitle: "Quickly create a test account with email + password, no invite email needed.",
     createUserBtn: "Create User",
@@ -1282,7 +1296,14 @@ const TRANSLATIONS = {
     adminStatsVetListings: "Vétérinaires Inscrits",
     adminStatsPendingRequests: "Attributions en Attente",
     adminStatsServiceProviders: "Prestataires de Services",
-    addVetSectionTitle: "Créer un Nouveau Compte Vétérinaire",
+    addVetSectionTitle: "Créer un Nouveau Compte Professionnel",
+    fieldBusinessType: "Type d'Activité",
+    businessTypeNames: { vet: "Vétérinaire", groomer: "Toilettage / Soins" },
+    myPatientsTitleFor: (type) => (type === "groomer" ? "Mes Clients" : "Mes Patients"),
+    myPatientsSubtitleFor: (type, count) => (type === "groomer" ? `${count} clients approuvés` : `${count} patients approuvés`),
+    todaysApptsTitle: "Rendez-vous d'Aujourd'hui",
+    noApptsToday: "Aucun rendez-vous aujourd'hui.",
+    quickSearchPlaceholder: "Rechercher patient, propriétaire ou puce…",
     createUserSectionTitle: "Créer un Nouvel Utilisateur",
     createUserSectionSubtitle: "Créez rapidement un compte de test avec e-mail + mot de passe, sans e-mail d'invitation.",
     createUserBtn: "Créer l'Utilisateur",
@@ -1750,7 +1771,14 @@ const TRANSLATIONS = {
     adminStatsVetListings: "Registrierte Tierärzte",
     adminStatsPendingRequests: "Ausstehende Zuweisungen",
     adminStatsServiceProviders: "Dienstleister",
-    addVetSectionTitle: "Neues Tierarztkonto Erstellen",
+    addVetSectionTitle: "Neues Geschäftskonto Erstellen",
+    fieldBusinessType: "Geschäftsart",
+    businessTypeNames: { vet: "Tierarzt", groomer: "Hundesalon / Pflege" },
+    myPatientsTitleFor: (type) => (type === "groomer" ? "Meine Kunden" : "Meine Patienten"),
+    myPatientsSubtitleFor: (type, count) => (type === "groomer" ? `${count} genehmigte Kunden` : `${count} genehmigte Patienten`),
+    todaysApptsTitle: "Heutige Termine",
+    noApptsToday: "Heute keine Termine.",
+    quickSearchPlaceholder: "Patient, Besitzer oder Mikrochip suchen…",
     createUserSectionTitle: "Neuen Benutzer Erstellen",
     createUserSectionSubtitle: "Erstellen Sie schnell ein Testkonto mit E-Mail + Passwort, ohne Einladungs-E-Mail.",
     createUserBtn: "Benutzer Erstellen",
@@ -2220,7 +2248,14 @@ const TRANSLATIONS = {
     adminStatsVetListings: "Veterinarios Registrados",
     adminStatsPendingRequests: "Asignaciones Pendientes",
     adminStatsServiceProviders: "Proveedores de Servicios",
-    addVetSectionTitle: "Crear Nueva Cuenta Veterinaria",
+    addVetSectionTitle: "Crear Nueva Cuenta de Negocio",
+    fieldBusinessType: "Tipo de Negocio",
+    businessTypeNames: { vet: "Veterinario", groomer: "Peluquería / Cuidado" },
+    myPatientsTitleFor: (type) => (type === "groomer" ? "Mis Clientes" : "Mis Pacientes"),
+    myPatientsSubtitleFor: (type, count) => (type === "groomer" ? `${count} clientes aprobados` : `${count} pacientes aprobados`),
+    todaysApptsTitle: "Citas de Hoy",
+    noApptsToday: "No hay citas hoy.",
+    quickSearchPlaceholder: "Buscar paciente, dueño o microchip…",
     createUserSectionTitle: "Crear Nuevo Usuario",
     createUserSectionSubtitle: "Crea rápidamente una cuenta de prueba con correo + contraseña, sin correo de invitación.",
     createUserBtn: "Crear Usuario",
@@ -5912,6 +5947,7 @@ function AdminPanel({ session }) {
   const { t } = useI18n();
   const [stats, setStats] = useState(null);
   const [vetForm, setVetForm] = useState({
+    businessType: "vet",
     clinicName: "",
     city: "",
     country: "",
@@ -5984,6 +6020,7 @@ function AdminPanel({ session }) {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify({
+          businessType: vetForm.businessType,
           clinicName: vetForm.clinicName,
           city: vetForm.city,
           country: vetForm.country,
@@ -5995,7 +6032,16 @@ function AdminPanel({ session }) {
       const data = await res.json();
       if (res.ok) {
         setVetMsg(t.vetInviteSuccess(vetForm.email));
-        setVetForm({ clinicName: "", city: "", country: "", specialty: [], phoneCode: "", phoneNumber: "", email: "" });
+        setVetForm({
+          businessType: "vet",
+          clinicName: "",
+          city: "",
+          country: "",
+          specialty: [],
+          phoneCode: "",
+          phoneNumber: "",
+          email: "",
+        });
         loadStats();
         loadVets();
       } else {
@@ -6114,6 +6160,24 @@ function AdminPanel({ session }) {
               <UserCog size={16} /> {t.addVetSectionTitle}
             </p>
             <div className="space-y-3">
+              <Field label={t.fieldBusinessType}>
+                <div className="flex gap-2">
+                  {Object.entries(t.businessTypeNames).map(([key, label]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setVetForm((f) => ({ ...f, businessType: key }))}
+                      className={`flex-1 rounded-md border px-3 py-2 text-[13px] font-semibold transition ${
+                        vetForm.businessType === key
+                          ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                          : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </Field>
               <Field label={t.fieldClinicName}>
                 <input
                   className={inputCls}
@@ -6376,7 +6440,7 @@ function AdminPanel({ session }) {
 }
 /* ------------------------------------------------------------------ */
 
-function PatientDetailModal({ dogId, session, onClose }) {
+function PatientDetailModal({ dogId, session, businessType, onClose }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const [dog, setDog] = useState(undefined);
@@ -6514,6 +6578,8 @@ function PatientDetailModal({ dogId, session, onClose }) {
             <Row label={t.cvIdealWeight} value={dog.idealWeight ? `${dog.idealWeight} kg` : "—"} />
           </div>
 
+          {businessType !== "groomer" && (
+            <>
           <div className="flex items-center justify-between mb-2">
             <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16]">{t.cvVaccinesSection}</p>
             <button
@@ -6768,6 +6834,8 @@ function PatientDetailModal({ dogId, session, onClose }) {
               ))}
             </div>
           )}
+            </>
+          )}
 
           {saveMsg && <p className="text-[12.5px] text-[#8a6d16] mt-2">{saveMsg}</p>}
         </div>
@@ -7015,8 +7083,10 @@ function VetPortal({ session }) {
             </div>
 
             <div className="mb-8">
-              <h3 className="font-display text-[18px] text-[#1B3A2F] mb-1">{t.myPatientsTitle}</h3>
-              <p className="text-[13px] text-[#5b6d63] mb-3">{t.myPatientsSubtitle(approvedPatients.length)}</p>
+              <h3 className="font-display text-[18px] text-[#1B3A2F] mb-1">{t.myPatientsTitleFor(vet?.business_type)}</h3>
+              <p className="text-[13px] text-[#5b6d63] mb-3">
+                {t.myPatientsSubtitleFor(vet?.business_type, approvedPatients.length)}
+              </p>
               {approvedPatients.length === 0 ? (
                 <EmptyState icon={PawPrint} text={t.noPatientsYet} />
               ) : (
@@ -7393,7 +7463,12 @@ function VetPortal({ session }) {
         )}
       </div>
       {selectedPatientId && (
-        <PatientDetailModal dogId={selectedPatientId} session={session} onClose={() => setSelectedPatientId(null)} />
+        <PatientDetailModal
+          dogId={selectedPatientId}
+          session={session}
+          businessType={vet?.business_type}
+          onClose={() => setSelectedPatientId(null)}
+        />
       )}
     </div>
   );

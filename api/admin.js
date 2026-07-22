@@ -83,14 +83,23 @@ export default async function handler(req, res) {
 
   // ---------- CREATE VET ----------
   if (action === "create-vet") {
-    const { clinicName, city, country, specialty, phone, email } = req.body || {};
+    const { businessType, clinicName, city, country, specialty, phone, email } = req.body || {};
     if (!clinicName || !email) {
       return res.status(400).json({ error: "clinicName and email are required" });
     }
 
     const { data: vetRow, error: insertError } = await admin
       .from("vets")
-      .insert({ clinic_name: clinicName, city, country, specialty, phone, email, approved: true })
+      .insert({
+        business_type: businessType === "groomer" ? "groomer" : "vet",
+        clinic_name: clinicName,
+        city,
+        country,
+        specialty,
+        phone,
+        email,
+        approved: true,
+      })
       .select()
       .single();
     if (insertError) return res.status(500).json({ error: insertError.message });
