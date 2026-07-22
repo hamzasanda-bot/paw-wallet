@@ -35,6 +35,7 @@ import {
   Crown,
   Pencil,
   Search,
+  LayoutGrid,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
@@ -443,6 +444,10 @@ const TRANSLATIONS = {
     blockSlotSubtitle: "Telefon ya da kapıdan aldığın bir randevuyu buraya işleyerek o saati kapat.",
     blockSlotNotePlaceholder: "Müşteri adı / not (opsiyonel)",
     blockSlotSuccessMsg: "Saat kapatıldı.",
+    vetTabDashboard: "Ana Ekran",
+    vetTabAppointments: "Randevular",
+    vetTabTeam: "Ekip & Hizmetler",
+    vetTabSettings: "Klinik Bilgileri",
     dayNames: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
     fieldStartTime: "Başlangıç",
     fieldEndTime: "Bitiş",
@@ -966,6 +971,10 @@ const TRANSLATIONS = {
     blockSlotSubtitle: "Log an appointment you took by phone or in person to block that time.",
     blockSlotNotePlaceholder: "Customer name / note (optional)",
     blockSlotSuccessMsg: "Time slot blocked.",
+    vetTabDashboard: "Dashboard",
+    vetTabAppointments: "Appointments",
+    vetTabTeam: "Team & Services",
+    vetTabSettings: "Clinic Info",
     dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     fieldStartTime: "Start",
     fieldEndTime: "End",
@@ -1469,6 +1478,10 @@ const TRANSLATIONS = {
     blockSlotSubtitle: "Enregistrez un rendez-vous pris par téléphone ou en personne pour bloquer ce créneau.",
     blockSlotNotePlaceholder: "Nom du client / note (facultatif)",
     blockSlotSuccessMsg: "Créneau bloqué.",
+    vetTabDashboard: "Tableau de Bord",
+    vetTabAppointments: "Rendez-vous",
+    vetTabTeam: "Équipe & Services",
+    vetTabSettings: "Infos de la Clinique",
     dayNames: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
     fieldStartTime: "Début",
     fieldEndTime: "Fin",
@@ -1972,6 +1985,10 @@ const TRANSLATIONS = {
     blockSlotSubtitle: "Erfassen Sie einen telefonisch oder persönlich vereinbarten Termin, um diese Zeit zu blockieren.",
     blockSlotNotePlaceholder: "Kundenname / Notiz (optional)",
     blockSlotSuccessMsg: "Zeitfenster blockiert.",
+    vetTabDashboard: "Übersicht",
+    vetTabAppointments: "Termine",
+    vetTabTeam: "Team & Dienstleistungen",
+    vetTabSettings: "Klinikinformationen",
     dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
     fieldStartTime: "Start",
     fieldEndTime: "Ende",
@@ -2477,6 +2494,10 @@ const TRANSLATIONS = {
     blockSlotSubtitle: "Registra una cita tomada por teléfono o en persona para bloquear ese horario.",
     blockSlotNotePlaceholder: "Nombre del cliente / nota (opcional)",
     blockSlotSuccessMsg: "Horario bloqueado.",
+    vetTabDashboard: "Panel",
+    vetTabAppointments: "Citas",
+    vetTabTeam: "Equipo & Servicios",
+    vetTabSettings: "Información de la Clínica",
     dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
     fieldStartTime: "Inicio",
     fieldEndTime: "Fin",
@@ -7052,6 +7073,7 @@ function VetPortal({ session }) {
   const [appointments, setAppointments] = useState([]);
   const [showBlockSlot, setShowBlockSlot] = useState(false);
   const [quickSearch, setQuickSearch] = useState("");
+  const [vetTab, setVetTab] = useState("dashboard");
   const [blockSlotForm, setBlockSlotForm] = useState({
     date: todayISO(),
     startTime: "10:00",
@@ -7061,6 +7083,7 @@ function VetPortal({ session }) {
   });
   const [blockSlotBusy, setBlockSlotBusy] = useState(false);
   const [blockSlotMsg, setBlockSlotMsg] = useState("");
+  const blockSlotSubmittingRef = useRef(false);
 
   const load = useCallback(async () => {
     if (!vetId) {
@@ -7135,6 +7158,8 @@ function VetPortal({ session }) {
   };
 
   const submitBlockSlot = async () => {
+    if (blockSlotSubmittingRef.current) return;
+    blockSlotSubmittingRef.current = true;
     setBlockSlotBusy(true);
     setBlockSlotMsg("");
     try {
@@ -7157,6 +7182,7 @@ function VetPortal({ session }) {
       setBlockSlotMsg(t.authError);
     }
     setBlockSlotBusy(false);
+    blockSlotSubmittingRef.current = false;
   };
 
   const saveClinicInfo = async () => {
@@ -7248,6 +7274,43 @@ function VetPortal({ session }) {
           <EmptyState icon={ShieldAlert} text={t.authError} />
         ) : (
           <>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-6">
+              {[
+                { id: "dashboard", label: t.vetTabDashboard, icon: LayoutGrid },
+                { id: "appointments", label: t.vetTabAppointments, icon: CalendarClock },
+                { id: "patients", label: t.myPatientsTitleFor(vet?.business_type), icon: PawPrint },
+                { id: "team", label: t.vetTabTeam, icon: UserCog },
+              ].map((tabDef) => {
+                const Icon = tabDef.icon;
+                return (
+                  <button
+                    key={tabDef.id}
+                    onClick={() => setVetTab(tabDef.id)}
+                    className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
+                      vetTab === tabDef.id
+                        ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                        : "bg-[#FBF8EE] border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
+                    }`}
+                  >
+                    <Icon size={16} />
+                    {tabDef.label}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setVetTab("settings")}
+                className={`col-span-2 sm:col-span-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
+                  vetTab === "settings"
+                    ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                    : "bg-[#FBF8EE] border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
+                }`}
+              >
+                <Building2 size={16} />
+                {t.vetTabSettings}
+              </button>
+            </div>
+
+            {vetTab === "dashboard" && (
             <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5 mb-8">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -7310,7 +7373,9 @@ function VetPortal({ session }) {
                 </div>
               </div>
             </div>
+            )}
 
+            {vetTab === "appointments" && (
             <div className="mb-8">
               <h3 className="font-display text-[18px] text-[#1B3A2F] mb-3">{t.pendingRequestsTitle}</h3>
               {pendingRequests.length === 0 ? (
@@ -7342,7 +7407,9 @@ function VetPortal({ session }) {
                 </div>
               )}
             </div>
+            )}
 
+            {vetTab === "patients" && (
             <div className="mb-8">
               <h3 className="font-display text-[18px] text-[#1B3A2F] mb-1">{t.myPatientsTitleFor(vet?.business_type)}</h3>
               <p className="text-[13px] text-[#5b6d63] mb-3">
@@ -7369,7 +7436,9 @@ function VetPortal({ session }) {
                 </div>
               )}
             </div>
+            )}
 
+            {vetTab === "appointments" && (
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-1">{t.availabilityTitle}</p>
@@ -7478,20 +7547,24 @@ function VetPortal({ session }) {
                         />
                       </Field>
                     </div>
-                    {(vet.services || []).length > 0 && (
-                      <select
-                        className={inputCls}
-                        value={blockSlotForm.reason}
-                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, reason: e.target.value }))}
-                      >
-                        <option value="">{t.selectServiceType}</option>
-                        {vet.services.map((s) => (
-                          <option key={s.id} value={s.name}>
-                            {t.serviceNames?.[s.name] || s.name}
-                          </option>
-                        ))}
-                      </select>
-                    )}
+                    <select
+                      className={inputCls}
+                      value={blockSlotForm.reason}
+                      onChange={(e) => setBlockSlotForm((f) => ({ ...f, reason: e.target.value }))}
+                    >
+                      <option value="">{t.selectServiceType}</option>
+                      {(vet.services || []).length > 0
+                        ? vet.services.map((s) => (
+                            <option key={s.id} value={s.name}>
+                              {t.serviceNames?.[s.name] || s.name}
+                            </option>
+                          ))
+                        : (vet?.business_type === "groomer" ? GROOMER_SPECIALTY_KEYS : VET_SERVICE_KEYS).map((k) => (
+                            <option key={k} value={k}>
+                              {vet?.business_type === "groomer" ? t.groomerSpecialtyNames?.[k] || k : t.serviceNames?.[k] || k}
+                            </option>
+                          ))}
+                    </select>
                     <input
                       className={inputCls}
                       placeholder={t.blockSlotNotePlaceholder}
@@ -7558,7 +7631,9 @@ function VetPortal({ session }) {
                 )}
               </div>
             </div>
+            )}
 
+            {vetTab === "team" && (
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myTeamTitleFor(vet?.business_type)}</p>
@@ -7668,8 +7743,9 @@ function VetPortal({ session }) {
                 </div>
               </div>
             </div>
+            )}
 
-            {clinicForm && (
+            {vetTab === "settings" && clinicForm && (
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.clinicInfoTitle}</p>
 
