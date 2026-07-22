@@ -34,6 +34,7 @@ import {
   Award,
   Crown,
   Pencil,
+  Search,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
@@ -7050,7 +7051,14 @@ function VetPortal({ session }) {
   const [newAvailability, setNewAvailability] = useState({ day: 1, start: "09:00", end: "17:00" });
   const [appointments, setAppointments] = useState([]);
   const [showBlockSlot, setShowBlockSlot] = useState(false);
-  const [blockSlotForm, setBlockSlotForm] = useState({ date: todayISO(), time: "10:00", note: "" });
+  const [quickSearch, setQuickSearch] = useState("");
+  const [blockSlotForm, setBlockSlotForm] = useState({
+    date: todayISO(),
+    startTime: "10:00",
+    endTime: "10:30",
+    reason: "",
+    customerName: "",
+  });
   const [blockSlotBusy, setBlockSlotBusy] = useState(false);
   const [blockSlotMsg, setBlockSlotMsg] = useState("");
 
@@ -7138,7 +7146,7 @@ function VetPortal({ session }) {
       const data = await res.json();
       if (res.ok) {
         setBlockSlotMsg(t.blockSlotSuccessMsg);
-        setBlockSlotForm({ date: todayISO(), time: "10:00", note: "" });
+        setBlockSlotForm({ date: todayISO(), startTime: "10:00", endTime: "10:30", reason: "", customerName: "" });
         load();
       } else if (data.error === "SLOT_TAKEN") {
         setBlockSlotMsg(t.slotTakenErrorMsg);
@@ -7192,6 +7200,12 @@ function VetPortal({ session }) {
   const approvedPatients = Array.from(
     new Map(requests.filter((r) => r.status === "approved").map((r) => [r.dog_id, r])).values()
   );
+  const todaysAppts = appointments
+    .filter((a) => a.appt_date === todayISO() && a.status !== "cancelled")
+    .sort((a, b) => a.appt_time.localeCompare(b.appt_time));
+  const filteredPatients = quickSearch.trim()
+    ? approvedPatients.filter((r) => (r.dog_name || "").toLowerCase().includes(quickSearch.trim().toLowerCase()))
+    : approvedPatients;
 
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body overflow-x-hidden" style={{ colorScheme: "light" }}>
@@ -7234,6 +7248,69 @@ function VetPortal({ session }) {
           <EmptyState icon={ShieldAlert} text={t.authError} />
         ) : (
           <>
+            <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5 mb-8">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.todaysApptsTitle}</p>
+                  {todaysAppts.length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noApptsToday}</p>
+                  ) : (
+                    <div className="space-y-1.5 max-h-56 overflow-y-auto">
+                      {todaysAppts.map((a) => (
+                        <div key={a.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
+                          <span className="font-mono text-[#1B3A2F] font-semibold">{a.appt_time}</span>
+                          <span className="flex-1 px-3 truncate">
+                            {a.dog_name}
+                            {!a.dog_id && (
+                              <span className="ml-1.5 text-[9.5px] font-semibold text-[#8d8560] bg-[#efe8d1] rounded-full px-1.5 py-0.5">
+                                {t.blockSlotTitle}
+                              </span>
+                            )}
+                          </span>
+                          <span
+                            className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full ${
+                              a.status === "completed" ? "bg-[#1B3A2F] text-[#F7F3E8]" : "bg-[#C9A227] text-white"
+                            }`}
+                          >
+                            {a.status === "completed" ? t.apptStatusCompleted : t.apptStatusBooked}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myPatientsTitleFor(vet?.business_type)}</p>
+                  <div className="relative mb-2">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d8560]" />
+                    <input
+                      className={inputCls + " pl-9"}
+                      placeholder={t.quickSearchPlaceholder}
+                      value={quickSearch}
+                      onChange={(e) => setQuickSearch(e.target.value)}
+                    />
+                  </div>
+                  {filteredPatients.length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noPatientsYet}</p>
+                  ) : (
+                    <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                      {filteredPatients.map((r) => (
+                        <button
+                          key={r.dog_id}
+                          onClick={() => setSelectedPatientId(r.dog_id)}
+                          className="w-full flex items-center justify-between text-left text-[13px] px-3 py-2 rounded-md bg-white/50 hover:bg-white/80 transition"
+                        >
+                          <span className="text-[#1f2a24]">{r.dog_name}</span>
+                          <span className="text-[11px] text-[#8a6d16] font-semibold">{t.viewDetailsBtn}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="mb-8">
               <h3 className="font-display text-[18px] text-[#1B3A2F] mb-3">{t.pendingRequestsTitle}</h3>
               {pendingRequests.length === 0 ? (
@@ -7376,26 +7453,50 @@ function VetPortal({ session }) {
                 {showBlockSlot && (
                   <div className="rounded-md border border-[#C9A227]/40 bg-white/60 p-3 mb-3 space-y-2">
                     <p className="text-[11.5px] text-[#8a6d16]">{t.blockSlotSubtitle}</p>
+                    <input
+                      type="date"
+                      min={todayISO()}
+                      className={inputCls}
+                      value={blockSlotForm.date}
+                      onChange={(e) => setBlockSlotForm((f) => ({ ...f, date: e.target.value }))}
+                    />
                     <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="date"
-                        min={todayISO()}
-                        className={inputCls}
-                        value={blockSlotForm.date}
-                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, date: e.target.value }))}
-                      />
-                      <input
-                        type="time"
-                        className={inputCls}
-                        value={blockSlotForm.time}
-                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, time: e.target.value }))}
-                      />
+                      <Field label={t.fieldStartTime}>
+                        <input
+                          type="time"
+                          className={inputCls}
+                          value={blockSlotForm.startTime}
+                          onChange={(e) => setBlockSlotForm((f) => ({ ...f, startTime: e.target.value }))}
+                        />
+                      </Field>
+                      <Field label={t.fieldEndTime}>
+                        <input
+                          type="time"
+                          className={inputCls}
+                          value={blockSlotForm.endTime}
+                          onChange={(e) => setBlockSlotForm((f) => ({ ...f, endTime: e.target.value }))}
+                        />
+                      </Field>
                     </div>
+                    {(vet.services || []).length > 0 && (
+                      <select
+                        className={inputCls}
+                        value={blockSlotForm.reason}
+                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, reason: e.target.value }))}
+                      >
+                        <option value="">{t.selectServiceType}</option>
+                        {vet.services.map((s) => (
+                          <option key={s.id} value={s.name}>
+                            {t.serviceNames?.[s.name] || s.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                     <input
                       className={inputCls}
                       placeholder={t.blockSlotNotePlaceholder}
-                      value={blockSlotForm.note}
-                      onChange={(e) => setBlockSlotForm((f) => ({ ...f, note: e.target.value }))}
+                      value={blockSlotForm.customerName}
+                      onChange={(e) => setBlockSlotForm((f) => ({ ...f, customerName: e.target.value }))}
                     />
                     {blockSlotMsg && <p className="text-[12px] text-[#8a6d16]">{blockSlotMsg}</p>}
                     <PrimaryButton disabled={blockSlotBusy} onClick={submitBlockSlot} icon={Check}>
