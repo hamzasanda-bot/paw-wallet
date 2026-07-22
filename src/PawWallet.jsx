@@ -7883,6 +7883,7 @@ function VetPortal({ session }) {
             )}
 
             {vetTab === "appointments" && (
+            <>
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-1">{t.availabilityTitle}</p>
@@ -8038,6 +8039,7 @@ function VetPortal({ session }) {
               lang={lang}
               onOpenDetail={setSelectedAppt}
             />
+            </>
             )}
 
             {vetTab === "team" && (
