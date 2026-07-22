@@ -36,6 +36,7 @@ import {
   Pencil,
   Search,
   LayoutGrid,
+  NotebookText,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
@@ -460,9 +461,34 @@ const TRANSLATIONS = {
     noAvailabilitySet: "Henüz müsaitlik tanımlanmadı.",
     myAppointmentsTitle: "Randevularım",
     noAppointmentsYet: "Henüz randevu yok.",
-    apptStatusBooked: "Beklemede",
+    apptStatusBooked: "Planlandı",
     apptStatusCompleted: "Tamamlandı",
     apptStatusCancelled: "İptal Edildi",
+    apptStatusRescheduled: "Yeniden Planlandı",
+    offAppApptSectionTitle: "Uygulama Dışı Randevu",
+    allAppointmentsTitle: "Tüm Randevular",
+    colApptDate: "Randevu Tarihi",
+    colApptTimeRange: "Saat Aralığı",
+    colCustomerName: "Müşteri Adı",
+    colPetName: "Pet Adı",
+    colService: "Verilecek Hizmet",
+    colApptType: "Randevu Tipi",
+    colStatus: "Durum",
+    colDetails: "Detay",
+    apptTypeOnApp: "Uygulama İçi",
+    apptTypeOffApp: "Uygulama Dışı",
+    noAppointmentsInTable: "Henüz randevu yok.",
+    apptDetailTitle: "Randevu Detayı",
+    cancelActionBtn: "İptal Et",
+    rescheduleActionBtn: "Yeniden Planla",
+    doneActionBtn: "Tamamlandı",
+    statusNoteLabel: "Not",
+    statusNotePlaceholder: "Hasta/müşteri ile ilgili not…",
+    confirmActionBtn: "Onayla",
+    newDateLabel: "Yeni Tarih",
+    rescheduleSuccessMsg: "Randevu yeniden planlandı.",
+    cancelSuccessMsg: "Randevu iptal edildi.",
+    doneSuccessMsg: "Randevu tamamlandı olarak işaretlendi.",
     markCompletedBtn: "Tamamlandı İşaretle",
     cancelApptBtn: "İptal Et",
     bookApptBtn: "Randevu Al",
@@ -992,9 +1018,34 @@ const TRANSLATIONS = {
     noAvailabilitySet: "No availability set yet.",
     myAppointmentsTitle: "My Appointments",
     noAppointmentsYet: "No appointments yet.",
-    apptStatusBooked: "Upcoming",
-    apptStatusCompleted: "Completed",
+    apptStatusBooked: "Scheduled",
+    apptStatusCompleted: "Done",
     apptStatusCancelled: "Cancelled",
+    apptStatusRescheduled: "Rescheduled",
+    offAppApptSectionTitle: "Off-App Appointment",
+    allAppointmentsTitle: "All Appointments",
+    colApptDate: "Appt Date",
+    colApptTimeRange: "Time Range",
+    colCustomerName: "Customer Name",
+    colPetName: "Pet Name",
+    colService: "Service",
+    colApptType: "Appt Type",
+    colStatus: "Status",
+    colDetails: "Details",
+    apptTypeOnApp: "On-App",
+    apptTypeOffApp: "Off-App",
+    noAppointmentsInTable: "No appointments yet.",
+    apptDetailTitle: "Appointment Details",
+    cancelActionBtn: "Cancel",
+    rescheduleActionBtn: "Reschedule",
+    doneActionBtn: "Done",
+    statusNoteLabel: "Note",
+    statusNotePlaceholder: "Note about the patient/customer…",
+    confirmActionBtn: "Confirm",
+    newDateLabel: "New Date",
+    rescheduleSuccessMsg: "Appointment rescheduled.",
+    cancelSuccessMsg: "Appointment cancelled.",
+    doneSuccessMsg: "Appointment marked as done.",
     markCompletedBtn: "Mark Completed",
     cancelApptBtn: "Cancel",
     bookApptBtn: "Book Appointment",
@@ -1504,9 +1555,34 @@ const TRANSLATIONS = {
     noAvailabilitySet: "Aucune disponibilité définie.",
     myAppointmentsTitle: "Mes Rendez-vous",
     noAppointmentsYet: "Aucun rendez-vous pour le moment.",
-    apptStatusBooked: "À Venir",
+    apptStatusBooked: "Planifié",
     apptStatusCompleted: "Terminé",
     apptStatusCancelled: "Annulé",
+    apptStatusRescheduled: "Replanifié",
+    offAppApptSectionTitle: "Rendez-vous Hors Application",
+    allAppointmentsTitle: "Tous les Rendez-vous",
+    colApptDate: "Date du RDV",
+    colApptTimeRange: "Plage Horaire",
+    colCustomerName: "Nom du Client",
+    colPetName: "Nom de l'Animal",
+    colService: "Service",
+    colApptType: "Type de RDV",
+    colStatus: "Statut",
+    colDetails: "Détails",
+    apptTypeOnApp: "Dans l'App",
+    apptTypeOffApp: "Hors App",
+    noAppointmentsInTable: "Aucun rendez-vous pour le moment.",
+    apptDetailTitle: "Détails du Rendez-vous",
+    cancelActionBtn: "Annuler",
+    rescheduleActionBtn: "Replanifier",
+    doneActionBtn: "Terminé",
+    statusNoteLabel: "Note",
+    statusNotePlaceholder: "Note sur le patient/client…",
+    confirmActionBtn: "Confirmer",
+    newDateLabel: "Nouvelle Date",
+    rescheduleSuccessMsg: "Rendez-vous replanifié.",
+    cancelSuccessMsg: "Rendez-vous annulé.",
+    doneSuccessMsg: "Rendez-vous marqué comme terminé.",
     markCompletedBtn: "Marquer Terminé",
     cancelApptBtn: "Annuler",
     bookApptBtn: "Prendre Rendez-vous",
@@ -2016,9 +2092,34 @@ const TRANSLATIONS = {
     noAvailabilitySet: "Noch keine Verfügbarkeit festgelegt.",
     myAppointmentsTitle: "Meine Termine",
     noAppointmentsYet: "Noch keine Termine.",
-    apptStatusBooked: "Bevorstehend",
-    apptStatusCompleted: "Abgeschlossen",
+    apptStatusBooked: "Geplant",
+    apptStatusCompleted: "Erledigt",
     apptStatusCancelled: "Storniert",
+    apptStatusRescheduled: "Verschoben",
+    offAppApptSectionTitle: "Termin Außerhalb der App",
+    allAppointmentsTitle: "Alle Termine",
+    colApptDate: "Termindatum",
+    colApptTimeRange: "Zeitraum",
+    colCustomerName: "Kundenname",
+    colPetName: "Tiername",
+    colService: "Dienstleistung",
+    colApptType: "Terminart",
+    colStatus: "Status",
+    colDetails: "Details",
+    apptTypeOnApp: "In der App",
+    apptTypeOffApp: "Außerhalb der App",
+    noAppointmentsInTable: "Noch keine Termine.",
+    apptDetailTitle: "Termindetails",
+    cancelActionBtn: "Stornieren",
+    rescheduleActionBtn: "Verschieben",
+    doneActionBtn: "Erledigt",
+    statusNoteLabel: "Notiz",
+    statusNotePlaceholder: "Notiz zum Patienten/Kunden…",
+    confirmActionBtn: "Bestätigen",
+    newDateLabel: "Neues Datum",
+    rescheduleSuccessMsg: "Termin verschoben.",
+    cancelSuccessMsg: "Termin storniert.",
+    doneSuccessMsg: "Termin als erledigt markiert.",
     markCompletedBtn: "Als Abgeschlossen Markieren",
     cancelApptBtn: "Stornieren",
     bookApptBtn: "Termin Buchen",
@@ -2530,9 +2631,34 @@ const TRANSLATIONS = {
     noAvailabilitySet: "Aún no hay disponibilidad definida.",
     myAppointmentsTitle: "Mis Citas",
     noAppointmentsYet: "Aún no hay citas.",
-    apptStatusBooked: "Próxima",
+    apptStatusBooked: "Programada",
     apptStatusCompleted: "Completada",
     apptStatusCancelled: "Cancelada",
+    apptStatusRescheduled: "Reprogramada",
+    offAppApptSectionTitle: "Cita Fuera de la Aplicación",
+    allAppointmentsTitle: "Todas las Citas",
+    colApptDate: "Fecha de Cita",
+    colApptTimeRange: "Rango Horario",
+    colCustomerName: "Nombre del Cliente",
+    colPetName: "Nombre de la Mascota",
+    colService: "Servicio",
+    colApptType: "Tipo de Cita",
+    colStatus: "Estado",
+    colDetails: "Detalles",
+    apptTypeOnApp: "Dentro de la App",
+    apptTypeOffApp: "Fuera de la App",
+    noAppointmentsInTable: "Aún no hay citas.",
+    apptDetailTitle: "Detalles de la Cita",
+    cancelActionBtn: "Cancelar",
+    rescheduleActionBtn: "Reprogramar",
+    doneActionBtn: "Completada",
+    statusNoteLabel: "Nota",
+    statusNotePlaceholder: "Nota sobre el paciente/cliente…",
+    confirmActionBtn: "Confirmar",
+    newDateLabel: "Nueva Fecha",
+    rescheduleSuccessMsg: "Cita reprogramada.",
+    cancelSuccessMsg: "Cita cancelada.",
+    doneSuccessMsg: "Cita marcada como completada.",
     markCompletedBtn: "Marcar como Completada",
     cancelApptBtn: "Cancelar",
     bookApptBtn: "Reservar Cita",
@@ -5060,10 +5186,11 @@ function VetBookedApptCard({ appt, onCancel }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const statusCfg = {
-    booked: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
-    completed: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
+    scheduled: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
+    done: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
     cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
-  }[appt.status];
+    rescheduled: { label: t.apptStatusRescheduled, cls: "bg-[#6b7db3] text-white" },
+  }[appt.status] || { label: appt.status, cls: "bg-[#8d8560] text-white" };
 
   return (
     <div className="rounded-xl border border-[#C9A227]/40 bg-[#FBF8EE] overflow-hidden">
@@ -5074,7 +5201,7 @@ function VetBookedApptCard({ appt, onCancel }) {
         </div>
         <div className="flex items-center gap-2">
           <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${statusCfg.cls}`}>{statusCfg.label}</span>
-          {appt.status === "booked" && (
+          {appt.status === "scheduled" && (
             <button onClick={() => onCancel(appt.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
               <Trash2 size={14} />
             </button>
@@ -5088,12 +5215,21 @@ function VetBookedApptCard({ appt, onCancel }) {
         </div>
         <div>
           <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.fieldApptTime}</p>
-          <p className="text-[#1f2a24] font-mono">{appt.appt_time}</p>
+          <p className="text-[#1f2a24] font-mono">
+            {appt.appt_time}
+            {appt.appt_end_time ? `–${appt.appt_end_time}` : ""}
+          </p>
         </div>
         {appt.note && (
           <div>
             <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.apptNoteLabel}</p>
             <p className="text-[#1f2a24]">{appt.note}</p>
+          </div>
+        )}
+        {appt.status_note && (
+          <div>
+            <p className="text-[10.5px] uppercase tracking-wider text-[#8d8560] font-semibold mb-0.5">{t.statusNoteLabel}</p>
+            <p className="text-[#1f2a24]">{appt.status_note}</p>
           </div>
         )}
       </div>
@@ -7061,6 +7197,197 @@ function PatientDetailModal({ dogId, session, businessType, onClose }) {
   );
 }
 
+function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const [activeAction, setActiveAction] = useState(null);
+  const [note, setNote] = useState("");
+  const [newDate, setNewDate] = useState(appt.appt_date);
+  const [newStartTime, setNewStartTime] = useState(appt.appt_time);
+  const [newEndTime, setNewEndTime] = useState(appt.appt_end_time || appt.appt_time);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const isOnApp = !!appt.dog_id;
+  const statusCfg = {
+    scheduled: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
+    done: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
+    cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
+    rescheduled: { label: t.apptStatusRescheduled, cls: "bg-[#6b7db3] text-white" },
+  }[appt.status] || { label: appt.status, cls: "bg-[#8d8560] text-white" };
+
+  const submitAction = async (action) => {
+    setBusy(true);
+    setMsg("");
+    try {
+      const res = await fetch("/api/update-appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({
+          appointmentId: appt.id,
+          action,
+          note,
+          newDate: action === "reschedule" ? newDate : undefined,
+          newStartTime: action === "reschedule" ? newStartTime : undefined,
+          newEndTime: action === "reschedule" ? newEndTime : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onUpdated();
+        onClose();
+      } else if (data.error === "SLOT_TAKEN") {
+        setMsg(t.slotTakenErrorMsg);
+      } else {
+        setMsg(data.error || t.authError);
+      }
+    } catch {
+      setMsg(t.authError);
+    }
+    setBusy(false);
+  };
+
+  return (
+    <Modal title={t.apptDetailTitle} onClose={onClose}>
+      <div className="space-y-1.5 mb-5">
+        <Row label={t.colApptDate} value={fmtDate(appt.appt_date, locale)} />
+        <Row
+          label={t.colApptTimeRange}
+          value={`${appt.appt_time}${appt.appt_end_time ? `–${appt.appt_end_time}` : ""}`}
+        />
+        <Row label={t.colCustomerName} value={appt.customer_name || "—"} />
+        <Row label={t.colPetName} value={appt.dog_name || "—"} />
+        <Row label={t.colService} value={appt.note ? t.serviceNames?.[appt.note] || t.groomerSpecialtyNames?.[appt.note] || appt.note : "—"} />
+        <Row label={t.colApptType} value={isOnApp ? t.apptTypeOnApp : t.apptTypeOffApp} />
+        <div className="flex items-baseline justify-between gap-4 py-1.5 border-b border-dotted border-[#d8cfb4]">
+          <span className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold shrink-0">{t.colStatus}</span>
+          <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full ${statusCfg.cls}`}>{statusCfg.label}</span>
+        </div>
+        {appt.status_note && <Row label={t.statusNoteLabel} value={appt.status_note} />}
+      </div>
+
+      <div className="flex gap-2 mb-3">
+        <button
+          onClick={() => setActiveAction("cancel")}
+          className={`flex-1 rounded-md border text-[12.5px] font-semibold py-2 transition ${
+            activeAction === "cancel" ? "bg-[#a63d40] border-[#a63d40] text-white" : "border-[#e3c2c2] text-[#a63d40] hover:bg-[#f7e9e9]"
+          }`}
+        >
+          {t.cancelActionBtn}
+        </button>
+        <button
+          onClick={() => setActiveAction("reschedule")}
+          className={`flex-1 rounded-md border text-[12.5px] font-semibold py-2 transition ${
+            activeAction === "reschedule"
+              ? "bg-[#C9A227] border-[#C9A227] text-white"
+              : "border-[#C9A227]/50 text-[#8a6d16] hover:bg-[#f3e9c8]"
+          }`}
+        >
+          {t.rescheduleActionBtn}
+        </button>
+        <button
+          onClick={() => setActiveAction("done")}
+          className={`flex-1 rounded-md border text-[12.5px] font-semibold py-2 transition ${
+            activeAction === "done" ? "bg-[#1B3A2F] border-[#1B3A2F] text-white" : "border-[#1B3A2F]/40 text-[#1B3A2F] hover:bg-[#eee6cd]"
+          }`}
+        >
+          {t.doneActionBtn}
+        </button>
+      </div>
+
+      {activeAction && (
+        <div className="rounded-md border border-[#d8cfb4] bg-white/60 p-3 space-y-2">
+          {activeAction === "reschedule" && (
+            <div className="grid grid-cols-3 gap-2">
+              <input type="date" className={inputCls} value={newDate} onChange={(e) => setNewDate(e.target.value)} />
+              <input type="time" className={inputCls} value={newStartTime} onChange={(e) => setNewStartTime(e.target.value)} />
+              <input type="time" className={inputCls} value={newEndTime} onChange={(e) => setNewEndTime(e.target.value)} />
+            </div>
+          )}
+          <textarea
+            className={inputCls}
+            rows={2}
+            placeholder={t.statusNotePlaceholder}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
+          {msg && <p className="text-[12px] text-[#a63d40]">{msg}</p>}
+          <PrimaryButton disabled={busy} onClick={() => submitAction(activeAction)} icon={Check}>
+            {t.confirmActionBtn}
+          </PrimaryButton>
+        </div>
+      )}
+
+      <div className="mt-6 flex justify-end">
+        <GhostButton onClick={onClose}>{t.closeBtn}</GhostButton>
+      </div>
+    </Modal>
+  );
+}
+
+function AllAppointmentsTable({ appointments, t, lang, onOpenDetail }) {
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const sorted = [...appointments].sort((a, b) => a.appt_date.localeCompare(b.appt_date) || a.appt_time.localeCompare(b.appt_time));
+  const statusCfg = {
+    scheduled: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
+    done: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
+    cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
+    rescheduled: { label: t.apptStatusRescheduled, cls: "bg-[#6b7db3] text-white" },
+  };
+
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5 mb-8">
+      <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.allAppointmentsTitle}</p>
+      {sorted.length === 0 ? (
+        <p className="text-[13px] text-[#5b6d63]">{t.noAppointmentsInTable}</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-[12.5px] border-collapse min-w-[820px]">
+            <thead>
+              <tr className="border-b border-[#d8cfb4] text-left">
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colApptDate}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colApptTimeRange}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colCustomerName}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colPetName}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colService}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colApptType}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colStatus}</th>
+                <th className="py-2 pr-3 font-semibold text-[#5b6d63]">{t.colDetails}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sorted.map((a) => {
+                const cfg = statusCfg[a.status] || { label: a.status, cls: "bg-[#8d8560] text-white" };
+                return (
+                  <tr key={a.id} className="border-b border-dotted border-[#d8cfb4]">
+                    <td className="py-2 pr-3 font-mono">{fmtDate(a.appt_date, locale)}</td>
+                    <td className="py-2 pr-3 font-mono">
+                      {a.appt_time}
+                      {a.appt_end_time ? `–${a.appt_end_time}` : ""}
+                    </td>
+                    <td className="py-2 pr-3">{a.customer_name || "—"}</td>
+                    <td className="py-2 pr-3">{a.dog_name || "—"}</td>
+                    <td className="py-2 pr-3">{a.note ? t.serviceNames?.[a.note] || t.groomerSpecialtyNames?.[a.note] || a.note : "—"}</td>
+                    <td className="py-2 pr-3">{a.dog_id ? t.apptTypeOnApp : t.apptTypeOffApp}</td>
+                    <td className="py-2 pr-3">
+                      <span className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full ${cfg.cls}`}>{cfg.label}</span>
+                    </td>
+                    <td className="py-2 pr-3">
+                      <button onClick={() => onOpenDetail(a)} className="text-[#5b6d63] hover:text-[#1B3A2F] transition">
+                        <NotebookText size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function VetPortal({ session }) {
   const { t, lang } = useI18n();
   const vetId = session.user.user_metadata?.vet_id;
@@ -7105,6 +7432,7 @@ function VetPortal({ session }) {
     }
   };
   const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [selectedAppt, setSelectedAppt] = useState(null);
   const [newAvailability, setNewAvailability] = useState({ day: 1, start: "09:00", end: "17:00" });
   const [appointments, setAppointments] = useState([]);
   const [showBlockSlot, setShowBlockSlot] = useState(false);
@@ -7117,6 +7445,7 @@ function VetPortal({ session }) {
     endTime: "10:30",
     reason: "",
     customerName: "",
+    petName: "",
   });
   const [blockSlotBusy, setBlockSlotBusy] = useState(false);
   const [blockSlotMsg, setBlockSlotMsg] = useState("");
@@ -7189,11 +7518,6 @@ function VetPortal({ session }) {
     load();
   };
 
-  const markApptStatus = async (id, status) => {
-    await supabase.from("vet_appointments").update({ status }).eq("id", id);
-    load();
-  };
-
   const submitBlockSlot = async () => {
     if (blockSlotSubmittingRef.current) return;
     blockSlotSubmittingRef.current = true;
@@ -7208,7 +7532,7 @@ function VetPortal({ session }) {
       const data = await res.json();
       if (res.ok) {
         setBlockSlotMsg(t.blockSlotSuccessMsg);
-        setBlockSlotForm({ date: todayISO(), startTime: "10:00", endTime: "10:30", reason: "", customerName: "" });
+        setBlockSlotForm({ date: todayISO(), startTime: "10:00", endTime: "10:30", reason: "", customerName: "", petName: "" });
         load();
       } else if (data.error === "SLOT_TAKEN") {
         setBlockSlotMsg(t.slotTakenErrorMsg);
@@ -7404,30 +7728,44 @@ function VetPortal({ session }) {
                     <p className="text-[13px] text-[#5b6d63]">{t.noApptsToday}</p>
                   ) : (
                     <div className="space-y-1.5 max-h-56 overflow-y-auto">
-                      {periodAppts.map((a) => (
-                        <div key={a.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
-                          <span className="font-mono text-[#1B3A2F] font-semibold shrink-0">
-                            {dashboardPeriod !== "today" && `${a.appt_date.slice(5)} · `}
-                            {a.appt_time}
-                            {a.appt_end_time ? `–${a.appt_end_time}` : ""}
-                          </span>
-                          <span className="flex-1 px-3 truncate">
-                            {a.dog_name}
-                            {!a.dog_id && (
-                              <span className="ml-1.5 text-[9.5px] font-semibold text-[#8d8560] bg-[#efe8d1] rounded-full px-1.5 py-0.5">
-                                {t.blockSlotTitle}
-                              </span>
-                            )}
-                          </span>
-                          <span
-                            className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
-                              a.status === "completed" ? "bg-[#1B3A2F] text-[#F7F3E8]" : "bg-[#C9A227] text-white"
-                            }`}
+                      {periodAppts.map((a) => {
+                        const statusCfg = {
+                          scheduled: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
+                          done: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
+                          cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
+                          rescheduled: { label: t.apptStatusRescheduled, cls: "bg-[#6b7db3] text-white" },
+                        }[a.status] || { label: a.status, cls: "bg-[#8d8560] text-white" };
+                        return (
+                          <button
+                            key={a.id}
+                            onClick={() => setSelectedAppt(a)}
+                            className="w-full flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50 hover:bg-white/80 transition text-left"
                           >
-                            {a.status === "completed" ? t.apptStatusCompleted : t.apptStatusBooked}
-                          </span>
-                        </div>
-                      ))}
+                            <span className="font-mono text-[#1B3A2F] font-semibold shrink-0">
+                              {dashboardPeriod !== "today" && `${a.appt_date.slice(5)} · `}
+                              {a.appt_time}
+                              {a.appt_end_time ? `–${a.appt_end_time}` : ""}
+                            </span>
+                            <span className="flex-1 px-3 truncate">
+                              {a.dog_name || "—"}
+                              {a.note && (
+                                <span className="text-[#8d8560]">
+                                  {" "}
+                                  · {t.serviceNames?.[a.note] || t.groomerSpecialtyNames?.[a.note] || a.note}
+                                </span>
+                              )}
+                              <span className="ml-1.5 text-[9.5px] font-semibold text-[#8d8560] bg-[#efe8d1] rounded-full px-1.5 py-0.5">
+                                {a.dog_id ? t.apptTypeOnApp : t.apptTypeOffApp}
+                              </span>
+                            </span>
+                            <span
+                              className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full shrink-0 ${statusCfg.cls}`}
+                            >
+                              {statusCfg.label}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
 
@@ -7616,7 +7954,7 @@ function VetPortal({ session }) {
 
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <div className="flex items-center justify-between mb-1">
-                  <p className="font-display text-[16px] text-[#1B3A2F]">{t.myAppointmentsTitle}</p>
+                  <p className="font-display text-[16px] text-[#1B3A2F]">{t.offAppApptSectionTitle}</p>
                   <button
                     onClick={() => setShowBlockSlot((s) => !s)}
                     className="text-[11.5px] font-semibold text-[#1B3A2F] underline underline-offset-2"
@@ -7671,73 +8009,35 @@ function VetPortal({ session }) {
                             </option>
                           ))}
                     </select>
-                    <input
-                      className={inputCls}
-                      placeholder={t.blockSlotNotePlaceholder}
-                      value={blockSlotForm.customerName}
-                      onChange={(e) => setBlockSlotForm((f) => ({ ...f, customerName: e.target.value }))}
-                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        className={inputCls}
+                        placeholder={t.blockSlotNotePlaceholder}
+                        value={blockSlotForm.customerName}
+                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, customerName: e.target.value }))}
+                      />
+                      <input
+                        className={inputCls}
+                        placeholder={t.colPetName}
+                        value={blockSlotForm.petName}
+                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, petName: e.target.value }))}
+                      />
+                    </div>
                     {blockSlotMsg && <p className="text-[12px] text-[#8a6d16]">{blockSlotMsg}</p>}
                     <PrimaryButton disabled={blockSlotBusy} onClick={submitBlockSlot} icon={Check}>
                       {t.blockSlotBtn}
                     </PrimaryButton>
                   </div>
                 )}
-
-                {appointments.length === 0 ? (
-                  <p className="text-[13px] text-[#5b6d63]">{t.noAppointmentsYet}</p>
-                ) : (
-                  <div className="space-y-2 max-h-80 overflow-y-auto">
-                    {appointments.map((a) => {
-                      const locale = LANGS.find((l) => l.code === lang)?.locale;
-                      const statusCfg = {
-                        booked: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
-                        completed: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
-                        cancelled: { label: t.apptStatusCancelled, cls: "bg-[#8d8560] text-white" },
-                      }[a.status];
-                      return (
-                        <div key={a.id} className="rounded-md bg-white/50 px-3 py-2.5">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-[13.5px] font-medium text-[#1f2a24] flex items-center gap-1.5">
-                              {a.dog_name}
-                              {!a.dog_id && (
-                                <span className="text-[9.5px] font-semibold text-[#8d8560] bg-[#efe8d1] rounded-full px-1.5 py-0.5">
-                                  {t.blockSlotTitle}
-                                </span>
-                              )}
-                            </span>
-                            <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full ${statusCfg.cls}`}>
-                              {statusCfg.label}
-                            </span>
-                          </div>
-                          <p className="text-[12.5px] text-[#5b6d63] font-mono mb-1.5">
-                            {fmtDate(a.appt_date, locale)} · {a.appt_time}
-                            {a.appt_end_time ? `–${a.appt_end_time}` : ""}
-                          </p>
-                          {a.note && <p className="text-[12.5px] text-[#5b6d63] mb-1.5">{a.note}</p>}
-                          {a.status === "booked" && (
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() => markApptStatus(a.id, "completed")}
-                                className="text-[11px] font-semibold text-[#1B3A2F] underline underline-offset-2"
-                              >
-                                {t.markCompletedBtn}
-                              </button>
-                              <button
-                                onClick={() => markApptStatus(a.id, "cancelled")}
-                                className="text-[11px] font-semibold text-[#a63d40] underline underline-offset-2"
-                              >
-                                {t.cancelApptBtn}
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
             </div>
+
+            <AllAppointmentsTable
+              appointments={appointments}
+              t={t}
+              lang={lang}
+              onOpenDetail={setSelectedAppt}
+            />
             )}
 
             {vetTab === "team" && (
@@ -8003,6 +8303,14 @@ function VetPortal({ session }) {
           session={session}
           businessType={vet?.business_type}
           onClose={() => setSelectedPatientId(null)}
+        />
+      )}
+      {selectedAppt && (
+        <AppointmentDetailModal
+          appt={selectedAppt}
+          session={session}
+          onClose={() => setSelectedAppt(null)}
+          onUpdated={load}
         />
       )}
     </div>

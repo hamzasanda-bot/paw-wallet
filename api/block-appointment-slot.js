@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   const { data: userData, error: userError } = await anon.auth.getUser(token);
   if (userError || !userData?.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const { date, startTime, endTime, reason, customerName } = req.body || {};
+  const { date, startTime, endTime, reason, customerName, petName } = req.body || {};
   if (!date || !startTime || !endTime) return res.status(400).json({ error: "Missing date/startTime/endTime" });
   if (endTime <= startTime) return res.status(400).json({ error: "End time must be after start time" });
 
@@ -54,16 +54,16 @@ export default async function handler(req, res) {
   });
   if (overlaps) return res.status(409).json({ error: "SLOT_TAKEN" });
 
-  const dogName = customerName || reason || "Harici Randevu";
   const { error: insertError } = await admin.from("vet_appointments").insert({
     vet_id: vetRow.id,
     dog_id: null,
     owner_user_id: userData.user.id,
-    dog_name: dogName,
+    dog_name: petName || "",
+    customer_name: customerName || "",
     appt_date: date,
     appt_time: startTime,
     appt_end_time: endTime,
-    status: "booked",
+    status: "scheduled",
     note: reason || "",
   });
 

@@ -54,10 +54,11 @@ export default async function handler(req, res) {
     dog_id: dogId,
     owner_user_id: userData.user.id,
     dog_name: dogRow.payload?.name || "",
+    customer_name: dogRow.payload?.ownerName || "",
     appt_date: date,
     appt_time: time,
     note: note || "",
-    status: "booked",
+    status: "scheduled",
   });
 
   if (insertError) {
