@@ -436,6 +436,12 @@ const TRANSLATIONS = {
     addMedicationForPatientBtn: "İlaç/Takviye Öner",
     availabilityTitle: "Müsaitlik Takvimi",
     availabilitySubtitle: "Hastaların randevu alabileceği gün ve saatleri belirle.",
+    availabilityBreakHint: "Mola vermek için aynı güne iki ayrı aralık ekleyebilirsin (örn. 09:00-12:00 ve 14:00-18:00).",
+    blockSlotBtn: "Bu Saati Kapat",
+    blockSlotTitle: "Uygulama Dışı Randevu",
+    blockSlotSubtitle: "Telefon ya da kapıdan aldığın bir randevuyu buraya işleyerek o saati kapat.",
+    blockSlotNotePlaceholder: "Müşteri adı / not (opsiyonel)",
+    blockSlotSuccessMsg: "Saat kapatıldı.",
     dayNames: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
     fieldStartTime: "Başlangıç",
     fieldEndTime: "Bitiş",
@@ -459,6 +465,28 @@ const TRANSLATIONS = {
     apptNoteLabel: "Not (opsiyonel)",
     loadingSlotsText: "Müsait saatler yükleniyor…",
     noBookableVets: "Şu anda müsaitlik tanımlamış bir veteriner yok.",
+    groomerSpecialtyNames: {
+      "Yıkama & Tıraş": "Yıkama & Tıraş",
+      "Tırnak Bakımı": "Tırnak Bakımı",
+      "Kulak & Göz Temizliği": "Kulak & Göz Temizliği",
+      "Diş Bakımı": "Diş Bakımı",
+      "Deri & Tüy Bakımı": "Deri & Tüy Bakımı",
+      "Irk Bazlı Kesim": "Irk Bazlı Kesim",
+      "Parazit Kontrolü": "Parazit Kontrolü",
+      "Spa & Masaj": "Spa & Masaj",
+      "Genel Bakım": "Genel Bakım",
+    },
+    groomerStaffTitleNames: {
+      "Kuaför": "Kuaför",
+      "Şef Kuaför": "Şef Kuaför",
+      "Bakım Uzmanı": "Bakım Uzmanı",
+      "Yardımcı Personel": "Yardımcı Personel",
+      "Stajyer": "Stajyer",
+    },
+    myTeamTitleFor: (type) => (type === "groomer" ? "Ekibim" : "Doktorlarım"),
+    fieldEmployeeTitleFor: (type) => (type === "groomer" ? "Görev" : "Unvan"),
+    fieldEmployeeNameFor: (type) => (type === "groomer" ? "Çalışan adı" : "Doktor adı"),
+    noTeamMembersFor: (type) => (type === "groomer" ? "Henüz çalışan eklenmedi." : "Henüz doktor eklenmedi."),
     vaccineNames: {
       "Kuduz / Rabies": "Kuduz / Rabies",
       "Karma (DHPPi)": "Karma (DHPPi)",
@@ -931,6 +959,12 @@ const TRANSLATIONS = {
     addMedicationForPatientBtn: "Prescribe Medication",
     availabilityTitle: "Availability Schedule",
     availabilitySubtitle: "Set the days and times patients can book appointments.",
+    availabilityBreakHint: "Add two separate ranges for the same day to include a break (e.g. 9:00-12:00 and 14:00-18:00).",
+    blockSlotBtn: "Block This Time",
+    blockSlotTitle: "Off-App Appointment",
+    blockSlotSubtitle: "Log an appointment you took by phone or in person to block that time.",
+    blockSlotNotePlaceholder: "Customer name / note (optional)",
+    blockSlotSuccessMsg: "Time slot blocked.",
     dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     fieldStartTime: "Start",
     fieldEndTime: "End",
@@ -954,6 +988,28 @@ const TRANSLATIONS = {
     apptNoteLabel: "Note (optional)",
     loadingSlotsText: "Loading available times…",
     noBookableVets: "No vets have set up availability yet.",
+    groomerSpecialtyNames: {
+      "Yıkama & Tıraş": "Bathing & Trimming",
+      "Tırnak Bakımı": "Nail Care",
+      "Kulak & Göz Temizliği": "Ear & Eye Cleaning",
+      "Diş Bakımı": "Dental Care",
+      "Deri & Tüy Bakımı": "Skin & Coat Care",
+      "Irk Bazlı Kesim": "Breed-Specific Cut",
+      "Parazit Kontrolü": "Parasite Control",
+      "Spa & Masaj": "Spa & Massage",
+      "Genel Bakım": "General Care",
+    },
+    groomerStaffTitleNames: {
+      "Kuaför": "Groomer",
+      "Şef Kuaför": "Head Groomer",
+      "Bakım Uzmanı": "Care Specialist",
+      "Yardımcı Personel": "Support Staff",
+      "Stajyer": "Intern",
+    },
+    myTeamTitleFor: (type) => (type === "groomer" ? "My Team" : "My Doctors"),
+    fieldEmployeeTitleFor: (type) => (type === "groomer" ? "Role" : "Title"),
+    fieldEmployeeNameFor: (type) => (type === "groomer" ? "Employee name" : "Doctor name"),
+    noTeamMembersFor: (type) => (type === "groomer" ? "No employees added yet." : "No doctors added yet."),
     vaccineNames: {
       "Kuduz / Rabies": "Rabies",
       "Karma (DHPPi)": "DHPPi (Combination)",
@@ -1406,6 +1462,12 @@ const TRANSLATIONS = {
     addMedicationForPatientBtn: "Prescrire un Médicament",
     availabilityTitle: "Horaires de Disponibilité",
     availabilitySubtitle: "Définissez les jours et heures où les patients peuvent prendre rendez-vous.",
+    availabilityBreakHint: "Ajoutez deux créneaux séparés le même jour pour inclure une pause (ex. 9h-12h et 14h-18h).",
+    blockSlotBtn: "Bloquer ce Créneau",
+    blockSlotTitle: "Rendez-vous Hors Application",
+    blockSlotSubtitle: "Enregistrez un rendez-vous pris par téléphone ou en personne pour bloquer ce créneau.",
+    blockSlotNotePlaceholder: "Nom du client / note (facultatif)",
+    blockSlotSuccessMsg: "Créneau bloqué.",
     dayNames: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
     fieldStartTime: "Début",
     fieldEndTime: "Fin",
@@ -1429,6 +1491,28 @@ const TRANSLATIONS = {
     apptNoteLabel: "Note (facultatif)",
     loadingSlotsText: "Chargement des créneaux disponibles…",
     noBookableVets: "Aucun vétérinaire n'a encore défini de disponibilité.",
+    groomerSpecialtyNames: {
+      "Yıkama & Tıraş": "Bain & Tonte",
+      "Tırnak Bakımı": "Soin des Griffes",
+      "Kulak & Göz Temizliği": "Nettoyage Oreilles & Yeux",
+      "Diş Bakımı": "Soin Dentaire",
+      "Deri & Tüy Bakımı": "Soin de la Peau & du Pelage",
+      "Irk Bazlı Kesim": "Coupe par Race",
+      "Parazit Kontrolü": "Contrôle des Parasites",
+      "Spa & Masaj": "Spa & Massage",
+      "Genel Bakım": "Soin Général",
+    },
+    groomerStaffTitleNames: {
+      "Kuaför": "Toiletteur",
+      "Şef Kuaför": "Toiletteur en Chef",
+      "Bakım Uzmanı": "Spécialiste Soins",
+      "Yardımcı Personel": "Personnel Auxiliaire",
+      "Stajyer": "Stagiaire",
+    },
+    myTeamTitleFor: (type) => (type === "groomer" ? "Mon Équipe" : "Mes Vétérinaires"),
+    fieldEmployeeTitleFor: (type) => (type === "groomer" ? "Rôle" : "Titre"),
+    fieldEmployeeNameFor: (type) => (type === "groomer" ? "Nom de l'employé" : "Nom du vétérinaire"),
+    noTeamMembersFor: (type) => (type === "groomer" ? "Aucun employé ajouté." : "Aucun vétérinaire ajouté."),
     vaccineNames: {
       "Kuduz / Rabies": "Rage",
       "Karma (DHPPi)": "CHPPI (Combiné)",
@@ -1881,6 +1965,12 @@ const TRANSLATIONS = {
     addMedicationForPatientBtn: "Medikament Verschreiben",
     availabilityTitle: "Verfügbarkeitsplan",
     availabilitySubtitle: "Legen Sie fest, an welchen Tagen und Uhrzeiten Patienten Termine buchen können.",
+    availabilityBreakHint: "Fügen Sie zwei separate Zeiträume für denselben Tag hinzu, um eine Pause einzuschließen (z.B. 9:00-12:00 und 14:00-18:00).",
+    blockSlotBtn: "Diese Zeit Blockieren",
+    blockSlotTitle: "Termin Außerhalb der App",
+    blockSlotSubtitle: "Erfassen Sie einen telefonisch oder persönlich vereinbarten Termin, um diese Zeit zu blockieren.",
+    blockSlotNotePlaceholder: "Kundenname / Notiz (optional)",
+    blockSlotSuccessMsg: "Zeitfenster blockiert.",
     dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
     fieldStartTime: "Start",
     fieldEndTime: "Ende",
@@ -1904,6 +1994,28 @@ const TRANSLATIONS = {
     apptNoteLabel: "Notiz (optional)",
     loadingSlotsText: "Verfügbare Zeiten werden geladen…",
     noBookableVets: "Noch kein Tierarzt hat eine Verfügbarkeit festgelegt.",
+    groomerSpecialtyNames: {
+      "Yıkama & Tıraş": "Baden & Trimmen",
+      "Tırnak Bakımı": "Krallenpflege",
+      "Kulak & Göz Temizliği": "Ohren- & Augenreinigung",
+      "Diş Bakımı": "Zahnpflege",
+      "Deri & Tüy Bakımı": "Haut- & Fellpflege",
+      "Irk Bazlı Kesim": "Rassespezifischer Schnitt",
+      "Parazit Kontrolü": "Parasitenkontrolle",
+      "Spa & Masaj": "Spa & Massage",
+      "Genel Bakım": "Allgemeine Pflege",
+    },
+    groomerStaffTitleNames: {
+      "Kuaför": "Hundefriseur",
+      "Şef Kuaför": "Chef-Hundefriseur",
+      "Bakım Uzmanı": "Pflegespezialist",
+      "Yardımcı Personel": "Hilfspersonal",
+      "Stajyer": "Praktikant",
+    },
+    myTeamTitleFor: (type) => (type === "groomer" ? "Mein Team" : "Meine Tierärzte"),
+    fieldEmployeeTitleFor: (type) => (type === "groomer" ? "Rolle" : "Titel"),
+    fieldEmployeeNameFor: (type) => (type === "groomer" ? "Name des Mitarbeiters" : "Name des Tierarztes"),
+    noTeamMembersFor: (type) => (type === "groomer" ? "Noch keine Mitarbeiter hinzugefügt." : "Noch keine Tierärzte hinzugefügt."),
     vaccineNames: {
       "Kuduz / Rabies": "Tollwut",
       "Karma (DHPPi)": "Mehrfachimpfung (DHPPi)",
@@ -2358,6 +2470,12 @@ const TRANSLATIONS = {
     addMedicationForPatientBtn: "Recetar Medicamento",
     availabilityTitle: "Horario de Disponibilidad",
     availabilitySubtitle: "Define los días y horas en que los pacientes pueden reservar citas.",
+    availabilityBreakHint: "Añade dos franjas separadas el mismo día para incluir un descanso (ej. 9:00-12:00 y 14:00-18:00).",
+    blockSlotBtn: "Bloquear Este Horario",
+    blockSlotTitle: "Cita Fuera de la Aplicación",
+    blockSlotSubtitle: "Registra una cita tomada por teléfono o en persona para bloquear ese horario.",
+    blockSlotNotePlaceholder: "Nombre del cliente / nota (opcional)",
+    blockSlotSuccessMsg: "Horario bloqueado.",
     dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
     fieldStartTime: "Inicio",
     fieldEndTime: "Fin",
@@ -2381,6 +2499,28 @@ const TRANSLATIONS = {
     apptNoteLabel: "Nota (opcional)",
     loadingSlotsText: "Cargando horarios disponibles…",
     noBookableVets: "Ningún veterinario ha configurado disponibilidad todavía.",
+    groomerSpecialtyNames: {
+      "Yıkama & Tıraş": "Baño & Corte",
+      "Tırnak Bakımı": "Cuidado de Uñas",
+      "Kulak & Göz Temizliği": "Limpieza de Oídos & Ojos",
+      "Diş Bakımı": "Cuidado Dental",
+      "Deri & Tüy Bakımı": "Cuidado de Piel & Pelaje",
+      "Irk Bazlı Kesim": "Corte por Raza",
+      "Parazit Kontrolü": "Control de Parásitos",
+      "Spa & Masaj": "Spa & Masaje",
+      "Genel Bakım": "Cuidado General",
+    },
+    groomerStaffTitleNames: {
+      "Kuaför": "Peluquero",
+      "Şef Kuaför": "Peluquero Jefe",
+      "Bakım Uzmanı": "Especialista en Cuidado",
+      "Yardımcı Personel": "Personal de Apoyo",
+      "Stajyer": "Interno",
+    },
+    myTeamTitleFor: (type) => (type === "groomer" ? "Mi Equipo" : "Mis Veterinarios"),
+    fieldEmployeeTitleFor: (type) => (type === "groomer" ? "Rol" : "Título"),
+    fieldEmployeeNameFor: (type) => (type === "groomer" ? "Nombre del empleado" : "Nombre del veterinario"),
+    noTeamMembersFor: (type) => (type === "groomer" ? "Aún no hay empleados añadidos." : "Aún no hay veterinarios añadidos."),
     vaccineNames: {
       "Kuduz / Rabies": "Rabia",
       "Karma (DHPPi)": "Vacuna Combinada (DHPPi)",
@@ -2586,6 +2726,20 @@ const DOCTOR_TITLE_KEYS = [
   "Stajyer",
   "Veteriner Teknisyeni",
 ];
+
+const GROOMER_SPECIALTY_KEYS = [
+  "Yıkama & Tıraş",
+  "Tırnak Bakımı",
+  "Kulak & Göz Temizliği",
+  "Diş Bakımı",
+  "Deri & Tüy Bakımı",
+  "Irk Bazlı Kesim",
+  "Parazit Kontrolü",
+  "Spa & Masaj",
+  "Genel Bakım",
+];
+
+const GROOMER_STAFF_TITLE_KEYS = ["Kuaför", "Şef Kuaför", "Bakım Uzmanı", "Yardımcı Personel", "Stajyer"];
 
 const CAT_VACCINES = [
   "Kuduz / Rabies",
@@ -3204,9 +3358,10 @@ function PhoneField({ label, code, number, onCodeChange, onNumberChange, placeho
 }
 
 /* Uzmanlık alanı — en fazla 3 tane seçilebilen etiket (pill) seçici */
-function SpecialtyMultiSelect({ label, value, onChange, options, max = 3 }) {
+function SpecialtyMultiSelect({ label, value, onChange, options, max = 3, nameMap }) {
   const { t } = useI18n();
   const selected = value || [];
+  const names = nameMap || t.specialtyNames;
 
   const toggle = (opt) => {
     if (selected.includes(opt)) {
@@ -3236,7 +3391,7 @@ function SpecialtyMultiSelect({ label, value, onChange, options, max = 3 }) {
                   : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
               }`}
             >
-              {t.specialtyNames?.[opt] || opt}
+              {names?.[opt] || opt}
             </button>
           );
         })}
@@ -5214,7 +5369,7 @@ function VetDetailModal({ vet, dog, session, onClose }) {
         <div className="flex flex-wrap gap-1.5 mb-4">
           {specialties.map((s) => (
             <span key={s} className="text-[11.5px] font-medium text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2.5 py-1">
-              {t.specialtyNames?.[s] || s}
+              {t.specialtyNames?.[s] || t.groomerSpecialtyNames?.[s] || s}
             </span>
           ))}
         </div>
@@ -5489,7 +5644,7 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
               {vet.specialty && vet.specialty.length > 0 && (
                 <p className="text-[12px] text-[#5b6d63] flex items-center gap-1">
                   <Stethoscope size={12} />{" "}
-                  {(Array.isArray(vet.specialty) ? vet.specialty : [vet.specialty]).map((s) => t.specialtyNames?.[s] || s).join(", ")}
+                  {(Array.isArray(vet.specialty) ? vet.specialty : [vet.specialty]).map((s) => t.specialtyNames?.[s] || t.groomerSpecialtyNames?.[s] || s).join(", ")}
                 </p>
               )}
               {vet.phone && (
@@ -5958,7 +6113,7 @@ function AdminPanel({ session }) {
   });
   const [vetBusy, setVetBusy] = useState(false);
   const [vetMsg, setVetMsg] = useState("");
-  const [svcForm, setSvcForm] = useState({ name: "", service_type: "Yıkama & Tıraş", city: "", country: "", phone: "" });
+  const [svcForm, setSvcForm] = useState({ name: "", service_type: "Köpek Yürüyüşü", city: "", country: "", phone: "" });
   const [svcBusy, setSvcBusy] = useState(false);
   const [svcMsg, setSvcMsg] = useState("");
   const [pwForm, setPwForm] = useState({ email: "", newPassword: "" });
@@ -6060,7 +6215,7 @@ function AdminPanel({ session }) {
     const { error } = await supabase.from("service_providers").insert(svcForm);
     if (!error) {
       setSvcMsg(t.serviceProviderAdded);
-      setSvcForm({ name: "", service_type: "Yıkama & Tıraş", city: "", country: "", phone: "" });
+      setSvcForm({ name: "", service_type: "Köpek Yürüyüşü", city: "", country: "", phone: "" });
       loadStats();
     } else {
       setSvcMsg(error.message);
@@ -6166,7 +6321,7 @@ function AdminPanel({ session }) {
                     <button
                       key={key}
                       type="button"
-                      onClick={() => setVetForm((f) => ({ ...f, businessType: key }))}
+                      onClick={() => setVetForm((f) => ({ ...f, businessType: key, specialty: [] }))}
                       className={`flex-1 rounded-md border px-3 py-2 text-[13px] font-semibold transition ${
                         vetForm.businessType === key
                           ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
@@ -6198,7 +6353,8 @@ function AdminPanel({ session }) {
                 label={t.fieldVetSpecialty}
                 value={vetForm.specialty}
                 onChange={(v) => setVetForm((f) => ({ ...f, specialty: v }))}
-                options={VET_SPECIALTY_KEYS}
+                options={vetForm.businessType === "groomer" ? GROOMER_SPECIALTY_KEYS : VET_SPECIALTY_KEYS}
+                nameMap={vetForm.businessType === "groomer" ? t.groomerSpecialtyNames : t.specialtyNames}
               />
               <PhoneField
                 label={t.fieldVetPhone}
@@ -6240,7 +6396,6 @@ function AdminPanel({ session }) {
                   value={svcForm.service_type}
                   onChange={(e) => setSvcForm((f) => ({ ...f, service_type: e.target.value }))}
                 >
-                  <option value="Yıkama & Tıraş">{t.serviceTypeGrooming}</option>
                   <option value="Köpek Yürüyüşü">{t.serviceTypeWalking}</option>
                   <option value="Pet Taksi">{t.serviceTypeTaxi}</option>
                   <option value="Diğer">{t.serviceTypeOther}</option>
@@ -6894,6 +7049,10 @@ function VetPortal({ session }) {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [newAvailability, setNewAvailability] = useState({ day: 1, start: "09:00", end: "17:00" });
   const [appointments, setAppointments] = useState([]);
+  const [showBlockSlot, setShowBlockSlot] = useState(false);
+  const [blockSlotForm, setBlockSlotForm] = useState({ date: todayISO(), time: "10:00", note: "" });
+  const [blockSlotBusy, setBlockSlotBusy] = useState(false);
+  const [blockSlotMsg, setBlockSlotMsg] = useState("");
 
   const load = useCallback(async () => {
     if (!vetId) {
@@ -6965,6 +7124,31 @@ function VetPortal({ session }) {
   const markApptStatus = async (id, status) => {
     await supabase.from("vet_appointments").update({ status }).eq("id", id);
     load();
+  };
+
+  const submitBlockSlot = async () => {
+    setBlockSlotBusy(true);
+    setBlockSlotMsg("");
+    try {
+      const res = await fetch("/api/block-appointment-slot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify(blockSlotForm),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setBlockSlotMsg(t.blockSlotSuccessMsg);
+        setBlockSlotForm({ date: todayISO(), time: "10:00", note: "" });
+        load();
+      } else if (data.error === "SLOT_TAKEN") {
+        setBlockSlotMsg(t.slotTakenErrorMsg);
+      } else {
+        setBlockSlotMsg(data.error || t.authError);
+      }
+    } catch {
+      setBlockSlotMsg(t.authError);
+    }
+    setBlockSlotBusy(false);
   };
 
   const saveClinicInfo = async () => {
@@ -7112,26 +7296,37 @@ function VetPortal({ session }) {
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-1">{t.availabilityTitle}</p>
-                <p className="text-[12.5px] text-[#5b6d63] mb-3">{t.availabilitySubtitle}</p>
+                <p className="text-[12.5px] text-[#5b6d63] mb-1">{t.availabilitySubtitle}</p>
+                <p className="text-[11.5px] text-[#8a6d16] mb-3">{t.availabilityBreakHint}</p>
                 <div className="space-y-1.5 mb-3">
                   {(vet.availability || []).length === 0 ? (
                     <p className="text-[13px] text-[#5b6d63]">{t.noAvailabilitySet}</p>
                   ) : (
-                    [...(vet.availability || [])]
-                      .sort((a, b) => a.day - b.day || a.start.localeCompare(b.start))
-                      .map((b) => (
-                        <div key={b.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
-                          <span>
-                            <span className="font-medium">{t.dayNames[b.day]}</span>{" "}
-                            <span className="font-mono text-[#5b6d63]">
-                              {b.start}–{b.end}
-                            </span>
-                          </span>
-                          <button onClick={() => removeAvailabilityBlock(b.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
-                            <Trash2 size={13} />
-                          </button>
-                        </div>
-                      ))
+                    Array.from(new Set((vet.availability || []).map((b) => b.day)))
+                      .sort((a, b) => a - b)
+                      .map((day) => {
+                        const dayBlocks = (vet.availability || [])
+                          .filter((b) => b.day === day)
+                          .sort((a, b) => a.start.localeCompare(b.start));
+                        return (
+                          <div key={day} className="px-3 py-2 rounded-md bg-white/50">
+                            <p className="font-medium text-[13px] mb-1">{t.dayNames[day]}</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {dayBlocks.map((b) => (
+                                <span
+                                  key={b.id}
+                                  className="flex items-center gap-1.5 font-mono text-[12px] text-[#5b6d63] bg-[#efe8d1] rounded-full px-2.5 py-1"
+                                >
+                                  {b.start}–{b.end}
+                                  <button onClick={() => removeAvailabilityBlock(b.id)} className="text-[#a08a5a] hover:text-[#a63d40]">
+                                    <Trash2 size={11} />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })
                   )}
                 </div>
                 <div className="grid grid-cols-[1fr_1fr_1fr_40px] gap-2 items-stretch">
@@ -7168,7 +7363,47 @@ function VetPortal({ session }) {
               </div>
 
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
-                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myAppointmentsTitle}</p>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="font-display text-[16px] text-[#1B3A2F]">{t.myAppointmentsTitle}</p>
+                  <button
+                    onClick={() => setShowBlockSlot((s) => !s)}
+                    className="text-[11.5px] font-semibold text-[#1B3A2F] underline underline-offset-2"
+                  >
+                    + {t.blockSlotBtn}
+                  </button>
+                </div>
+
+                {showBlockSlot && (
+                  <div className="rounded-md border border-[#C9A227]/40 bg-white/60 p-3 mb-3 space-y-2">
+                    <p className="text-[11.5px] text-[#8a6d16]">{t.blockSlotSubtitle}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="date"
+                        min={todayISO()}
+                        className={inputCls}
+                        value={blockSlotForm.date}
+                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, date: e.target.value }))}
+                      />
+                      <input
+                        type="time"
+                        className={inputCls}
+                        value={blockSlotForm.time}
+                        onChange={(e) => setBlockSlotForm((f) => ({ ...f, time: e.target.value }))}
+                      />
+                    </div>
+                    <input
+                      className={inputCls}
+                      placeholder={t.blockSlotNotePlaceholder}
+                      value={blockSlotForm.note}
+                      onChange={(e) => setBlockSlotForm((f) => ({ ...f, note: e.target.value }))}
+                    />
+                    {blockSlotMsg && <p className="text-[12px] text-[#8a6d16]">{blockSlotMsg}</p>}
+                    <PrimaryButton disabled={blockSlotBusy} onClick={submitBlockSlot} icon={Check}>
+                      {t.blockSlotBtn}
+                    </PrimaryButton>
+                  </div>
+                )}
+
                 {appointments.length === 0 ? (
                   <p className="text-[13px] text-[#5b6d63]">{t.noAppointmentsYet}</p>
                 ) : (
@@ -7183,7 +7418,14 @@ function VetPortal({ session }) {
                       return (
                         <div key={a.id} className="rounded-md bg-white/50 px-3 py-2.5">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[13.5px] font-medium text-[#1f2a24]">{a.dog_name}</span>
+                            <span className="text-[13.5px] font-medium text-[#1f2a24] flex items-center gap-1.5">
+                              {a.dog_name}
+                              {!a.dog_id && (
+                                <span className="text-[9.5px] font-semibold text-[#8d8560] bg-[#efe8d1] rounded-full px-1.5 py-0.5">
+                                  {t.blockSlotTitle}
+                                </span>
+                              )}
+                            </span>
                             <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full ${statusCfg.cls}`}>
                               {statusCfg.label}
                             </span>
@@ -7218,15 +7460,23 @@ function VetPortal({ session }) {
 
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
-                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myDoctorsTitle}</p>
+                <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.myTeamTitleFor(vet?.business_type)}</p>
                 <div className="space-y-2 mb-3">
                   {(vet.doctors || []).length === 0 ? (
-                    <p className="text-[13px] text-[#5b6d63]">{t.noDoctors}</p>
+                    <p className="text-[13px] text-[#5b6d63]">{t.noTeamMembersFor(vet?.business_type)}</p>
                   ) : (
                     (vet.doctors || []).map((d) => (
                       <div key={d.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
                         <span>
-                          {d.name} {d.title && <span className="text-[#8d8560]">· {t.doctorTitleNames?.[d.title] || d.title}</span>}
+                          {d.name}{" "}
+                          {d.title && (
+                            <span className="text-[#8d8560]">
+                              ·{" "}
+                              {vet?.business_type === "groomer"
+                                ? t.groomerStaffTitleNames?.[d.title] || d.title
+                                : t.doctorTitleNames?.[d.title] || d.title}
+                            </span>
+                          )}
                         </span>
                         <button onClick={() => removeDoctor(d.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
                           <Trash2 size={13} />
@@ -7238,7 +7488,7 @@ function VetPortal({ session }) {
                 <div className="flex gap-2">
                   <input
                     className={inputCls}
-                    placeholder={t.fieldDoctorName}
+                    placeholder={t.fieldEmployeeNameFor(vet?.business_type)}
                     value={newDoctor.name}
                     onChange={(e) => setNewDoctor((f) => ({ ...f, name: e.target.value }))}
                   />
@@ -7247,10 +7497,10 @@ function VetPortal({ session }) {
                     value={newDoctor.title}
                     onChange={(e) => setNewDoctor((f) => ({ ...f, title: e.target.value }))}
                   >
-                    <option value="">{t.fieldDoctorTitle}</option>
-                    {DOCTOR_TITLE_KEYS.map((k) => (
+                    <option value="">{t.fieldEmployeeTitleFor(vet?.business_type)}</option>
+                    {(vet?.business_type === "groomer" ? GROOMER_STAFF_TITLE_KEYS : DOCTOR_TITLE_KEYS).map((k) => (
                       <option key={k} value={k}>
-                        {t.doctorTitleNames?.[k] || k}
+                        {vet?.business_type === "groomer" ? t.groomerStaffTitleNames?.[k] || k : t.doctorTitleNames?.[k] || k}
                       </option>
                     ))}
                   </select>
@@ -7351,7 +7601,8 @@ function VetPortal({ session }) {
                     label={t.fieldVetSpecialty}
                     value={clinicForm.specialty}
                     onChange={(v) => setClinicForm((f) => ({ ...f, specialty: v }))}
-                    options={VET_SPECIALTY_KEYS}
+                    options={vet?.business_type === "groomer" ? GROOMER_SPECIALTY_KEYS : VET_SPECIALTY_KEYS}
+                    nameMap={vet?.business_type === "groomer" ? t.groomerSpecialtyNames : t.specialtyNames}
                   />
                   <CountryCityPicker
                     t={t}
