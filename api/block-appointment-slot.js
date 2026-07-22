@@ -2,20 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 
 // Bir vet/groomer, uygulama dışından (telefon, kapıdan gelen müşteri vb.)
 // aldığı bir randevuyu kendi takviminde işaretleyip o saat ARALIĞINI
-// kapatabilir. Aralık, vetin kendi randevu süresi (slot_minutes) kadar
-// parçalara bölünüp hepsi tek seferde (ya hep ya hiç) rezerve edilir.
-
-function toMinutes(hhmm) {
-  const [h, m] = hhmm.split(":").map(Number);
-  return h * 60 + m;
-}
-function toHHMM(mins) {
-  const h = Math.floor(mins / 60)
-    .toString()
-    .padStart(2, "0");
-  const m = (mins % 60).toString().padStart(2, "0");
-  return `${h}:${m}`;
-}
+// kapatabilir. Artık TEK bir kayıt olarak, gerçek başlangıç+bitiş
+// saatiyle saklanıyor — 30 dakika da olsa 3 saat de olsa fark etmez.
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -30,6 +18,7 @@ export default async function handler(req, res) {
 
   const { date, startTime, endTime, reason, customerName } = req.body || {};
   if (!date || !startTime || !endTime) return res.status(400).json({ error: "Missing date/startTime/endTime" });
+  if (endTime <= startTime) return res.status(400).json({ error: "End time must be after start time" });
 
   const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -41,31 +30,42 @@ export default async function handler(req, res) {
   if (vetError || !vetRow) return res.status(403).json({ error: "Not a vet/groomer account" });
 
   const slotMinutes = vetRow.slot_minutes || 30;
-  const start = toMinutes(startTime);
-  const end = toMinutes(endTime);
-  if (end <= start) return res.status(400).json({ error: "End time must be after start time" });
 
-  const times = [];
-  for (let t = start; t + slotMinutes <= end; t += slotMinutes) {
-    times.push(toHHMM(t));
-  }
-  if (times.length === 0) times.push(startTime);
+  // Bu aralık, aynı vet için mevcut herhangi bir randevuyla (normal ya da
+  // harici) çakışıyor mu? Çakışıyorsa reddet.
+  const { data: sameDayAppts } = await admin
+    .from("vet_appointments")
+    .select("appt_time, appt_end_time")
+    .eq("vet_id", vetRow.id)
+    .eq("appt_date", date)
+    .neq("status", "cancelled");
+
+  const toMinutes = (hhmm) => {
+    const [h, m] = hhmm.split(":").map(Number);
+    return h * 60 + m;
+  };
+  const newStart = toMinutes(startTime);
+  const newEnd = toMinutes(endTime);
+
+  const overlaps = (sameDayAppts || []).some((a) => {
+    const s = toMinutes(a.appt_time);
+    const e = a.appt_end_time ? toMinutes(a.appt_end_time) : s + slotMinutes;
+    return newStart < e && s < newEnd;
+  });
+  if (overlaps) return res.status(409).json({ error: "SLOT_TAKEN" });
 
   const dogName = customerName || reason || "Harici Randevu";
-  const rows = times.map((t) => ({
+  const { error: insertError } = await admin.from("vet_appointments").insert({
     vet_id: vetRow.id,
     dog_id: null,
     owner_user_id: userData.user.id,
     dog_name: dogName,
     appt_date: date,
-    appt_time: t,
+    appt_time: startTime,
+    appt_end_time: endTime,
     status: "booked",
     note: reason || "",
-  }));
-
-  // Tek bir INSERT ifadesiyle tüm parçaları ekliyoruz — biri bile
-  // çakışırsa (aynı saat zaten doluysa) hiçbiri eklenmez.
-  const { error: insertError } = await admin.from("vet_appointments").insert(rows);
+  });
 
   if (insertError) {
     if (insertError.code === "23505") {
@@ -76,4 +76,3 @@ export default async function handler(req, res) {
 
   return res.status(200).json({ success: true });
 }
-

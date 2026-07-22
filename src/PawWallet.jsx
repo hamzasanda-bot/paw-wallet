@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, BarChart, Bar } from "recharts";
 
 /* ------------------------------------------------------------------ */
 /*  Languages                                                          */
@@ -448,6 +448,11 @@ const TRANSLATIONS = {
     vetTabAppointments: "Randevular",
     vetTabTeam: "Ekip & Hizmetler",
     vetTabSettings: "Klinik Bilgileri",
+    ownerInfoSection: "Sahip Bilgileri",
+    periodToday: "Bugün",
+    periodWeek: "Bu Hafta",
+    periodMonth: "Bu Ay",
+    serviceBreakdownTitle: "Hizmete Göre Dağılım",
     dayNames: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
     fieldStartTime: "Başlangıç",
     fieldEndTime: "Bitiş",
@@ -975,6 +980,11 @@ const TRANSLATIONS = {
     vetTabAppointments: "Appointments",
     vetTabTeam: "Team & Services",
     vetTabSettings: "Clinic Info",
+    ownerInfoSection: "Owner Info",
+    periodToday: "Today",
+    periodWeek: "This Week",
+    periodMonth: "This Month",
+    serviceBreakdownTitle: "By Service",
     dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     fieldStartTime: "Start",
     fieldEndTime: "End",
@@ -1482,6 +1492,11 @@ const TRANSLATIONS = {
     vetTabAppointments: "Rendez-vous",
     vetTabTeam: "Équipe & Services",
     vetTabSettings: "Infos de la Clinique",
+    ownerInfoSection: "Informations du Propriétaire",
+    periodToday: "Aujourd'hui",
+    periodWeek: "Cette Semaine",
+    periodMonth: "Ce Mois",
+    serviceBreakdownTitle: "Par Service",
     dayNames: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
     fieldStartTime: "Début",
     fieldEndTime: "Fin",
@@ -1989,6 +2004,11 @@ const TRANSLATIONS = {
     vetTabAppointments: "Termine",
     vetTabTeam: "Team & Dienstleistungen",
     vetTabSettings: "Klinikinformationen",
+    ownerInfoSection: "Besitzerinformationen",
+    periodToday: "Heute",
+    periodWeek: "Diese Woche",
+    periodMonth: "Diesen Monat",
+    serviceBreakdownTitle: "Nach Dienstleistung",
     dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
     fieldStartTime: "Start",
     fieldEndTime: "Ende",
@@ -2498,6 +2518,11 @@ const TRANSLATIONS = {
     vetTabAppointments: "Citas",
     vetTabTeam: "Equipo & Servicios",
     vetTabSettings: "Información de la Clínica",
+    ownerInfoSection: "Información del Dueño",
+    periodToday: "Hoy",
+    periodWeek: "Esta Semana",
+    periodMonth: "Este Mes",
+    serviceBreakdownTitle: "Por Servicio",
     dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
     fieldStartTime: "Inicio",
     fieldEndTime: "Fin",
@@ -6740,6 +6765,17 @@ function PatientDetailModal({ dogId, session, businessType, onClose }) {
             </div>
           </div>
 
+          <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.ownerInfoSection}</p>
+          <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
+            <div>
+              <Row label={t.rowOwner} value={dog.ownerName} />
+              <Row label={t.rowPhone} value={fmtPhone(dog.ownerPhoneCode, dog.ownerPhoneNumber)} />
+            </div>
+            <div>
+              <Row label={t.rowEmail} value={dog.ownerEmail} />
+            </div>
+          </div>
+
           <p className="text-[11px] uppercase tracking-[0.1em] font-semibold text-[#8a6d16] mb-2">{t.cvHealthSection}</p>
           <div className="grid sm:grid-cols-2 gap-x-8 mb-5">
             <Row label={t.fieldChronicConditions} value={dog.chronicConditions} />
@@ -7074,6 +7110,7 @@ function VetPortal({ session }) {
   const [showBlockSlot, setShowBlockSlot] = useState(false);
   const [quickSearch, setQuickSearch] = useState("");
   const [vetTab, setVetTab] = useState("dashboard");
+  const [dashboardPeriod, setDashboardPeriod] = useState("today");
   const [blockSlotForm, setBlockSlotForm] = useState({
     date: todayISO(),
     startTime: "10:00",
@@ -7226,9 +7263,35 @@ function VetPortal({ session }) {
   const approvedPatients = Array.from(
     new Map(requests.filter((r) => r.status === "approved").map((r) => [r.dog_id, r])).values()
   );
-  const todaysAppts = appointments
-    .filter((a) => a.appt_date === todayISO() && a.status !== "cancelled")
-    .sort((a, b) => a.appt_time.localeCompare(b.appt_time));
+  const periodBounds = (() => {
+    const now = new Date();
+    if (dashboardPeriod === "today") {
+      return { start: todayISO(), end: todayISO() };
+    }
+    if (dashboardPeriod === "week") {
+      const day = now.getDay(); // 0=Pazar
+      const mondayOffset = day === 0 ? -6 : 1 - day;
+      const monday = new Date(now);
+      monday.setDate(now.getDate() + mondayOffset);
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+      return { start: monday.toISOString().slice(0, 10), end: sunday.toISOString().slice(0, 10) };
+    }
+    // month
+    const first = new Date(now.getFullYear(), now.getMonth(), 1);
+    const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return { start: first.toISOString().slice(0, 10), end: last.toISOString().slice(0, 10) };
+  })();
+  const periodAppts = appointments
+    .filter((a) => a.appt_date >= periodBounds.start && a.appt_date <= periodBounds.end && a.status !== "cancelled")
+    .sort((a, b) => a.appt_date.localeCompare(b.appt_date) || a.appt_time.localeCompare(b.appt_time));
+  const serviceChartData = Object.entries(
+    periodAppts.reduce((acc, a) => {
+      const key = a.note?.trim() ? t.serviceNames?.[a.note] || t.groomerSpecialtyNames?.[a.note] || a.note : t.serviceNames?.Diğer || "—";
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {})
+  ).map(([name, count]) => ({ name, count }));
   const filteredPatients = quickSearch.trim()
     ? approvedPatients.filter((r) => (r.dog_name || "").toLowerCase().includes(quickSearch.trim().toLowerCase()))
     : approvedPatients;
@@ -7312,16 +7375,42 @@ function VetPortal({ session }) {
 
             {vetTab === "dashboard" && (
             <div className="rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] p-5 mb-8">
+              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <p className="font-display text-[16px] text-[#1B3A2F]">{t.todaysApptsTitle}</p>
+                <div className="flex gap-1.5">
+                  {[
+                    { id: "today", label: t.periodToday },
+                    { id: "week", label: t.periodWeek },
+                    { id: "month", label: t.periodMonth },
+                  ].map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => setDashboardPeriod(p.id)}
+                      className={`text-[11.5px] font-semibold rounded-full px-3 py-1 transition ${
+                        dashboardPeriod === p.id
+                          ? "bg-[#1B3A2F] text-[#F7F3E8]"
+                          : "bg-white/60 text-[#5b6d63] hover:bg-white"
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <p className="font-display text-[16px] text-[#1B3A2F] mb-3">{t.todaysApptsTitle}</p>
-                  {todaysAppts.length === 0 ? (
+                  {periodAppts.length === 0 ? (
                     <p className="text-[13px] text-[#5b6d63]">{t.noApptsToday}</p>
                   ) : (
                     <div className="space-y-1.5 max-h-56 overflow-y-auto">
-                      {todaysAppts.map((a) => (
+                      {periodAppts.map((a) => (
                         <div key={a.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
-                          <span className="font-mono text-[#1B3A2F] font-semibold">{a.appt_time}</span>
+                          <span className="font-mono text-[#1B3A2F] font-semibold shrink-0">
+                            {dashboardPeriod !== "today" && `${a.appt_date.slice(5)} · `}
+                            {a.appt_time}
+                            {a.appt_end_time ? `–${a.appt_end_time}` : ""}
+                          </span>
                           <span className="flex-1 px-3 truncate">
                             {a.dog_name}
                             {!a.dog_id && (
@@ -7331,7 +7420,7 @@ function VetPortal({ session }) {
                             )}
                           </span>
                           <span
-                            className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full ${
+                            className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
                               a.status === "completed" ? "bg-[#1B3A2F] text-[#F7F3E8]" : "bg-[#C9A227] text-white"
                             }`}
                           >
@@ -7339,6 +7428,23 @@ function VetPortal({ session }) {
                           </span>
                         </div>
                       ))}
+                    </div>
+                  )}
+
+                  {serviceChartData.length > 0 && (
+                    <div className="mt-4" style={{ height: 160 }}>
+                      <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">
+                        {t.serviceBreakdownTitle}
+                      </p>
+                      <ResponsiveContainer width="100%" height="85%">
+                        <BarChart data={serviceChartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e3d9bd" />
+                          <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#5b6d63" }} interval={0} angle={-15} textAnchor="end" height={40} />
+                          <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: "#5b6d63" }} />
+                          <Tooltip contentStyle={{ background: "#FBF8EE", border: "1px solid #d8cfb4", borderRadius: 8, fontSize: 12 }} />
+                          <Bar dataKey="count" fill="#1B3A2F" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
                   )}
                 </div>
@@ -7606,6 +7712,7 @@ function VetPortal({ session }) {
                           </div>
                           <p className="text-[12.5px] text-[#5b6d63] font-mono mb-1.5">
                             {fmtDate(a.appt_date, locale)} · {a.appt_time}
+                            {a.appt_end_time ? `–${a.appt_end_time}` : ""}
                           </p>
                           {a.note && <p className="text-[12.5px] text-[#5b6d63] mb-1.5">{a.note}</p>}
                           {a.status === "booked" && (

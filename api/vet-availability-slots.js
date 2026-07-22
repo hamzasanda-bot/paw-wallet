@@ -25,14 +25,15 @@ export default async function handler(req, res) {
 
   if (blocks.length === 0) return res.status(200).json({ slots: [] });
 
-  // Bu vet + tarih için zaten alınmış (iptal edilmemiş) saatleri çek
+  // Bu vet + tarih için zaten alınmış (iptal edilmemiş) randevuları çek —
+  // her biri bir [appt_time, appt_end_time) aralığı temsil eder (normal
+  // randevularda bitiş belirtilmemişse süre = slot_minutes kabul edilir).
   const { data: existing } = await admin
     .from("vet_appointments")
-    .select("appt_time")
+    .select("appt_time, appt_end_time")
     .eq("vet_id", vetId)
     .eq("appt_date", date)
     .neq("status", "cancelled");
-  const taken = new Set((existing || []).map((r) => r.appt_time));
 
   const toMinutes = (hhmm) => {
     const [h, m] = hhmm.split(":").map(Number);
@@ -46,6 +47,14 @@ export default async function handler(req, res) {
     return `${h}:${m}`;
   };
 
+  const occupied = (existing || []).map((a) => {
+    const s = toMinutes(a.appt_time);
+    const e = a.appt_end_time ? toMinutes(a.appt_end_time) : s + slotMinutes;
+    return [s, e];
+  });
+  const isOverlapping = (candidateStart, candidateEnd) =>
+    occupied.some(([s, e]) => candidateStart < e && s < candidateEnd);
+
   const now = new Date();
   const isToday = date === now.toISOString().slice(0, 10);
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
@@ -57,7 +66,7 @@ export default async function handler(req, res) {
     while (start + slotMinutes <= end) {
       const hhmm = toHHMM(start);
       const isPast = isToday && start <= nowMinutes;
-      if (!taken.has(hhmm) && !isPast) slots.push(hhmm);
+      if (!isOverlapping(start, start + slotMinutes) && !isPast) slots.push(hhmm);
       start += slotMinutes;
     }
   }

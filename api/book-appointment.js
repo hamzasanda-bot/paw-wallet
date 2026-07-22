@@ -26,6 +26,29 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: "Not your pet" });
   }
 
+  const { data: vetRow } = await admin.from("vets").select("slot_minutes").eq("id", vetId).single();
+  const slotMinutes = vetRow?.slot_minutes || 30;
+
+  const toMinutes = (hhmm) => {
+    const [h, m] = hhmm.split(":").map(Number);
+    return h * 60 + m;
+  };
+  const newStart = toMinutes(time);
+  const newEnd = newStart + slotMinutes;
+
+  const { data: sameDayAppts } = await admin
+    .from("vet_appointments")
+    .select("appt_time, appt_end_time")
+    .eq("vet_id", vetId)
+    .eq("appt_date", date)
+    .neq("status", "cancelled");
+  const overlaps = (sameDayAppts || []).some((a) => {
+    const s = toMinutes(a.appt_time);
+    const e = a.appt_end_time ? toMinutes(a.appt_end_time) : s + slotMinutes;
+    return newStart < e && s < newEnd;
+  });
+  if (overlaps) return res.status(409).json({ error: "SLOT_TAKEN" });
+
   const { error: insertError } = await admin.from("vet_appointments").insert({
     vet_id: vetId,
     dog_id: dogId,
