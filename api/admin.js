@@ -3,11 +3,45 @@ import { createClient } from "@supabase/supabase-js";
 // Tüm admin-only işlemleri TEK bir fonksiyonda topluyoruz — Vercel'in
 // Hobby planındaki "en fazla 12 sunucu fonksiyonu" sınırını aşmamak için.
 // Hangi işlemin yapılacağı ?action=... parametresiyle belirleniyor:
-//   GET  ?action=stats           → panel istatistikleri
-//   GET  ?action=logs&email=...  → hareket kayıtları
-//   POST ?action=create-vet      → yeni veteriner hesabı + davet
-//   POST ?action=set-password    → mevcut kullanıcının şifresini değiştir
-//   POST ?action=create-user     → yeni kullanıcı (davetsiz, doğrudan)
+//   GET  ?action=stats                    → panel istatistikleri
+//   GET  ?action=logs&email=...           → hareket kayıtları
+//   GET  ?action=access-requests          → bekleyen işletme başvuruları
+//   POST ?action=create-vet               → yeni veteriner/groomer hesabı + davet
+//   POST ?action=set-password             → mevcut kullanıcının şifresini değiştir
+//   POST ?action=create-user              → yeni kullanıcı (davetsiz, doğrudan)
+//   POST ?action=approve-access-request   → başvuruyu onayla, hesap aç + davet gönder
+//   POST ?action=reject-access-request    → başvuruyu reddet
+
+async function createVetAccount(admin, { businessType, clinicName, city, country, specialty, phone, email }) {
+  const { data: vetRow, error: insertError } = await admin
+    .from("vets")
+    .insert({
+      business_type: businessType === "groomer" ? "groomer" : "vet",
+      clinic_name: clinicName,
+      city,
+      country,
+      specialty,
+      phone,
+      email,
+      approved: true,
+    })
+    .select()
+    .single();
+  if (insertError) return { error: insertError.message };
+
+  const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
+    data: { role: "vet", vet_id: vetRow.id },
+    redirectTo: process.env.SITE_URL || "https://paw-wallet.vercel.app",
+  });
+
+  if (inviteError) {
+    await admin.from("vets").delete().eq("id", vetRow.id);
+    return { error: inviteError.message };
+  }
+
+  await admin.from("vets").update({ user_id: invited.user.id }).eq("id", vetRow.id);
+  return { vetId: vetRow.id };
+}
 
 export default async function handler(req, res) {
   const authHeader = req.headers.authorization || "";
@@ -41,6 +75,10 @@ export default async function handler(req, res) {
     const { count: serviceProviderCount } = await admin
       .from("service_providers")
       .select("*", { count: "exact", head: true });
+    const { count: pendingAccessRequestCount } = await admin
+      .from("business_access_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending");
 
     return res.status(200).json({
       totalUsers,
@@ -49,6 +87,7 @@ export default async function handler(req, res) {
       vetListingCount: vetListingCount || 0,
       pendingRequestCount: pendingRequestCount || 0,
       serviceProviderCount: serviceProviderCount || 0,
+      pendingAccessRequestCount: pendingAccessRequestCount || 0,
     });
   }
 
@@ -79,6 +118,17 @@ export default async function handler(req, res) {
     return res.status(200).json({ logs: enriched });
   }
 
+  // ---------- ACCESS REQUESTS (list) ----------
+  if (action === "access-requests") {
+    const { data: requests, error: reqError } = await admin
+      .from("business_access_requests")
+      .select("*")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+    if (reqError) return res.status(500).json({ error: reqError.message });
+    return res.status(200).json({ requests: requests || [] });
+  }
+
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   // ---------- CREATE VET ----------
@@ -87,35 +137,9 @@ export default async function handler(req, res) {
     if (!clinicName || !email) {
       return res.status(400).json({ error: "clinicName and email are required" });
     }
-
-    const { data: vetRow, error: insertError } = await admin
-      .from("vets")
-      .insert({
-        business_type: businessType === "groomer" ? "groomer" : "vet",
-        clinic_name: clinicName,
-        city,
-        country,
-        specialty,
-        phone,
-        email,
-        approved: true,
-      })
-      .select()
-      .single();
-    if (insertError) return res.status(500).json({ error: insertError.message });
-
-    const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
-      data: { role: "vet", vet_id: vetRow.id },
-      redirectTo: process.env.SITE_URL || "https://paw-wallet.vercel.app",
-    });
-
-    if (inviteError) {
-      await admin.from("vets").delete().eq("id", vetRow.id);
-      return res.status(500).json({ error: inviteError.message });
-    }
-
-    await admin.from("vets").update({ user_id: invited.user.id }).eq("id", vetRow.id);
-    return res.status(200).json({ ok: true, vetId: vetRow.id, invitedEmail: email });
+    const result = await createVetAccount(admin, { businessType, clinicName, city, country, specialty, phone, email });
+    if (result.error) return res.status(500).json({ error: result.error });
+    return res.status(200).json({ ok: true, vetId: result.vetId, invitedEmail: email });
   }
 
   // ---------- SET PASSWORD ----------
@@ -151,6 +175,43 @@ export default async function handler(req, res) {
     });
     if (createError) return res.status(500).json({ error: createError.message });
     return res.status(200).json({ ok: true, userId: created.user.id, email });
+  }
+
+  // ---------- APPROVE ACCESS REQUEST ----------
+  if (action === "approve-access-request") {
+    const { requestId } = req.body || {};
+    if (!requestId) return res.status(400).json({ error: "requestId is required" });
+
+    const { data: reqRow, error: reqError } = await admin
+      .from("business_access_requests")
+      .select("*")
+      .eq("id", requestId)
+      .single();
+    if (reqError || !reqRow) return res.status(404).json({ error: "Request not found" });
+
+    const result = await createVetAccount(admin, {
+      businessType: reqRow.business_type,
+      clinicName: reqRow.business_name,
+      city: reqRow.city,
+      country: reqRow.country,
+      specialty: [],
+      phone: reqRow.phone,
+      email: reqRow.email,
+    });
+    if (result.error) return res.status(500).json({ error: result.error });
+
+    await admin.from("business_access_requests").update({ status: "approved" }).eq("id", requestId);
+    return res.status(200).json({ ok: true, vetId: result.vetId });
+  }
+
+  // ---------- REJECT ACCESS REQUEST ----------
+  if (action === "reject-access-request") {
+    const { requestId } = req.body || {};
+    if (!requestId) return res.status(400).json({ error: "requestId is required" });
+
+    const { error } = await admin.from("business_access_requests").update({ status: "rejected" }).eq("id", requestId);
+    if (error) return res.status(500).json({ error: error.message });
+    return res.status(200).json({ ok: true });
   }
 
   return res.status(400).json({ error: "Unknown action" });

@@ -201,6 +201,12 @@ const TRANSLATIONS = {
     assignBtn: "Ata",
     alreadyAssignedBtn: "Atandı",
     extraAssignmentLabel: "Ek Atama (Premium)",
+    businessRequestAccessLink: "İşletme misiniz? Başvurun",
+    requestAccessTitle: "İşletme Başvurusu",
+    requestAccessDesc: "Veteriner kliniği ya da kuaför/bakım işletmesiyseniz, bilgilerinizi bırakın — inceleyip size davet göndereceğiz.",
+    requestAccessSentDesc: "Başvurun alındı! İnceledikten sonra e-posta adresine bir davet göndereceğiz.",
+    submitRequestBtn: "Başvuruyu Gönder",
+    fieldClinicPhone: "Telefon",
     makeSecondaryBtn: "İkincil Yap",
     landingHeadline: "Evcil hayvanınızın tüm hayatı, tek bir dijital pasaportta.",
     landingSub: "Kimlik bilgileri, aşı takvimi ve veteriner ataması — hepsi güvenle saklanır, her yerden erişilir.",
@@ -358,6 +364,7 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Firmayı Ekle",
     serviceProviderAdded: "Firma eklendi.",
     vetListSectionTitle: "Kayıtlı Veterinerler",
+    pendingAccessRequestsTitle: "Bekleyen İşletme Başvuruları",
     activityLogsTitle: "Kullanıcı Hareket Kayıtları",
     fieldFilterByEmail: "E-postaya göre filtrele",
     filterBtn: "Filtrele",
@@ -764,6 +771,12 @@ const TRANSLATIONS = {
     assignBtn: "Assign",
     alreadyAssignedBtn: "Assigned",
     extraAssignmentLabel: "Extra Assignment (Premium)",
+    businessRequestAccessLink: "Are you a business? Apply here",
+    requestAccessTitle: "Business Application",
+    requestAccessDesc: "If you're a vet clinic or a grooming/care business, leave your details — we'll review and send you an invite.",
+    requestAccessSentDesc: "Your application was received! We'll send an invite to your email after reviewing it.",
+    submitRequestBtn: "Submit Application",
+    fieldClinicPhone: "Phone",
     makeSecondaryBtn: "Make Secondary",
     landingHeadline: "Your pet's whole life, in one digital passport.",
     landingSub: "Identity details, vaccine schedule and vet assignment — securely stored, accessible from anywhere.",
@@ -921,6 +934,7 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Add Company",
     serviceProviderAdded: "Company added.",
     vetListSectionTitle: "Registered Vets",
+    pendingAccessRequestsTitle: "Pending Business Applications",
     activityLogsTitle: "User Activity Logs",
     fieldFilterByEmail: "Filter by email",
     filterBtn: "Filter",
@@ -1330,6 +1344,12 @@ const TRANSLATIONS = {
     assignBtn: "Assigner",
     alreadyAssignedBtn: "Assigné",
     extraAssignmentLabel: "Attribution Supplémentaire (Premium)",
+    businessRequestAccessLink: "Vous êtes une entreprise ? Postulez ici",
+    requestAccessTitle: "Candidature d'Entreprise",
+    requestAccessDesc: "Si vous êtes une clinique vétérinaire ou un salon de toilettage, laissez vos coordonnées — nous les examinerons et vous enverrons une invitation.",
+    requestAccessSentDesc: "Votre candidature a été reçue ! Nous vous enverrons une invitation par e-mail après examen.",
+    submitRequestBtn: "Envoyer la Candidature",
+    fieldClinicPhone: "Téléphone",
     makeSecondaryBtn: "Définir Secondaire",
     landingHeadline: "Toute la vie de votre animal, dans un seul passeport numérique.",
     landingSub: "Identité, calendrier de vaccination et vétérinaire assigné — stockés en sécurité, accessibles de partout.",
@@ -1487,6 +1507,7 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Ajouter l'Entreprise",
     serviceProviderAdded: "Entreprise ajoutée.",
     vetListSectionTitle: "Vétérinaires Enregistrés",
+    pendingAccessRequestsTitle: "Candidatures d'Entreprise en Attente",
     activityLogsTitle: "Journaux d'Activité",
     fieldFilterByEmail: "Filtrer par e-mail",
     filterBtn: "Filtrer",
@@ -1873,6 +1894,12 @@ const TRANSLATIONS = {
     assignBtn: "Zuweisen",
     alreadyAssignedBtn: "Zugewiesen",
     extraAssignmentLabel: "Zusätzliche Zuweisung (Premium)",
+    businessRequestAccessLink: "Sind Sie ein Unternehmen? Hier bewerben",
+    requestAccessTitle: "Unternehmensbewerbung",
+    requestAccessDesc: "Wenn Sie eine Tierarztpraxis oder ein Pflege-/Hundesalon-Unternehmen sind, hinterlassen Sie Ihre Daten — wir prüfen und senden Ihnen eine Einladung.",
+    requestAccessSentDesc: "Ihre Bewerbung wurde erhalten! Wir senden Ihnen nach der Prüfung eine Einladung per E-Mail.",
+    submitRequestBtn: "Bewerbung Senden",
+    fieldClinicPhone: "Telefon",
     makeSecondaryBtn: "Als Sekundär Festlegen",
     landingHeadline: "Das ganze Leben Ihres Haustiers in einem digitalen Pass.",
     landingSub: "Identitätsdaten, Impfplan und Tierarztzuweisung — sicher gespeichert, von überall zugänglich.",
@@ -2030,6 +2057,7 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Firma Hinzufügen",
     serviceProviderAdded: "Firma hinzugefügt.",
     vetListSectionTitle: "Registrierte Tierärzte",
+    pendingAccessRequestsTitle: "Ausstehende Unternehmensbewerbungen",
     activityLogsTitle: "Aktivitätsprotokolle",
     fieldFilterByEmail: "Nach E-Mail filtern",
     filterBtn: "Filtern",
@@ -2418,6 +2446,12 @@ const TRANSLATIONS = {
     assignBtn: "Asignar",
     alreadyAssignedBtn: "Asignado",
     extraAssignmentLabel: "Asignación Extra (Premium)",
+    businessRequestAccessLink: "¿Eres un negocio? Solicita aquí",
+    requestAccessTitle: "Solicitud de Negocio",
+    requestAccessDesc: "Si eres una clínica veterinaria o un negocio de peluquería/cuidado, déjanos tus datos — los revisaremos y te enviaremos una invitación.",
+    requestAccessSentDesc: "¡Tu solicitud fue recibida! Te enviaremos una invitación por correo después de revisarla.",
+    submitRequestBtn: "Enviar Solicitud",
+    fieldClinicPhone: "Teléfono",
     makeSecondaryBtn: "Hacer Secundario",
     landingHeadline: "Toda la vida de tu mascota, en un solo pasaporte digital.",
     landingSub: "Datos de identidad, calendario de vacunas y veterinario asignado — almacenados con seguridad, accesibles desde cualquier lugar.",
@@ -2575,6 +2609,7 @@ const TRANSLATIONS = {
     createServiceProviderBtn: "Añadir Empresa",
     serviceProviderAdded: "Empresa añadida.",
     vetListSectionTitle: "Veterinarios Registrados",
+    pendingAccessRequestsTitle: "Solicitudes de Negocio Pendientes",
     activityLogsTitle: "Registros de Actividad",
     fieldFilterByEmail: "Filtrar por correo",
     filterBtn: "Filtrar",
@@ -6174,6 +6209,31 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
   const [sentTo, setSentTo] = useState("");
   const [forgotMode, setForgotMode] = useState(false);
   const [resetSentTo, setResetSentTo] = useState("");
+  const [requestAccessMode, setRequestAccessMode] = useState(false);
+  const [reqForm, setReqForm] = useState({ businessName: "", businessType: "vet", email: "", phone: "", city: "", country: "" });
+  const [reqSubmitting, setReqSubmitting] = useState(false);
+  const [reqSent, setReqSent] = useState(false);
+  const [reqError, setReqError] = useState("");
+
+  const submitAccessRequest = async () => {
+    if (!reqForm.businessName.trim() || !reqForm.email.trim()) return;
+    setReqSubmitting(true);
+    setReqError("");
+    const { error } = await supabase.from("business_access_requests").insert({
+      business_name: reqForm.businessName,
+      business_type: reqForm.businessType,
+      email: reqForm.email,
+      phone: reqForm.phone,
+      city: reqForm.city,
+      country: reqForm.country,
+    });
+    if (error) {
+      setReqError(t.authError);
+    } else {
+      setReqSent(true);
+    }
+    setReqSubmitting(false);
+  };
 
   const submit = async () => {
     setError("");
@@ -6234,6 +6294,92 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
         <p className="text-[14px] text-[#3c473f] leading-relaxed">{t.resetLinkSentDesc(resetSentTo)}</p>
         <div className="mt-6 flex justify-end">
           <GhostButton onClick={onClose}>{t.backToForm}</GhostButton>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (requestAccessMode) {
+    if (reqSent) {
+      return (
+        <Modal title={t.requestAccessTitle} onClose={onClose}>
+          <p className="text-[14px] text-[#3c473f] leading-relaxed">{t.requestAccessSentDesc}</p>
+          <div className="mt-6 flex justify-end">
+            <GhostButton onClick={onClose}>{t.backToForm}</GhostButton>
+          </div>
+        </Modal>
+      );
+    }
+    return (
+      <Modal title={t.requestAccessTitle} onClose={onClose}>
+        <div className="space-y-3.5">
+          <p className="text-[13.5px] text-[#5b6d63]">{t.requestAccessDesc}</p>
+          <Field label={t.fieldBusinessType}>
+            <div className="flex gap-2">
+              {Object.entries(t.businessTypeNames).map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setReqForm((f) => ({ ...f, businessType: key }))}
+                  className={`flex-1 rounded-md border px-3 py-2 text-[13px] font-semibold transition ${
+                    reqForm.businessType === key
+                      ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                      : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </Field>
+          <Field label={t.fieldClinicName}>
+            <input
+              className={inputCls}
+              value={reqForm.businessName}
+              onChange={(e) => setReqForm((f) => ({ ...f, businessName: e.target.value }))}
+            />
+          </Field>
+          <Field label={t.fieldEmail}>
+            <input
+              type="email"
+              className={inputCls}
+              value={reqForm.email}
+              onChange={(e) => setReqForm((f) => ({ ...f, email: e.target.value }))}
+            />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t.fieldVetCity}>
+              <input
+                className={inputCls}
+                value={reqForm.city}
+                onChange={(e) => setReqForm((f) => ({ ...f, city: e.target.value }))}
+              />
+            </Field>
+            <Field label={t.fieldVetCountry}>
+              <input
+                className={inputCls}
+                value={reqForm.country}
+                onChange={(e) => setReqForm((f) => ({ ...f, country: e.target.value }))}
+              />
+            </Field>
+          </div>
+          <Field label={t.fieldClinicPhone}>
+            <input
+              className={inputCls}
+              value={reqForm.phone}
+              onChange={(e) => setReqForm((f) => ({ ...f, phone: e.target.value }))}
+            />
+          </Field>
+          {reqError && <p className="text-[13px] text-[#a63d40]">{reqError}</p>}
+          <PrimaryButton onClick={submitAccessRequest} full icon={reqSubmitting ? Loader2 : Check}>
+            {t.submitRequestBtn}
+          </PrimaryButton>
+          <button
+            onClick={() => setRequestAccessMode(false)}
+            className="w-full text-center text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 mt-1"
+          >
+            {t.backToForm}
+          </button>
         </div>
       </Modal>
     );
@@ -6322,6 +6468,13 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
           className="w-full text-center text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 mt-1"
         >
           {mode === "signup" ? t.authSwitchToLogin : t.authSwitchToSignup}
+        </button>
+
+        <button
+          onClick={() => setRequestAccessMode(true)}
+          className="w-full text-center text-[12px] text-[#8d8560] hover:text-[#1B3A2F] underline underline-offset-2"
+        >
+          {t.businessRequestAccessLink}
         </button>
       </div>
     </Modal>
@@ -6415,6 +6568,8 @@ function AdminPanel({ session }) {
   const [logs, setLogs] = useState([]);
   const [logsLoading, setLogsLoading] = useState(false);
   const [emailFilterInput, setEmailFilterInput] = useState("");
+  const [accessRequests, setAccessRequests] = useState([]);
+  const [accessRequestsBusy, setAccessRequestsBusy] = useState(null);
 
   const loadLogs = useCallback(
     async (emailFilter = "") => {
@@ -6449,11 +6604,42 @@ function AdminPanel({ session }) {
     if (data) setVetsList(data);
   }, []);
 
+  const loadAccessRequests = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin?action=access-requests", {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      const data = await res.json();
+      setAccessRequests(data.requests || []);
+    } catch {
+      /* ignore */
+    }
+  }, [session]);
+
+  const respondToAccessRequest = async (requestId, approve) => {
+    setAccessRequestsBusy(requestId);
+    try {
+      const res = await fetch(`/api/admin?action=${approve ? "approve-access-request" : "reject-access-request"}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ requestId }),
+      });
+      await res.json();
+      loadAccessRequests();
+      loadStats();
+      loadVets();
+    } catch {
+      /* ignore */
+    }
+    setAccessRequestsBusy(null);
+  };
+
   useEffect(() => {
     loadStats();
     loadVets();
     loadLogs();
-  }, [loadStats, loadVets, loadLogs]);
+    loadAccessRequests();
+  }, [loadStats, loadVets, loadLogs, loadAccessRequests]);
 
   const submitVet = async () => {
     if (!vetForm.clinicName.trim() || !vetForm.email.trim()) return;
@@ -6793,6 +6979,50 @@ function AdminPanel({ session }) {
             </div>
           </div>
         </div>
+
+        {accessRequests.length > 0 && (
+          <div className="mb-8">
+            <p className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#5b6d63] mb-2.5">
+              {t.pendingAccessRequestsTitle}
+            </p>
+            <div className="space-y-2">
+              {accessRequests.map((r) => (
+                <div
+                  key={r.id}
+                  className="flex items-center justify-between rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] px-4 py-3 flex-wrap gap-2"
+                >
+                  <div>
+                    <p className="text-[14px] font-semibold text-[#1B3A2F]">
+                      {r.business_name}{" "}
+                      <span className="text-[10.5px] font-bold tracking-wider bg-[#eee6cd] text-[#8a6d16] rounded-full px-2 py-0.5 ml-1">
+                        {t.businessTypeNames?.[r.business_type] || r.business_type}
+                      </span>
+                    </p>
+                    <p className="text-[12px] text-[#5b6d63]">
+                      {r.email} {r.phone && `· ${r.phone}`} {(r.city || r.country) && `· ${r.city}${r.city && r.country ? ", " : ""}${r.country}`}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      disabled={accessRequestsBusy === r.id}
+                      onClick={() => respondToAccessRequest(r.id, true)}
+                      className="rounded-md bg-[#1B3A2F] text-[#F7F3E8] text-[12px] font-semibold px-3 py-1.5 hover:bg-[#234a3b] transition disabled:opacity-50"
+                    >
+                      {t.approveBtn}
+                    </button>
+                    <button
+                      disabled={accessRequestsBusy === r.id}
+                      onClick={() => respondToAccessRequest(r.id, false)}
+                      className="rounded-md border border-[#e3c2c2] text-[#a63d40] text-[12px] font-semibold px-3 py-1.5 hover:bg-[#f7e9e9] transition disabled:opacity-50"
+                    >
+                      {t.rejectBtn}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <p className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#5b6d63] mb-2.5">{t.vetListSectionTitle}</p>
         <div className="grid sm:grid-cols-2 gap-3">
