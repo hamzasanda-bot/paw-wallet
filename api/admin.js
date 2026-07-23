@@ -11,6 +11,7 @@ import { createClient } from "@supabase/supabase-js";
 //   POST ?action=create-user              → yeni kullanıcı (davetsiz, doğrudan)
 //   POST ?action=approve-access-request   → başvuruyu onayla, hesap aç + davet gönder
 //   POST ?action=reject-access-request    → başvuruyu reddet
+//   POST ?action=verify-vet               → profili incele, herkese açık listeye al
 
 async function createVetAccount(admin, { businessType, clinicName, city, country, specialty, phone, email }) {
   const { data: vetRow, error: insertError } = await admin
@@ -202,6 +203,15 @@ export default async function handler(req, res) {
 
     await admin.from("business_access_requests").update({ status: "approved" }).eq("id", requestId);
     return res.status(200).json({ ok: true, vetId: result.vetId });
+  }
+
+  // ---------- VERIFY VET (profile reviewed & approved for public listing) ----------
+  if (action === "verify-vet") {
+    const { vetId } = req.body || {};
+    if (!vetId) return res.status(400).json({ error: "vetId is required" });
+    const { error } = await admin.from("vets").update({ verified: true }).eq("id", vetId);
+    if (error) return res.status(500).json({ error: error.message });
+    return res.status(200).json({ ok: true });
   }
 
   // ---------- REJECT ACCESS REQUEST ----------

@@ -365,6 +365,13 @@ const TRANSLATIONS = {
     serviceProviderAdded: "Firma eklendi.",
     vetListSectionTitle: "Kayıtlı Veterinerler",
     pendingAccessRequestsTitle: "Bekleyen İşletme Başvuruları",
+    verifiedBadge: "Doğrulandı",
+    underReviewBadge: "İnceleniyor",
+    underReviewTitle: "Hesabınız inceleniyor",
+    underReviewDesc: "Klinik Bilgileri sekmesindeki bilgilerinizi eksiksiz doldurun. Ekibimiz inceleyip onayladıktan sonra 'Sağlık & Bakım' listesinde görünmeye başlayacaksınız.",
+    verifyBtn: "Doğrula",
+    verifiedLabel: "Doğrulandı",
+    notVerifiedLabel: "İnceleniyor",
     activityLogsTitle: "Kullanıcı Hareket Kayıtları",
     fieldFilterByEmail: "E-postaya göre filtrele",
     filterBtn: "Filtrele",
@@ -935,6 +942,13 @@ const TRANSLATIONS = {
     serviceProviderAdded: "Company added.",
     vetListSectionTitle: "Registered Vets",
     pendingAccessRequestsTitle: "Pending Business Applications",
+    verifiedBadge: "Verified",
+    underReviewBadge: "Under Review",
+    underReviewTitle: "Your account is under review",
+    underReviewDesc: "Complete your details in the Clinic Info tab. Once our team reviews and approves it, you'll start appearing in the 'Health & Care' listing.",
+    verifyBtn: "Verify",
+    verifiedLabel: "Verified",
+    notVerifiedLabel: "Under Review",
     activityLogsTitle: "User Activity Logs",
     fieldFilterByEmail: "Filter by email",
     filterBtn: "Filter",
@@ -1508,6 +1522,13 @@ const TRANSLATIONS = {
     serviceProviderAdded: "Entreprise ajoutée.",
     vetListSectionTitle: "Vétérinaires Enregistrés",
     pendingAccessRequestsTitle: "Candidatures d'Entreprise en Attente",
+    verifiedBadge: "Vérifié",
+    underReviewBadge: "En Cours d'Examen",
+    underReviewTitle: "Votre compte est en cours d'examen",
+    underReviewDesc: "Complétez vos informations dans l'onglet Infos de la Clinique. Une fois examiné et approuvé par notre équipe, vous apparaîtrez dans la liste 'Santé & Soins'.",
+    verifyBtn: "Vérifier",
+    verifiedLabel: "Vérifié",
+    notVerifiedLabel: "En Cours d'Examen",
     activityLogsTitle: "Journaux d'Activité",
     fieldFilterByEmail: "Filtrer par e-mail",
     filterBtn: "Filtrer",
@@ -2058,6 +2079,13 @@ const TRANSLATIONS = {
     serviceProviderAdded: "Firma hinzugefügt.",
     vetListSectionTitle: "Registrierte Tierärzte",
     pendingAccessRequestsTitle: "Ausstehende Unternehmensbewerbungen",
+    verifiedBadge: "Verifiziert",
+    underReviewBadge: "In Prüfung",
+    underReviewTitle: "Ihr Konto wird geprüft",
+    underReviewDesc: "Vervollständigen Sie Ihre Angaben im Tab Klinikinformationen. Nach Prüfung und Genehmigung durch unser Team erscheinen Sie in der Liste 'Gesundheit & Pflege'.",
+    verifyBtn: "Verifizieren",
+    verifiedLabel: "Verifiziert",
+    notVerifiedLabel: "In Prüfung",
     activityLogsTitle: "Aktivitätsprotokolle",
     fieldFilterByEmail: "Nach E-Mail filtern",
     filterBtn: "Filtern",
@@ -2610,6 +2638,13 @@ const TRANSLATIONS = {
     serviceProviderAdded: "Empresa añadida.",
     vetListSectionTitle: "Veterinarios Registrados",
     pendingAccessRequestsTitle: "Solicitudes de Negocio Pendientes",
+    verifiedBadge: "Verificado",
+    underReviewBadge: "En Revisión",
+    underReviewTitle: "Tu cuenta está en revisión",
+    underReviewDesc: "Completa tus datos en la pestaña Información de la Clínica. Una vez que nuestro equipo lo revise y apruebe, aparecerás en el listado de 'Salud & Cuidado'.",
+    verifyBtn: "Verificar",
+    verifiedLabel: "Verificado",
+    notVerifiedLabel: "En Revisión",
     activityLogsTitle: "Registros de Actividad",
     fieldFilterByEmail: "Filtrar por correo",
     filterBtn: "Filtrar",
@@ -5029,7 +5064,7 @@ function BookAppointmentModal({ dog, session, onClose, onBooked }) {
         roleByVetId[r.vet_id] = r.role;
       });
 
-      const { data: vetRows } = await supabase.from("vets").select("*").eq("approved", true).order("clinic_name");
+      const { data: vetRows } = await supabase.from("vets").select("*").eq("approved", true).eq("verified", true).order("clinic_name");
       const bookable = (vetRows || []).filter((v) => (v.availability || []).length > 0);
       const withRole = bookable.map((v) => ({ ...v, myRole: roleByVetId[v.id] || null }));
       withRole.sort((a, b) => {
@@ -5810,7 +5845,7 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
   const [selectedVetDetail, setSelectedVetDetail] = useState(null);
 
   const load = useCallback(async () => {
-    const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).order("clinic_name");
+    const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).eq("verified", true).order("clinic_name");
     if (vetsData) {
       const { data: ratingsData } = await supabase.from("vet_ratings").select("*");
       const ratingByVetId = Object.fromEntries((ratingsData || []).map((r) => [r.vet_id, r]));
@@ -6210,7 +6245,15 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
   const [forgotMode, setForgotMode] = useState(false);
   const [resetSentTo, setResetSentTo] = useState("");
   const [requestAccessMode, setRequestAccessMode] = useState(false);
-  const [reqForm, setReqForm] = useState({ businessName: "", businessType: "vet", email: "", phone: "", city: "", country: "" });
+  const [reqForm, setReqForm] = useState({
+    businessName: "",
+    businessType: "vet",
+    email: "",
+    phoneCode: "",
+    phoneNumber: "",
+    city: "",
+    country: "",
+  });
   const [reqSubmitting, setReqSubmitting] = useState(false);
   const [reqSent, setReqSent] = useState(false);
   const [reqError, setReqError] = useState("");
@@ -6223,7 +6266,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
       business_name: reqForm.businessName,
       business_type: reqForm.businessType,
       email: reqForm.email,
-      phone: reqForm.phone,
+      phone: fmtPhone(reqForm.phoneCode, reqForm.phoneNumber),
       city: reqForm.city,
       country: reqForm.country,
     });
@@ -6347,29 +6390,22 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
               onChange={(e) => setReqForm((f) => ({ ...f, email: e.target.value }))}
             />
           </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label={t.fieldVetCity}>
-              <input
-                className={inputCls}
-                value={reqForm.city}
-                onChange={(e) => setReqForm((f) => ({ ...f, city: e.target.value }))}
-              />
-            </Field>
-            <Field label={t.fieldVetCountry}>
-              <input
-                className={inputCls}
-                value={reqForm.country}
-                onChange={(e) => setReqForm((f) => ({ ...f, country: e.target.value }))}
-              />
-            </Field>
-          </div>
-          <Field label={t.fieldClinicPhone}>
-            <input
-              className={inputCls}
-              value={reqForm.phone}
-              onChange={(e) => setReqForm((f) => ({ ...f, phone: e.target.value }))}
-            />
-          </Field>
+          <CountryCityPicker
+            t={t}
+            countryLabel={t.fieldVetCountry}
+            cityLabel={t.fieldVetCity}
+            country={reqForm.country}
+            city={reqForm.city}
+            onCountryChange={(v) => setReqForm((f) => ({ ...f, country: v }))}
+            onCityChange={(v) => setReqForm((f) => ({ ...f, city: v }))}
+          />
+          <PhoneField
+            label={t.fieldClinicPhone}
+            code={reqForm.phoneCode}
+            number={reqForm.phoneNumber}
+            onCodeChange={(v) => setReqForm((f) => ({ ...f, phoneCode: v }))}
+            onNumberChange={(v) => setReqForm((f) => ({ ...f, phoneNumber: v }))}
+          />
           {reqError && <p className="text-[13px] text-[#a63d40]">{reqError}</p>}
           <PrimaryButton onClick={submitAccessRequest} full icon={reqSubmitting ? Loader2 : Check}>
             {t.submitRequestBtn}
@@ -6472,7 +6508,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
 
         <button
           onClick={() => setRequestAccessMode(true)}
-          className="w-full text-center text-[12px] text-[#8d8560] hover:text-[#1B3A2F] underline underline-offset-2"
+          className="w-full text-center text-[13px] font-bold text-[#1B3A2F] hover:text-[#C9A227] underline underline-offset-2 mt-1"
         >
           {t.businessRequestAccessLink}
         </button>
@@ -6632,6 +6668,22 @@ function AdminPanel({ session }) {
       /* ignore */
     }
     setAccessRequestsBusy(null);
+  };
+
+  const [verifyBusyId, setVerifyBusyId] = useState(null);
+  const verifyVet = async (vetId) => {
+    setVerifyBusyId(vetId);
+    try {
+      await fetch("/api/admin?action=verify-vet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ vetId }),
+      });
+      loadVets();
+    } catch {
+      /* ignore */
+    }
+    setVerifyBusyId(null);
   };
 
   useEffect(() => {
@@ -7028,7 +7080,16 @@ function AdminPanel({ session }) {
         <div className="grid sm:grid-cols-2 gap-3">
           {vetsList.map((vet) => (
             <div key={vet.id} className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4">
-              <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.clinic_name}</p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[14px] font-semibold text-[#1B3A2F]">{vet.clinic_name}</p>
+                <span
+                  className={`text-[9.5px] font-bold tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
+                    vet.verified ? "bg-[#dcefe3] text-[#1B3A2F]" : "bg-[#f3e9c8] text-[#8a6d16]"
+                  }`}
+                >
+                  {vet.verified ? t.verifiedLabel : t.notVerifiedLabel}
+                </span>
+              </div>
               <p className="text-[12px] text-[#5b6d63]">
                 {vet.city}
                 {vet.city && vet.country ? ", " : ""}
@@ -7037,6 +7098,15 @@ function AdminPanel({ session }) {
               <p className="text-[11.5px] text-[#8d8560] mt-1">
                 {vet.user_id ? "✓ " + t.logInBtn : "—"} {vet.phone && `· ${vet.phone}`}
               </p>
+              {!vet.verified && (
+                <button
+                  onClick={() => verifyVet(vet.id)}
+                  disabled={verifyBusyId === vet.id}
+                  className="mt-2 rounded-md bg-[#1B3A2F] text-[#F7F3E8] text-[11.5px] font-semibold px-3 py-1.5 hover:bg-[#234a3b] transition disabled:opacity-50"
+                >
+                  {t.verifyBtn}
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -7617,6 +7687,16 @@ function AppointmentDetailModal({ appt, session, viewerRole = "vet", onClose, on
           <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full ${statusCfg.cls}`}>{statusCfg.label}</span>
         </div>
         {appt.status_note && <Row label={t.statusNoteLabel} value={appt.status_note} />}
+        {!isOwnerView && appt.rating > 0 && (
+          <div className="flex items-baseline justify-between gap-4 py-1.5 border-b border-dotted border-[#d8cfb4]">
+            <span className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold shrink-0">{t.rateServiceLabel}</span>
+            <span className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <Star key={n} size={14} className={n <= appt.rating ? "fill-[#C9A227] text-[#C9A227]" : "text-[#d8cfb4]"} />
+              ))}
+            </span>
+          </div>
+        )}
       </div>
 
       {isOwnerView && appt.status === "done" && isOnApp && (
@@ -8008,7 +8088,20 @@ function VetPortal({ session }) {
             </div>
             <div>
               <h1 className="font-display text-[22px] text-[#1B3A2F] leading-none">{t.vetPortalTitle}</h1>
-              {vet && <p className="text-[11.5px] text-[#5b6d63]">{t.vetPortalWelcome(vet.clinic_name)}</p>}
+              {vet && (
+                <p className="text-[11.5px] text-[#5b6d63] flex items-center gap-1.5 mt-0.5">
+                  {t.vetPortalWelcome(vet.clinic_name)}
+                  {vet.verified ? (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#1B3A2F] bg-[#dcefe3] rounded-full px-2 py-0.5">
+                      <ShieldCheck size={10} /> {t.verifiedBadge}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#8a6d16] bg-[#f3e9c8] rounded-full px-2 py-0.5">
+                      {t.underReviewBadge}
+                    </span>
+                  )}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2.5">
@@ -8033,6 +8126,14 @@ function VetPortal({ session }) {
           <EmptyState icon={ShieldAlert} text={t.authError} />
         ) : (
           <>
+            {!vet.verified && (
+              <div className="rounded-xl border border-[#C9A227]/50 bg-[#f3e9c8] px-5 py-3.5 mb-6">
+                <p className="text-[13.5px] font-semibold text-[#8a6d16] flex items-center gap-2">
+                  <AlertTriangle size={16} /> {t.underReviewTitle}
+                </p>
+                <p className="text-[12.5px] text-[#8a6d16]/90 mt-1">{t.underReviewDesc}</p>
+              </div>
+            )}
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-6">
               {[
                 { id: "dashboard", label: t.vetTabDashboard, icon: LayoutGrid, alert: false },
