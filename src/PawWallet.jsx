@@ -37,6 +37,8 @@ import {
   Search,
   LayoutGrid,
   NotebookText,
+  Send,
+  MessageCircle,
 } from "lucide-react";
 import { isPushSupported, getPushPermissionState, subscribeToPush } from "./pushClient";
 import { logActivity } from "./activityLog";
@@ -375,6 +377,10 @@ const TRANSLATIONS = {
     businessBoxTitle: "İşletme misiniz?",
     businessBoxDesc: "Veteriner kliniğinizi ya da kuaför/bakım işletmenizi Paw Wallet'a taşıyın.",
     applyNowBtn: "Başvuru Yap",
+    messagesTitle: "Mesajlar",
+    noMessagesYet: "Henüz mesaj yok. İlk mesajı gönder.",
+    messagePlaceholder: "Bir mesaj yaz…",
+    messageBtn: "Mesaj",
     activityLogsTitle: "Kullanıcı Hareket Kayıtları",
     fieldFilterByEmail: "E-postaya göre filtrele",
     filterBtn: "Filtrele",
@@ -955,6 +961,10 @@ const TRANSLATIONS = {
     businessBoxTitle: "Are you a business?",
     businessBoxDesc: "Bring your vet clinic or grooming/care business to Paw Wallet.",
     applyNowBtn: "Apply Now",
+    messagesTitle: "Messages",
+    noMessagesYet: "No messages yet. Send the first one.",
+    messagePlaceholder: "Write a message…",
+    messageBtn: "Message",
     activityLogsTitle: "User Activity Logs",
     fieldFilterByEmail: "Filter by email",
     filterBtn: "Filter",
@@ -1538,6 +1548,10 @@ const TRANSLATIONS = {
     businessBoxTitle: "Vous êtes une entreprise ?",
     businessBoxDesc: "Rejoignez Paw Wallet avec votre clinique vétérinaire ou votre salon de toilettage.",
     applyNowBtn: "Postuler",
+    messagesTitle: "Messages",
+    noMessagesYet: "Aucun message pour le moment. Envoyez le premier.",
+    messagePlaceholder: "Écrire un message…",
+    messageBtn: "Message",
     activityLogsTitle: "Journaux d'Activité",
     fieldFilterByEmail: "Filtrer par e-mail",
     filterBtn: "Filtrer",
@@ -2098,6 +2112,10 @@ const TRANSLATIONS = {
     businessBoxTitle: "Sind Sie ein Unternehmen?",
     businessBoxDesc: "Bringen Sie Ihre Tierarztpraxis oder Ihr Pflege-/Hundesalon-Unternehmen zu Paw Wallet.",
     applyNowBtn: "Jetzt Bewerben",
+    messagesTitle: "Nachrichten",
+    noMessagesYet: "Noch keine Nachrichten. Senden Sie die erste.",
+    messagePlaceholder: "Eine Nachricht schreiben…",
+    messageBtn: "Nachricht",
     activityLogsTitle: "Aktivitätsprotokolle",
     fieldFilterByEmail: "Nach E-Mail filtern",
     filterBtn: "Filtern",
@@ -2660,6 +2678,10 @@ const TRANSLATIONS = {
     businessBoxTitle: "¿Eres un negocio?",
     businessBoxDesc: "Trae tu clínica veterinaria o tu negocio de peluquería/cuidado a Paw Wallet.",
     applyNowBtn: "Solicitar Ahora",
+    messagesTitle: "Mensajes",
+    noMessagesYet: "Aún no hay mensajes. Envía el primero.",
+    messagePlaceholder: "Escribe un mensaje…",
+    messageBtn: "Mensaje",
     activityLogsTitle: "Registros de Actividad",
     fieldFilterByEmail: "Filtrar por correo",
     filterBtn: "Filtrar",
@@ -5858,6 +5880,7 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
   const [requests, setRequests] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [selectedVetDetail, setSelectedVetDetail] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(null);
 
   const load = useCallback(async () => {
     const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).eq("verified", true).order("clinic_name");
@@ -5955,6 +5978,14 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
           <button onClick={() => cancelRequest(req.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
             <Trash2 size={14} />
           </button>
+          {req.status === "approved" && (
+            <button
+              onClick={() => setSelectedChat({ vetId: vet.id, clinicName: vet.clinic_name })}
+              className="text-[#5b6d63] hover:text-[#1B3A2F] transition p-1"
+            >
+              <MessageCircle size={16} />
+            </button>
+          )}
         </div>
       </div>
     );
@@ -6054,6 +6085,16 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
       </div>
       {selectedVetDetail && (
         <VetDetailModal vet={selectedVetDetail} dog={dog} session={session} onClose={() => setSelectedVetDetail(null)} />
+      )}
+      {selectedChat && (
+        <ChatModal
+          vetId={selectedChat.vetId}
+          dogId={dog.id}
+          session={session}
+          viewerRole="owner"
+          otherPartyName={selectedChat.clinicName}
+          onClose={() => setSelectedChat(null)}
+        />
       )}
     </div>
   );
@@ -7635,6 +7676,105 @@ function PatientDetailModal({ dogId, session, businessType, onClose }) {
   );
 }
 
+function ChatModal({ vetId, dogId, session, viewerRole, otherPartyName, onClose }) {
+  const { t, lang } = useI18n();
+  const locale = LANGS.find((l) => l.code === lang)?.locale;
+  const [messages, setMessages] = useState(null);
+  const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
+  const scrollRef = useRef(null);
+
+  const load = useCallback(async () => {
+    const { data } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("vet_id", vetId)
+      .eq("dog_id", dogId)
+      .order("created_at", { ascending: true });
+    setMessages(data || []);
+
+    // Karşı taraftan gelen okunmamış mesajları okundu olarak işaretle
+    const unreadFromOther = (data || []).filter((m) => m.sender_role !== viewerRole && !m.read);
+    if (unreadFromOther.length > 0) {
+      await supabase
+        .from("messages")
+        .update({ read: true })
+        .eq("vet_id", vetId)
+        .eq("dog_id", dogId)
+        .neq("sender_role", viewerRole);
+    }
+  }, [vetId, dogId, viewerRole]);
+
+  useEffect(() => {
+    load();
+    const interval = setInterval(load, 5000);
+    return () => clearInterval(interval);
+  }, [load]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
+  }, [messages]);
+
+  const send = async () => {
+    if (!input.trim()) return;
+    setSending(true);
+    const content = input.trim();
+    setInput("");
+    await supabase.from("messages").insert({
+      vet_id: vetId,
+      dog_id: dogId,
+      sender_role: viewerRole,
+      sender_id: session.user.id,
+      content,
+    });
+    setSending(false);
+    load();
+  };
+
+  return (
+    <Modal title={otherPartyName || t.messagesTitle} onClose={onClose}>
+      <div ref={scrollRef} className="h-80 overflow-y-auto rounded-md border border-[#d8cfb4] bg-white/50 p-3 space-y-2 mb-3">
+        {messages === null ? (
+          <div className="h-full grid place-items-center text-[#5b6d63]">
+            <Loader2 className="animate-spin" size={18} />
+          </div>
+        ) : messages.length === 0 ? (
+          <p className="text-[13px] text-[#5b6d63] text-center mt-8">{t.noMessagesYet}</p>
+        ) : (
+          messages.map((m) => {
+            const isMine = m.sender_role === viewerRole;
+            return (
+              <div key={m.id} className={`flex ${isMine ? "justify-end" : "justify-start"}`}>
+                <div
+                  className={`max-w-[75%] rounded-xl px-3 py-2 text-[13.5px] ${
+                    isMine ? "bg-[#1B3A2F] text-[#F7F3E8]" : "bg-[#eee6cd] text-[#1f2a24]"
+                  }`}
+                >
+                  <p>{m.content}</p>
+                  <p className={`text-[10px] mt-0.5 ${isMine ? "text-[#F7F3E8]/60" : "text-[#8d8560]"}`}>
+                    {fmtDate(m.created_at?.slice(0, 10), locale)}{" "}
+                    {new Date(m.created_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}
+                  </p>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+      <div className="flex gap-2">
+        <input
+          className={inputCls}
+          placeholder={t.messagePlaceholder}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+        />
+        <PrimaryButton disabled={sending || !input.trim()} onClick={send} icon={Send} />
+      </div>
+    </Modal>
+  );
+}
+
 function AppointmentDetailModal({ appt, session, viewerRole = "vet", onClose, onUpdated }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
@@ -7913,6 +8053,7 @@ function VetPortal({ session }) {
   };
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [selectedAppt, setSelectedAppt] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(null);
   const [newAvailability, setNewAvailability] = useState({ day: 1, start: "09:00", end: "17:00" });
   const [appointments, setAppointments] = useState([]);
   const [showBlockSlot, setShowBlockSlot] = useState(false);
@@ -8386,7 +8527,15 @@ function VetPortal({ session }) {
                         </div>
                         <span className="text-[14px] text-[#1f2a24] font-medium">{r.dog_name}</span>
                       </div>
-                      <GhostButton onClick={() => setSelectedPatientId(r.dog_id)}>{t.viewPatientBtn}</GhostButton>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setSelectedChat({ dogId: r.dog_id, dogName: r.dog_name })}
+                          className="text-[#5b6d63] hover:text-[#1B3A2F] transition p-1.5"
+                        >
+                          <MessageCircle size={16} />
+                        </button>
+                        <GhostButton onClick={() => setSelectedPatientId(r.dog_id)}>{t.viewPatientBtn}</GhostButton>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -8838,6 +8987,16 @@ function VetPortal({ session }) {
           session={session}
           onClose={() => setSelectedAppt(null)}
           onUpdated={load}
+        />
+      )}
+      {selectedChat && (
+        <ChatModal
+          vetId={vetId}
+          dogId={selectedChat.dogId}
+          session={session}
+          viewerRole="vet"
+          otherPartyName={selectedChat.dogName}
+          onClose={() => setSelectedChat(null)}
         />
       )}
     </div>
