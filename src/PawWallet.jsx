@@ -198,6 +198,9 @@ const TRANSLATIONS = {
     vetTabSubtitle: (dogName) => `Platformdaki veterinerlerden ${dogName}'e birincil ve ikincil veteriner atayın.`,
     platformVetsLabel: "Platform Veterinerleri",
     makePrimaryBtn: "Birincil Yap",
+    assignBtn: "Ata",
+    alreadyAssignedBtn: "Atandı",
+    extraAssignmentLabel: "Ek Atama (Premium)",
     makeSecondaryBtn: "İkincil Yap",
     landingHeadline: "Evcil hayvanınızın tüm hayatı, tek bir dijital pasaportta.",
     landingSub: "Kimlik bilgileri, aşı takvimi ve veteriner ataması — hepsi güvenle saklanır, her yerden erişilir.",
@@ -485,6 +488,7 @@ const TRANSLATIONS = {
     rescheduleActionBtn: "Yeniden Planla",
     doneActionBtn: "Tamamlandı",
     statusNoteLabel: "Not",
+    rateServiceLabel: "Bu hizmeti puanla",
     statusNotePlaceholder: "Hasta/müşteri ile ilgili not…",
     confirmActionBtn: "Onayla",
     newDateLabel: "Yeni Tarih",
@@ -757,6 +761,9 @@ const TRANSLATIONS = {
     vetTabSubtitle: (dogName) => `Assign a primary and secondary vet to ${dogName} from platform vets.`,
     platformVetsLabel: "Platform Vets",
     makePrimaryBtn: "Make Primary",
+    assignBtn: "Assign",
+    alreadyAssignedBtn: "Assigned",
+    extraAssignmentLabel: "Extra Assignment (Premium)",
     makeSecondaryBtn: "Make Secondary",
     landingHeadline: "Your pet's whole life, in one digital passport.",
     landingSub: "Identity details, vaccine schedule and vet assignment — securely stored, accessible from anywhere.",
@@ -1044,6 +1051,7 @@ const TRANSLATIONS = {
     rescheduleActionBtn: "Reschedule",
     doneActionBtn: "Done",
     statusNoteLabel: "Note",
+    rateServiceLabel: "Rate this service",
     statusNotePlaceholder: "Note about the patient/customer…",
     confirmActionBtn: "Confirm",
     newDateLabel: "New Date",
@@ -1319,6 +1327,9 @@ const TRANSLATIONS = {
     vetTabSubtitle: (dogName) => `Assignez un vétérinaire principal et secondaire à ${dogName} parmi les vétérinaires de la plateforme.`,
     platformVetsLabel: "Vétérinaires de la Plateforme",
     makePrimaryBtn: "Définir Principal",
+    assignBtn: "Assigner",
+    alreadyAssignedBtn: "Assigné",
+    extraAssignmentLabel: "Attribution Supplémentaire (Premium)",
     makeSecondaryBtn: "Définir Secondaire",
     landingHeadline: "Toute la vie de votre animal, dans un seul passeport numérique.",
     landingSub: "Identité, calendrier de vaccination et vétérinaire assigné — stockés en sécurité, accessibles de partout.",
@@ -1583,6 +1594,7 @@ const TRANSLATIONS = {
     rescheduleActionBtn: "Replanifier",
     doneActionBtn: "Terminé",
     statusNoteLabel: "Note",
+    rateServiceLabel: "Évaluer ce service",
     statusNotePlaceholder: "Note sur le patient/client…",
     confirmActionBtn: "Confirmer",
     newDateLabel: "Nouvelle Date",
@@ -1858,6 +1870,9 @@ const TRANSLATIONS = {
     vetTabSubtitle: (dogName) => `Weisen Sie ${dogName} einen primären und sekundären Tierarzt aus der Plattform zu.`,
     platformVetsLabel: "Plattform-Tierärzte",
     makePrimaryBtn: "Als Primär Festlegen",
+    assignBtn: "Zuweisen",
+    alreadyAssignedBtn: "Zugewiesen",
+    extraAssignmentLabel: "Zusätzliche Zuweisung (Premium)",
     makeSecondaryBtn: "Als Sekundär Festlegen",
     landingHeadline: "Das ganze Leben Ihres Haustiers in einem digitalen Pass.",
     landingSub: "Identitätsdaten, Impfplan und Tierarztzuweisung — sicher gespeichert, von überall zugänglich.",
@@ -2122,6 +2137,7 @@ const TRANSLATIONS = {
     rescheduleActionBtn: "Verschieben",
     doneActionBtn: "Erledigt",
     statusNoteLabel: "Notiz",
+    rateServiceLabel: "Diesen Service bewerten",
     statusNotePlaceholder: "Notiz zum Patienten/Kunden…",
     confirmActionBtn: "Bestätigen",
     newDateLabel: "Neues Datum",
@@ -2399,6 +2415,9 @@ const TRANSLATIONS = {
     vetTabSubtitle: (dogName) => `Asigna un veterinario principal y secundario a ${dogName} de entre los veterinarios de la plataforma.`,
     platformVetsLabel: "Veterinarios de la Plataforma",
     makePrimaryBtn: "Hacer Principal",
+    assignBtn: "Asignar",
+    alreadyAssignedBtn: "Asignado",
+    extraAssignmentLabel: "Asignación Extra (Premium)",
     makeSecondaryBtn: "Hacer Secundario",
     landingHeadline: "Toda la vida de tu mascota, en un solo pasaporte digital.",
     landingSub: "Datos de identidad, calendario de vacunas y veterinario asignado — almacenados con seguridad, accesibles desde cualquier lugar.",
@@ -2663,6 +2682,7 @@ const TRANSLATIONS = {
     rescheduleActionBtn: "Reprogramar",
     doneActionBtn: "Completada",
     statusNoteLabel: "Nota",
+    rateServiceLabel: "Califica este servicio",
     statusNotePlaceholder: "Nota sobre el paciente/cliente…",
     confirmActionBtn: "Confirmar",
     newDateLabel: "Nueva Fecha",
@@ -5216,7 +5236,7 @@ function AppointmentCard({ appt, onDelete }) {
   );
 }
 
-function VetBookedApptCard({ appt, onCancel }) {
+function VetBookedApptCard({ appt, onOpenDetail }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const statusCfg = {
@@ -5227,20 +5247,16 @@ function VetBookedApptCard({ appt, onCancel }) {
   }[appt.status] || { label: appt.status, cls: "bg-[#8d8560] text-white" };
 
   return (
-    <div className="rounded-xl border border-[#C9A227]/40 bg-[#FBF8EE] overflow-hidden">
+    <button
+      onClick={() => onOpenDetail(appt)}
+      className="w-full text-left rounded-xl border border-[#C9A227]/40 bg-[#FBF8EE] overflow-hidden hover:border-[#C9A227] transition"
+    >
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-dashed border-[#d8cfb4]">
         <div className="flex items-center gap-2.5">
           <CalendarClock size={16} className="text-[#1B3A2F]" />
           <span className="font-display text-[16px] text-[#1B3A2F]">{t.vetBookedApptBadge}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${statusCfg.cls}`}>{statusCfg.label}</span>
-          {appt.status === "scheduled" && (
-            <button onClick={() => onCancel(appt.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
-              <Trash2 size={14} />
-            </button>
-          )}
-        </div>
+        <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded-full ${statusCfg.cls}`}>{statusCfg.label}</span>
       </div>
       <div className="px-5 py-3.5 grid grid-cols-2 sm:grid-cols-3 gap-3 text-[13px]">
         <div>
@@ -5267,7 +5283,7 @@ function VetBookedApptCard({ appt, onCancel }) {
           </div>
         )}
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -5276,6 +5292,7 @@ function AppointmentTab({ dog, session, onAdd, onDelete }) {
   const [showAdd, setShowAdd] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
   const [vetAppts, setVetAppts] = useState([]);
+  const [selectedVetAppt, setSelectedVetAppt] = useState(null);
   const appts = [...(dog.appointments || [])].sort((a, b) => (a.date < b.date ? 1 : -1));
 
   const loadVetAppts = useCallback(async () => {
@@ -5290,11 +5307,6 @@ function AppointmentTab({ dog, session, onAdd, onDelete }) {
   useEffect(() => {
     loadVetAppts();
   }, [loadVetAppts]);
-
-  const cancelVetAppt = async (id) => {
-    await supabase.from("vet_appointments").update({ status: "cancelled" }).eq("id", id);
-    loadVetAppts();
-  };
 
   const totalCount = appts.length + vetAppts.length;
 
@@ -5320,12 +5332,22 @@ function AppointmentTab({ dog, session, onAdd, onDelete }) {
       ) : (
         <div className="space-y-3">
           {vetAppts.map((a) => (
-            <VetBookedApptCard key={a.id} appt={a} onCancel={cancelVetAppt} />
+            <VetBookedApptCard key={a.id} appt={a} onOpenDetail={setSelectedVetAppt} />
           ))}
           {appts.map((a) => (
             <AppointmentCard key={a.id} appt={a} onDelete={onDelete} />
           ))}
         </div>
+      )}
+
+      {selectedVetAppt && (
+        <AppointmentDetailModal
+          appt={selectedVetAppt}
+          session={session}
+          viewerRole="owner"
+          onClose={() => setSelectedVetAppt(null)}
+          onUpdated={loadVetAppts}
+        />
       )}
 
       {showBooking && (
@@ -5589,6 +5611,11 @@ function VetDetailModal({ vet, dog, session, onClose }) {
             {vet.city && vet.country ? ", " : ""}
             {vet.country}
           </p>
+          {vet.rating > 0 && (
+            <p className="flex items-center gap-1 text-[12.5px] text-[#8a6d16] font-semibold mt-1">
+              <Star size={13} className="fill-[#C9A227] text-[#C9A227]" /> {vet.rating} · {vet.ratingCount}
+            </p>
+          )}
         </div>
       </div>
 
@@ -5749,12 +5776,16 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
 
   const load = useCallback(async () => {
     const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).order("clinic_name");
-    if (vetsData) setVetsList(vetsData);
+    if (vetsData) {
+      const { data: ratingsData } = await supabase.from("vet_ratings").select("*");
+      const ratingByVetId = Object.fromEntries((ratingsData || []).map((r) => [r.vet_id, r]));
+      setVetsList(vetsData.map((v) => ({ ...v, rating: ratingByVetId[v.id]?.avg_rating || 0, ratingCount: ratingByVetId[v.id]?.rating_count || 0 })));
+    }
     const { data: reqData } = await supabase
       .from("vet_assignment_requests")
       .select("*")
       .eq("dog_id", dog.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: true });
     if (reqData) setRequests(reqData);
     setLoaded(true);
   }, [dog.id]);
@@ -5763,29 +5794,33 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
     load();
   }, [load]);
 
-  // en son isteği her rol için al (pending veya approved olan aktif kabul edilir)
-  const latestByRole = (role) =>
-    requests.filter((r) => r.role === role && r.status !== "rejected").sort((a, b) => (a.created_at < b.created_at ? 1 : -1))[0];
+  const vetTypeById = Object.fromEntries(vetsList.map((v) => [v.id, v.business_type || "vet"]));
 
-  const primaryReq = latestByRole("Birincil");
-  const secondaryReq = latestByRole("İkincil");
-  const activeVetIds = [primaryReq, secondaryReq].filter(Boolean).map((r) => r.vet_id);
+  // Her tür (vet/groomer) için, o türe ait aktif (reddedilmemiş) istekleri
+  // en eskiden en yeniye sıralı olarak alıyoruz. İlk sırada olan "Birincil",
+  // ikinci "İkincil" (Premium gerektirir), sonrakiler "Ek" (Premium + sadece ikon).
+  const assignmentsOfType = (type) =>
+    requests.filter((r) => r.status !== "rejected" && vetTypeById[r.vet_id] === type);
 
-  const requestVet = async (vetId, role) => {
-    // aynı rol için varsa eski isteği kaldır
-    const existing = latestByRole(role);
-    if (existing) {
-      await supabase.from("vet_assignment_requests").delete().eq("id", existing.id);
+  const roleForIndex = (idx) => (idx === 0 ? "Birincil" : idx === 1 ? "İkincil" : "Ek");
+  const requiresPremiumForIndex = (idx) => idx >= 1;
+
+  const requestVet = async (vetId, businessType) => {
+    const existingOfType = assignmentsOfType(businessType);
+    const idx = existingOfType.length;
+    if (requiresPremiumForIndex(idx) && !isPremium) {
+      onRequirePremium();
+      return;
     }
     await supabase.from("vet_assignment_requests").insert({
       dog_id: dog.id,
       dog_name: dog.name,
       owner_user_id: session.user.id,
       vet_id: vetId,
-      role,
+      role: roleForIndex(idx),
       status: "pending",
     });
-    logActivity(session.user.id, "vet_requested", `${role} — ${dog.name}`);
+    logActivity(session.user.id, "vet_requested", `${roleForIndex(idx)} — ${dog.name}`);
     load();
   };
 
@@ -5795,9 +5830,10 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
     load();
   };
 
-  const AssignmentRow = ({ req }) => {
+  const AssignmentRow = ({ req, idx }) => {
     const vet = vetsList.find((v) => v.id === req.vet_id);
     if (!vet) return null;
+    const isExtra = idx >= 2;
     return (
       <div className="flex items-center justify-between rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] px-4 py-3">
         <div className="flex items-center gap-3">
@@ -5814,17 +5850,23 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span
-            className={`text-[10.5px] font-bold tracking-wider px-2.5 py-1 rounded-full ${
-              req.status === "approved"
-                ? req.role === "Birincil"
-                  ? "bg-[#1B3A2F] text-[#F7F3E8]"
-                  : "bg-[#C9A227] text-white"
-                : "bg-[#8d8560] text-white"
-            }`}
-          >
-            {req.status === "approved" ? req.role.toUpperCase() : t.pendingApprovalBadge}
-          </span>
+          {req.status === "approved" && isExtra ? (
+            <span className="h-6 w-6 rounded-full bg-[#C9A227] text-white grid place-items-center" title={t.extraAssignmentLabel}>
+              <Star size={12} className="fill-white" />
+            </span>
+          ) : (
+            <span
+              className={`text-[10.5px] font-bold tracking-wider px-2.5 py-1 rounded-full ${
+                req.status === "approved"
+                  ? req.role === "Birincil"
+                    ? "bg-[#1B3A2F] text-[#F7F3E8]"
+                    : "bg-[#C9A227] text-white"
+                  : "bg-[#8d8560] text-white"
+              }`}
+            >
+              {req.status === "approved" ? req.role.toUpperCase() : t.pendingApprovalBadge}
+            </span>
+          )}
           <button onClick={() => cancelRequest(req.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
             <Trash2 size={14} />
           </button>
@@ -5841,6 +5883,9 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
     );
   }
 
+  const vetAssignments = assignmentsOfType("vet");
+  const groomerAssignments = assignmentsOfType("groomer");
+
   return (
     <div>
       <div className="mb-5">
@@ -5848,18 +5893,22 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
         <p className="text-[13px] text-[#5b6d63]">{t.vetTabSubtitle(dog.name)}</p>
       </div>
 
-      {(primaryReq || secondaryReq) && (
+      {(vetAssignments.length > 0 || groomerAssignments.length > 0) && (
         <div className="mb-5 space-y-2">
-          {primaryReq && <AssignmentRow req={primaryReq} />}
-          {secondaryReq && <AssignmentRow req={secondaryReq} />}
+          {vetAssignments.map((r, i) => (
+            <AssignmentRow key={r.id} req={r} idx={i} />
+          ))}
+          {groomerAssignments.map((r, i) => (
+            <AssignmentRow key={r.id} req={r} idx={i} />
+          ))}
         </div>
       )}
 
       <p className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#5b6d63] mb-2.5">{t.platformVetsLabel}</p>
       <div className="grid sm:grid-cols-2 gap-3">
         {vetsList.map((vet) => {
-          const isPrimary = primaryReq?.vet_id === vet.id;
-          const isSecondary = secondaryReq?.vet_id === vet.id;
+          const businessType = vet.business_type || "vet";
+          const alreadyAssigned = requests.some((r) => r.vet_id === vet.id && r.status !== "rejected");
           return (
             <div key={vet.id} className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-4 flex flex-col gap-2.5">
               <button
@@ -5907,22 +5956,13 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
               >
                 {t.viewDetailsBtn}
               </button>
-              <div className="flex gap-2 mt-1">
-                <button
-                  disabled={isPrimary}
-                  onClick={() => requestVet(vet.id, "Birincil")}
-                  className="flex-1 rounded-md border border-[#1B3A2F] text-[#1B3A2F] text-[12px] font-semibold py-1.5 hover:bg-[#1B3A2F] hover:text-[#F7F3E8] transition disabled:opacity-40"
-                >
-                  {t.makePrimaryBtn}
-                </button>
-                <button
-                  disabled={isSecondary}
-                  onClick={() => (isPremium ? requestVet(vet.id, "İkincil") : onRequirePremium())}
-                  className="flex-1 rounded-md border border-[#C9A227] text-[#8a6d16] text-[12px] font-semibold py-1.5 hover:bg-[#C9A227] hover:text-white transition disabled:opacity-40"
-                >
-                  {t.makeSecondaryBtn}
-                </button>
-              </div>
+              <button
+                disabled={alreadyAssigned}
+                onClick={() => requestVet(vet.id, businessType)}
+                className="rounded-md border border-[#1B3A2F] text-[#1B3A2F] text-[12px] font-semibold py-1.5 hover:bg-[#1B3A2F] hover:text-[#F7F3E8] transition disabled:opacity-40 mt-1"
+              >
+                {alreadyAssigned ? t.alreadyAssignedBtn : t.assignBtn}
+              </button>
             </div>
           );
         })}
@@ -7263,7 +7303,7 @@ function PatientDetailModal({ dogId, session, businessType, onClose }) {
   );
 }
 
-function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
+function AppointmentDetailModal({ appt, session, viewerRole = "vet", onClose, onUpdated }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const [activeAction, setActiveAction] = useState(null);
@@ -7273,8 +7313,11 @@ function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
   const [newEndTime, setNewEndTime] = useState(appt.appt_end_time || appt.appt_time);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
+  const [rating, setRating] = useState(appt.rating || 0);
+  const [ratingBusy, setRatingBusy] = useState(false);
 
   const isOnApp = !!appt.dog_id;
+  const isOwnerView = viewerRole === "owner";
   const Row = ({ label, value }) => (
     <div className="flex items-baseline justify-between gap-4 py-1.5 border-b border-dotted border-[#d8cfb4]">
       <span className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold shrink-0">{label}</span>
@@ -7319,6 +7362,14 @@ function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
     setBusy(false);
   };
 
+  const submitRating = async (stars) => {
+    setRatingBusy(true);
+    setRating(stars);
+    await supabase.from("vet_appointments").update({ rating: stars }).eq("id", appt.id);
+    setRatingBusy(false);
+    onUpdated();
+  };
+
   return (
     <Modal title={t.apptDetailTitle} onClose={onClose}>
       <div className="space-y-1.5 mb-5">
@@ -7337,6 +7388,19 @@ function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
         </div>
         {appt.status_note && <Row label={t.statusNoteLabel} value={appt.status_note} />}
       </div>
+
+      {isOwnerView && appt.status === "done" && isOnApp && (
+        <div className="rounded-md border border-[#C9A227]/40 bg-[#FBF8EE] p-3.5 mb-3">
+          <p className="text-[12.5px] text-[#5b6d63] mb-2">{t.rateServiceLabel}</p>
+          <div className="flex gap-1.5">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button key={n} disabled={ratingBusy} onClick={() => submitRating(n)} className="transition">
+                <Star size={24} className={n <= rating ? "fill-[#C9A227] text-[#C9A227]" : "text-[#d8cfb4]"} />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2 mb-3">
         <button
@@ -7357,14 +7421,16 @@ function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
         >
           {t.rescheduleActionBtn}
         </button>
-        <button
-          onClick={() => setActiveAction("done")}
-          className={`flex-1 rounded-md border text-[12.5px] font-semibold py-2 transition ${
-            activeAction === "done" ? "bg-[#1B3A2F] border-[#1B3A2F] text-white" : "border-[#1B3A2F]/40 text-[#1B3A2F] hover:bg-[#eee6cd]"
-          }`}
-        >
-          {t.doneActionBtn}
-        </button>
+        {!isOwnerView && (
+          <button
+            onClick={() => setActiveAction("done")}
+            className={`flex-1 rounded-md border text-[12.5px] font-semibold py-2 transition ${
+              activeAction === "done" ? "bg-[#1B3A2F] border-[#1B3A2F] text-white" : "border-[#1B3A2F]/40 text-[#1B3A2F] hover:bg-[#eee6cd]"
+            }`}
+          >
+            {t.doneActionBtn}
+          </button>
+        )}
       </div>
 
       {activeAction && (

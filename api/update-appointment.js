@@ -1,8 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Vet/groomer'ın kendi randevusunu iptal etmesi, yeniden planlaması ya da
-// tamamlandı olarak işaretlemesi için tek uç nokta. Girilen not, hem burada
-// hem de (hayvana bağlı bir randevuysa) sahibin tarafında görünür.
+// tamamlandı olarak işaretlemesi İÇİN; AYRICA sahibin kendi randevusunu
+// iptal edip yeniden planlaması İÇİN kullanılan tek uç nokta. Sahip "done"
+// aksiyonunu kullanamaz — bu yetki vet/groomer'da kalır. Girilen not, hem
+// burada hem de (hayvana bağlı bir randevuysa) karşı tarafta görünür.
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -22,20 +24,24 @@ export default async function handler(req, res) {
 
   const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-  const { data: vetRow, error: vetError } = await admin
-    .from("vets")
-    .select("id, slot_minutes")
-    .eq("user_id", userData.user.id)
-    .single();
-  if (vetError || !vetRow) return res.status(403).json({ error: "Not a vet/groomer account" });
-
   const { data: apptRow, error: apptError } = await admin
     .from("vet_appointments")
     .select("*")
     .eq("id", appointmentId)
-    .eq("vet_id", vetRow.id)
     .single();
   if (apptError || !apptRow) return res.status(404).json({ error: "Appointment not found" });
+
+  // Bu isteği yapan kişi bu randevunun vet'i mi, yoksa sahibi mi?
+  const { data: vetRow } = await admin.from("vets").select("id, slot_minutes").eq("user_id", userData.user.id).single();
+  const isVet = vetRow && vetRow.id === apptRow.vet_id;
+  const isOwner = apptRow.owner_user_id === userData.user.id;
+
+  if (!isVet && !isOwner) return res.status(403).json({ error: "Forbidden" });
+  if (isOwner && !isVet && action === "done") {
+    return res.status(403).json({ error: "Only the vet/groomer can mark an appointment as done" });
+  }
+
+  const slotMinutes = (isVet ? vetRow.slot_minutes : null) || 30;
 
   if (action === "cancel") {
     const { error } = await admin
@@ -59,7 +65,6 @@ export default async function handler(req, res) {
   if (!newDate || !newStartTime || !newEndTime) {
     return res.status(400).json({ error: "Missing new date/time for reschedule" });
   }
-  const slotMinutes = vetRow.slot_minutes || 30;
   const toMinutes = (hhmm) => {
     const [h, m] = hhmm.split(":").map(Number);
     return h * 60 + m;
@@ -71,7 +76,7 @@ export default async function handler(req, res) {
   const { data: sameDayAppts } = await admin
     .from("vet_appointments")
     .select("id, appt_time, appt_end_time")
-    .eq("vet_id", vetRow.id)
+    .eq("vet_id", apptRow.vet_id)
     .eq("appt_date", newDate)
     .neq("status", "cancelled")
     .neq("id", appointmentId);
