@@ -7510,6 +7510,8 @@ function VetPortal({ session }) {
   const [showBlockSlot, setShowBlockSlot] = useState(false);
   const [quickSearch, setQuickSearch] = useState("");
   const [vetTab, setVetTab] = useState("dashboard");
+  const [patientsLastSeen, setPatientsLastSeen] = useState("2000-01-01T00:00:00.000Z");
+  const [apptLastSeen, setApptLastSeen] = useState("2000-01-01T00:00:00.000Z");
   const [dashboardPeriod, setDashboardPeriod] = useState("today");
   const [blockSlotForm, setBlockSlotForm] = useState({
     date: todayISO(),
@@ -7659,6 +7661,8 @@ function VetPortal({ session }) {
   const approvedPatients = Array.from(
     new Map(requests.filter((r) => r.status === "approved").map((r) => [r.dog_id, r])).values()
   );
+  const hasNewPending = pendingRequests.some((r) => r.created_at && r.created_at > patientsLastSeen);
+  const hasNewAppt = appointments.some((a) => a.dog_id && a.created_at && a.created_at > apptLastSeen);
   const periodBounds = (() => {
     const now = new Date();
     if (dashboardPeriod === "today") {
@@ -7735,22 +7739,29 @@ function VetPortal({ session }) {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-6">
               {[
-                { id: "dashboard", label: t.vetTabDashboard, icon: LayoutGrid },
-                { id: "appointments", label: t.vetTabAppointments, icon: CalendarClock },
-                { id: "patients", label: t.myPatientsTitleFor(vet?.business_type), icon: PawPrint },
-                { id: "team", label: t.vetTabTeam, icon: UserCog },
+                { id: "dashboard", label: t.vetTabDashboard, icon: LayoutGrid, alert: false },
+                { id: "appointments", label: t.vetTabAppointments, icon: CalendarClock, alert: hasNewAppt },
+                { id: "patients", label: t.myPatientsTitleFor(vet?.business_type), icon: PawPrint, alert: hasNewPending },
+                { id: "team", label: t.vetTabTeam, icon: UserCog, alert: false },
               ].map((tabDef) => {
                 const Icon = tabDef.icon;
                 return (
                   <button
                     key={tabDef.id}
-                    onClick={() => setVetTab(tabDef.id)}
-                    className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
+                    onClick={() => {
+                      setVetTab(tabDef.id);
+                      if (tabDef.id === "appointments") setApptLastSeen(new Date().toISOString());
+                      if (tabDef.id === "patients") setPatientsLastSeen(new Date().toISOString());
+                    }}
+                    className={`relative flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
                       vetTab === tabDef.id
                         ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
                         : "bg-[#FBF8EE] border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
                     }`}
                   >
+                    {tabDef.alert && (
+                      <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-[#a63d40] border-2 border-[#EFE9D6]" />
+                    )}
                     <Icon size={16} />
                     {tabDef.label}
                   </button>
@@ -7891,7 +7902,7 @@ function VetPortal({ session }) {
             </div>
             )}
 
-            {vetTab === "appointments" && (
+            {vetTab === "patients" && (
             <div className="mb-8">
               <h3 className="font-display text-[18px] text-[#1B3A2F] mb-3">{t.pendingRequestsTitle}</h3>
               {pendingRequests.length === 0 ? (
@@ -7956,6 +7967,12 @@ function VetPortal({ session }) {
 
             {vetTab === "appointments" && (
             <>
+            <AllAppointmentsTable
+              appointments={appointments}
+              t={t}
+              lang={lang}
+              onOpenDetail={setSelectedAppt}
+            />
             <div className="grid lg:grid-cols-2 gap-6 mb-8">
               <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5">
                 <p className="font-display text-[16px] text-[#1B3A2F] mb-1">{t.availabilityTitle}</p>
@@ -8104,13 +8121,6 @@ function VetPortal({ session }) {
                 )}
               </div>
             </div>
-
-            <AllAppointmentsTable
-              appointments={appointments}
-              t={t}
-              lang={lang}
-              onOpenDetail={setSelectedAppt}
-            />
             </>
             )}
 
