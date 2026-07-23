@@ -381,6 +381,10 @@ const TRANSLATIONS = {
     noMessagesYet: "Henüz mesaj yok. İlk mesajı gönder.",
     messagePlaceholder: "Bir mesaj yaz…",
     messageBtn: "Mesaj",
+    messagesSubtitle: (name) => `${name} için klinik/kuaför konuşmaların`,
+    noConversationsYet: "Henüz onaylı bir vet/groomer ataman yok. Önce Sağlık & Bakım sekmesinden birini ata.",
+    vetMessagesSubtitle: "Müşterilerinle olan konuşmaların",
+    noVetConversationsYet: "Henüz mesaj yok.",
     activityLogsTitle: "Kullanıcı Hareket Kayıtları",
     fieldFilterByEmail: "E-postaya göre filtrele",
     filterBtn: "Filtrele",
@@ -965,6 +969,10 @@ const TRANSLATIONS = {
     noMessagesYet: "No messages yet. Send the first one.",
     messagePlaceholder: "Write a message…",
     messageBtn: "Message",
+    messagesSubtitle: (name) => `Your clinic/groomer conversations for ${name}`,
+    noConversationsYet: "You don't have an approved vet/groomer yet. Assign one from the Health & Care tab first.",
+    vetMessagesSubtitle: "Your conversations with customers",
+    noVetConversationsYet: "No messages yet.",
     activityLogsTitle: "User Activity Logs",
     fieldFilterByEmail: "Filter by email",
     filterBtn: "Filter",
@@ -1552,6 +1560,10 @@ const TRANSLATIONS = {
     noMessagesYet: "Aucun message pour le moment. Envoyez le premier.",
     messagePlaceholder: "Écrire un message…",
     messageBtn: "Message",
+    messagesSubtitle: (name) => `Vos conversations avec cliniques/toiletteurs pour ${name}`,
+    noConversationsYet: "Vous n'avez pas encore de vétérinaire/toiletteur approuvé. Assignez-en un depuis l'onglet Santé & Soins.",
+    vetMessagesSubtitle: "Vos conversations avec les clients",
+    noVetConversationsYet: "Aucun message pour le moment.",
     activityLogsTitle: "Journaux d'Activité",
     fieldFilterByEmail: "Filtrer par e-mail",
     filterBtn: "Filtrer",
@@ -2116,6 +2128,10 @@ const TRANSLATIONS = {
     noMessagesYet: "Noch keine Nachrichten. Senden Sie die erste.",
     messagePlaceholder: "Eine Nachricht schreiben…",
     messageBtn: "Nachricht",
+    messagesSubtitle: (name) => `Ihre Klinik-/Hundesalon-Gespräche für ${name}`,
+    noConversationsYet: "Sie haben noch keinen genehmigten Tierarzt/Hundesalon. Weisen Sie zuerst einen im Tab Gesundheit & Pflege zu.",
+    vetMessagesSubtitle: "Ihre Gespräche mit Kunden",
+    noVetConversationsYet: "Noch keine Nachrichten.",
     activityLogsTitle: "Aktivitätsprotokolle",
     fieldFilterByEmail: "Nach E-Mail filtern",
     filterBtn: "Filtern",
@@ -2682,6 +2698,10 @@ const TRANSLATIONS = {
     noMessagesYet: "Aún no hay mensajes. Envía el primero.",
     messagePlaceholder: "Escribe un mensaje…",
     messageBtn: "Mensaje",
+    messagesSubtitle: (name) => `Tus conversaciones con clínicas/peluquerías para ${name}`,
+    noConversationsYet: "Aún no tienes un veterinario/peluquero aprobado. Asigna uno primero desde la pestaña Salud & Cuidado.",
+    vetMessagesSubtitle: "Tus conversaciones con los clientes",
+    noVetConversationsYet: "Aún no hay mensajes.",
     activityLogsTitle: "Registros de Actividad",
     fieldFilterByEmail: "Filtrar por correo",
     filterBtn: "Filtrar",
@@ -5880,7 +5900,6 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
   const [requests, setRequests] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [selectedVetDetail, setSelectedVetDetail] = useState(null);
-  const [selectedChat, setSelectedChat] = useState(null);
 
   const load = useCallback(async () => {
     const { data: vetsData } = await supabase.from("vets").select("*").eq("approved", true).eq("verified", true).order("clinic_name");
@@ -5978,14 +5997,6 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
           <button onClick={() => cancelRequest(req.id)} className="text-[#a08a5a] hover:text-[#a63d40] transition p-1">
             <Trash2 size={14} />
           </button>
-          {req.status === "approved" && (
-            <button
-              onClick={() => setSelectedChat({ vetId: vet.id, clinicName: vet.clinic_name })}
-              className="text-[#5b6d63] hover:text-[#1B3A2F] transition p-1"
-            >
-              <MessageCircle size={16} />
-            </button>
-          )}
         </div>
       </div>
     );
@@ -6085,16 +6096,6 @@ function VetTab({ dog, session, isPremium, onRequirePremium }) {
       </div>
       {selectedVetDetail && (
         <VetDetailModal vet={selectedVetDetail} dog={dog} session={session} onClose={() => setSelectedVetDetail(null)} />
-      )}
-      {selectedChat && (
-        <ChatModal
-          vetId={selectedChat.vetId}
-          dogId={dog.id}
-          session={session}
-          viewerRole="owner"
-          otherPartyName={selectedChat.clinicName}
-          onClose={() => setSelectedChat(null)}
-        />
       )}
     </div>
   );
@@ -7775,6 +7776,108 @@ function ChatModal({ vetId, dogId, session, viewerRole, otherPartyName, onClose 
   );
 }
 
+function MessagesTab({ dog, session, onRead }) {
+  const { t } = useI18n();
+  const [conversations, setConversations] = useState(null);
+  const [selectedConv, setSelectedConv] = useState(null);
+
+  const load = useCallback(async () => {
+    const { data: reqData } = await supabase
+      .from("vet_assignment_requests")
+      .select("vet_id")
+      .eq("dog_id", dog.id)
+      .eq("status", "approved");
+    const vetIds = [...new Set((reqData || []).map((r) => r.vet_id))];
+    if (vetIds.length === 0) {
+      setConversations([]);
+      return;
+    }
+
+    const { data: vetsData } = await supabase.from("vets").select("id, clinic_name, business_type").in("id", vetIds);
+    const { data: msgs } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("dog_id", dog.id)
+      .in("vet_id", vetIds)
+      .order("created_at", { ascending: true });
+
+    const convs = (vetsData || []).map((v) => {
+      const vetMsgs = (msgs || []).filter((m) => m.vet_id === v.id);
+      const last = vetMsgs[vetMsgs.length - 1];
+      const unread = vetMsgs.some((m) => m.sender_role === "vet" && !m.read);
+      return {
+        vetId: v.id,
+        clinicName: v.clinic_name,
+        businessType: v.business_type,
+        lastMessage: last?.content || "",
+        lastAt: last?.created_at || null,
+        unread,
+      };
+    });
+    convs.sort((a, b) => (b.lastAt || "").localeCompare(a.lastAt || ""));
+    setConversations(convs);
+  }, [dog.id]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return (
+    <div>
+      <div className="mb-4">
+        <h3 className="font-display text-[20px] text-[#1B3A2F]">{t.messagesTitle}</h3>
+        <p className="text-[13px] text-[#5b6d63]">{t.messagesSubtitle(dog.name)}</p>
+      </div>
+      {conversations === null ? (
+        <div className="py-16 grid place-items-center text-[#5b6d63]">
+          <Loader2 className="animate-spin" size={20} />
+        </div>
+      ) : conversations.length === 0 ? (
+        <EmptyState icon={MessageCircle} text={t.noConversationsYet} />
+      ) : (
+        <div className="space-y-2">
+          {conversations.map((c) => (
+            <button
+              key={c.vetId}
+              onClick={() => setSelectedConv(c)}
+              className="w-full flex items-center justify-between text-left rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] px-4 py-3 hover:border-[#1B3A2F]/40 transition"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-9 w-9 rounded-full bg-[#1B3A2F] text-[#F7F3E8] grid place-items-center font-display text-[14px] shrink-0">
+                  {c.clinicName[0]}
+                </div>
+                <div className="min-w-0">
+                  <p className={`text-[14px] truncate ${c.unread ? "font-bold text-[#1B3A2F]" : "font-medium text-[#1f2a24]"}`}>
+                    {c.clinicName}
+                  </p>
+                  <p className={`text-[12.5px] truncate ${c.unread ? "font-bold text-[#1B3A2F]" : "text-[#5b6d63]"}`}>
+                    {c.lastMessage || t.noMessagesYet}
+                  </p>
+                </div>
+              </div>
+              {c.unread && <span className="h-2.5 w-2.5 rounded-full bg-[#a63d40] shrink-0 ml-2" />}
+            </button>
+          ))}
+        </div>
+      )}
+      {selectedConv && (
+        <ChatModal
+          vetId={selectedConv.vetId}
+          dogId={dog.id}
+          session={session}
+          viewerRole="owner"
+          otherPartyName={selectedConv.clinicName}
+          onClose={() => {
+            setSelectedConv(null);
+            load();
+            onRead && onRead();
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 function AppointmentDetailModal({ appt, session, viewerRole = "vet", onClose, onUpdated }) {
   const { t, lang } = useI18n();
   const locale = LANGS.find((l) => l.code === lang)?.locale;
@@ -8008,6 +8111,105 @@ function AllAppointmentsTable({ appointments, t, lang, onOpenDetail }) {
   );
 }
 
+function VetMessagesTab({ vetId, approvedPatients, session, onRead }) {
+  const { t } = useI18n();
+  const [conversations, setConversations] = useState(null);
+  const [selectedConv, setSelectedConv] = useState(null);
+
+  const load = useCallback(async () => {
+    if (approvedPatients.length === 0) {
+      setConversations([]);
+      return;
+    }
+    const dogIds = approvedPatients.map((p) => p.dog_id);
+    const { data: dogsData } = await supabase.from("dogs").select("id, payload").in("id", dogIds);
+    const ownerNameByDogId = {};
+    (dogsData || []).forEach((d) => {
+      ownerNameByDogId[d.id] = d.payload?.ownerName || "";
+    });
+
+    const { data: msgs } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("vet_id", vetId)
+      .in("dog_id", dogIds)
+      .order("created_at", { ascending: true });
+
+    const convs = approvedPatients.map((p) => {
+      const dogMsgs = (msgs || []).filter((m) => m.dog_id === p.dog_id);
+      const last = dogMsgs[dogMsgs.length - 1];
+      const unread = dogMsgs.some((m) => m.sender_role === "owner" && !m.read);
+      return {
+        dogId: p.dog_id,
+        dogName: p.dog_name,
+        ownerName: ownerNameByDogId[p.dog_id] || "",
+        lastMessage: last?.content || "",
+        lastAt: last?.created_at || null,
+        unread,
+      };
+    });
+    convs.sort((a, b) => (b.lastAt || "").localeCompare(a.lastAt || ""));
+    setConversations(convs);
+  }, [vetId, approvedPatients]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return (
+    <div className="rounded-xl border border-[#d8cfb4] bg-[#FBF8EE] p-5 mb-8">
+      <h3 className="font-display text-[18px] text-[#1B3A2F] mb-1">{t.messagesTitle}</h3>
+      <p className="text-[13px] text-[#5b6d63] mb-4">{t.vetMessagesSubtitle}</p>
+      {conversations === null ? (
+        <div className="py-12 grid place-items-center text-[#5b6d63]">
+          <Loader2 className="animate-spin" size={20} />
+        </div>
+      ) : conversations.length === 0 ? (
+        <EmptyState icon={MessageCircle} text={t.noVetConversationsYet} />
+      ) : (
+        <div className="space-y-2">
+          {conversations.map((c) => (
+            <button
+              key={c.dogId}
+              onClick={() => setSelectedConv(c)}
+              className="w-full flex items-center justify-between text-left rounded-xl border border-[#d8cfb4] bg-white/50 px-4 py-3 hover:border-[#1B3A2F]/40 transition"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-9 w-9 rounded-full bg-[#1B3A2F] text-[#F7F3E8] grid place-items-center font-display text-[14px] shrink-0">
+                  {c.dogName?.[0] || "?"}
+                </div>
+                <div className="min-w-0">
+                  <p className={`text-[14px] truncate ${c.unread ? "font-bold text-[#1B3A2F]" : "font-medium text-[#1f2a24]"}`}>
+                    {c.ownerName ? `${c.ownerName} · ${c.dogName}` : c.dogName}
+                  </p>
+                  <p className={`text-[12.5px] truncate ${c.unread ? "font-bold text-[#1B3A2F]" : "text-[#5b6d63]"}`}>
+                    {c.lastMessage || t.noMessagesYet}
+                  </p>
+                </div>
+              </div>
+              {c.unread && <span className="h-2.5 w-2.5 rounded-full bg-[#a63d40] shrink-0 ml-2" />}
+            </button>
+          ))}
+        </div>
+      )}
+      {selectedConv && (
+        <ChatModal
+          vetId={vetId}
+          dogId={selectedConv.dogId}
+          session={session}
+          viewerRole="vet"
+          otherPartyName={selectedConv.ownerName ? `${selectedConv.ownerName} · ${selectedConv.dogName}` : selectedConv.dogName}
+          onClose={() => {
+            setSelectedConv(null);
+            load();
+            onRead && onRead();
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 function VetPortal({ session }) {
   const { t, lang } = useI18n();
   const vetId = session.user.user_metadata?.vet_id;
@@ -8017,6 +8219,24 @@ function VetPortal({ session }) {
   const [newDoctor, setNewDoctor] = useState({ name: "", title: "" });
   const [newService, setNewService] = useState({ name: "", price: "", currency: "EUR", duration: 30 });
   const [clinicForm, setClinicForm] = useState(null);
+  const [hasNewMessage, setHasNewMessage] = useState(false);
+
+  const checkNewMessages = useCallback(async () => {
+    if (!vetId) return;
+    const { count } = await supabase
+      .from("messages")
+      .select("*", { count: "exact", head: true })
+      .eq("vet_id", vetId)
+      .eq("sender_role", "owner")
+      .eq("read", false);
+    setHasNewMessage((count || 0) > 0);
+  }, [vetId]);
+
+  useEffect(() => {
+    checkNewMessages();
+    const interval = setInterval(checkNewMessages, 8000);
+    return () => clearInterval(interval);
+  }, [checkNewMessages]);
   const tradeDocRef = useRef(null);
   const logoRef = useRef(null);
 
@@ -8053,7 +8273,6 @@ function VetPortal({ session }) {
   };
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [selectedAppt, setSelectedAppt] = useState(null);
-  const [selectedChat, setSelectedChat] = useState(null);
   const [newAvailability, setNewAvailability] = useState({ day: 1, start: "09:00", end: "17:00" });
   const [appointments, setAppointments] = useState([]);
   const [showBlockSlot, setShowBlockSlot] = useState(false);
@@ -8307,11 +8526,12 @@ function VetPortal({ session }) {
                 <p className="text-[12.5px] text-[#8a6d16]/90 mt-1">{t.underReviewDesc}</p>
               </div>
             )}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-6">
               {[
                 { id: "dashboard", label: t.vetTabDashboard, icon: LayoutGrid, alert: false },
                 { id: "appointments", label: t.vetTabAppointments, icon: CalendarClock, alert: hasNewAppt },
                 { id: "patients", label: t.myPatientsTitleFor(vet?.business_type), icon: PawPrint, alert: hasNewPending },
+                { id: "messages", label: t.messagesTitle, icon: MessageCircle, alert: hasNewMessage },
                 { id: "team", label: t.vetTabTeam, icon: UserCog, alert: false },
               ].map((tabDef) => {
                 const Icon = tabDef.icon;
@@ -8339,7 +8559,7 @@ function VetPortal({ session }) {
               })}
               <button
                 onClick={() => setVetTab("settings")}
-                className={`col-span-2 sm:col-span-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
+                className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-xl border text-[11.5px] sm:text-[13.5px] font-semibold text-center transition ${
                   vetTab === "settings"
                     ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
                     : "bg-[#FBF8EE] border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
@@ -8527,15 +8747,7 @@ function VetPortal({ session }) {
                         </div>
                         <span className="text-[14px] text-[#1f2a24] font-medium">{r.dog_name}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => setSelectedChat({ dogId: r.dog_id, dogName: r.dog_name })}
-                          className="text-[#5b6d63] hover:text-[#1B3A2F] transition p-1.5"
-                        >
-                          <MessageCircle size={16} />
-                        </button>
-                        <GhostButton onClick={() => setSelectedPatientId(r.dog_id)}>{t.viewPatientBtn}</GhostButton>
-                      </div>
+                      <GhostButton onClick={() => setSelectedPatientId(r.dog_id)}>{t.viewPatientBtn}</GhostButton>
                     </div>
                   ))}
                 </div>
@@ -8700,6 +8912,15 @@ function VetPortal({ session }) {
               </div>
             </div>
             </>
+            )}
+
+            {vetTab === "messages" && (
+              <VetMessagesTab
+                vetId={vetId}
+                approvedPatients={approvedPatients}
+                session={session}
+                onRead={checkNewMessages}
+              />
             )}
 
             {vetTab === "team" && (
@@ -8989,16 +9210,6 @@ function VetPortal({ session }) {
           onUpdated={load}
         />
       )}
-      {selectedChat && (
-        <ChatModal
-          vetId={vetId}
-          dogId={selectedChat.dogId}
-          session={session}
-          viewerRole="vet"
-          otherPartyName={selectedChat.dogName}
-          onClose={() => setSelectedChat(null)}
-        />
-      )}
     </div>
   );
 }
@@ -9147,6 +9358,7 @@ const TAB_IDS = [
   { id: "appointments", key: "navAppointments", icon: CalendarClock },
   { id: "weight", key: "navWeight", icon: Scale },
   { id: "vets", key: "navVets", icon: Stethoscope },
+  { id: "messages", key: "messagesTitle", icon: MessageCircle },
   { id: "cv", key: "navPetCV", icon: Award },
 ];
 
@@ -9411,6 +9623,24 @@ function PawWalletInner({ session }) {
 
   const activeDog = dogs.find((d) => d.id === activeId) || null;
 
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  const checkUnreadMessages = useCallback(async () => {
+    if (!activeDog) return setHasUnreadMessages(false);
+    const { count } = await supabase
+      .from("messages")
+      .select("*", { count: "exact", head: true })
+      .eq("dog_id", activeDog.id)
+      .eq("sender_role", "vet")
+      .eq("read", false);
+    setHasUnreadMessages((count || 0) > 0);
+  }, [activeDog?.id]);
+
+  useEffect(() => {
+    checkUnreadMessages();
+    const interval = setInterval(checkUnreadMessages, 8000);
+    return () => clearInterval(interval);
+  }, [checkUnreadMessages]);
+
   const updateDog = (id, updater) => {
     persistDogs(dogs.map((d) => (d.id === id ? updater(d) : d)));
   };
@@ -9673,6 +9903,9 @@ function PawWalletInner({ session }) {
                           className={`absolute -top-1 -right-1.5 ${isActive ? "text-[#f3c8c9]" : "text-[#a63d40]"}`}
                         />
                       )}
+                      {tabDef.id === "messages" && hasUnreadMessages && (
+                        <span className="absolute -top-1 -right-1.5 h-2.5 w-2.5 rounded-full bg-[#a63d40] border-2 border-[#EFE9D6]" />
+                      )}
                     </span>
                     <span className="leading-tight">{t[tabDef.key]}</span>
                   </button>
@@ -9713,6 +9946,9 @@ function PawWalletInner({ session }) {
             )}
             {tab === "vets" && (
               <VetTab dog={activeDog} session={session} isPremium={isPremium} onRequirePremium={() => setShowPremiumModal(true)} />
+            )}
+            {tab === "messages" && (
+              <MessagesTab dog={activeDog} session={session} onRead={checkUnreadMessages} />
             )}
             {tab === "cv" && (
               <PetCVTab
