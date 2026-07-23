@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   const { data: userData, error: userError } = await anon.auth.getUser(token);
   if (userError || !userData?.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const { vetId, dogId, date, time, note } = req.body || {};
+  const { vetId, dogId, date, time, note, durationMinutes } = req.body || {};
   if (!vetId || !dogId || !date || !time) return res.status(400).json({ error: "Missing fields" });
 
   const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
@@ -28,13 +28,21 @@ export default async function handler(req, res) {
 
   const { data: vetRow } = await admin.from("vets").select("slot_minutes").eq("id", vetId).single();
   const slotMinutes = vetRow?.slot_minutes || 30;
+  const serviceDuration = durationMinutes || slotMinutes;
 
   const toMinutes = (hhmm) => {
     const [h, m] = hhmm.split(":").map(Number);
     return h * 60 + m;
   };
+  const toHHMM = (mins) => {
+    const h = Math.floor(mins / 60)
+      .toString()
+      .padStart(2, "0");
+    const m = (mins % 60).toString().padStart(2, "0");
+    return `${h}:${m}`;
+  };
   const newStart = toMinutes(time);
-  const newEnd = newStart + slotMinutes;
+  const newEnd = newStart + serviceDuration;
 
   const { data: sameDayAppts } = await admin
     .from("vet_appointments")
@@ -57,6 +65,7 @@ export default async function handler(req, res) {
     customer_name: dogRow.payload?.ownerName || "",
     appt_date: date,
     appt_time: time,
+    appt_end_time: toHHMM(newEnd),
     note: note || "",
     status: "scheduled",
   });

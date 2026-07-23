@@ -60,7 +60,7 @@ const TRANSLATIONS = {
     tagline: "Evcil hayvanınızın dijital pasaportu",
     navPassport: "Pasaport",
     navVaccines: "Aşı Kartı",
-    navVets: "Veteriner",
+    navVets: "Sağlık & Bakım",
     addNewDogItem: "Yeni köpek ekle",
     addNewCatItem: "Yeni kedi ekle",
     noDogsTitle: "Henüz evcil hayvan eklenmedi",
@@ -194,7 +194,7 @@ const TRANSLATIONS = {
     statusOverdue: "GECİKMİŞ",
     statusSoon: "YAKINDA",
     statusCurrent: "GÜNCEL",
-    vetTabTitle: "Veteriner Ataması",
+    vetTabTitle: "Atama",
     vetTabSubtitle: (dogName) => `Platformdaki veterinerlerden ${dogName}'e birincil ve ikincil veteriner atayın.`,
     platformVetsLabel: "Platform Veterinerleri",
     makePrimaryBtn: "Birincil Yap",
@@ -402,6 +402,8 @@ const TRANSLATIONS = {
     addServiceBtn: "Hizmet Ekle",
     fieldServiceNameShort: "Hizmet adı",
     fieldServicePrice: "Fiyat",
+    fieldServiceDuration: "Süre",
+    durationMinutesLabel: (m) => (m < 60 ? `${m} dk` : m === 60 ? "1 saat" : `${Math.floor(m / 60)} sa ${m % 60 || ""} ${m % 60 ? "dk" : ""}`.trim()),
     selectServiceType: "Hizmet seçin",
     serviceNames: {
       "Muayene": "Muayene",
@@ -622,7 +624,7 @@ const TRANSLATIONS = {
     tagline: "Your pet's digital passport",
     navPassport: "Passport",
     navVaccines: "Vaccine Card",
-    navVets: "Vet",
+    navVets: "Health & Care",
     addNewDogItem: "Add new dog",
     addNewCatItem: "Add new cat",
     noDogsTitle: "No pets added yet",
@@ -751,7 +753,7 @@ const TRANSLATIONS = {
     statusOverdue: "OVERDUE",
     statusSoon: "DUE SOON",
     statusCurrent: "CURRENT",
-    vetTabTitle: "Vet Assignment",
+    vetTabTitle: "Assignment",
     vetTabSubtitle: (dogName) => `Assign a primary and secondary vet to ${dogName} from platform vets.`,
     platformVetsLabel: "Platform Vets",
     makePrimaryBtn: "Make Primary",
@@ -959,6 +961,8 @@ const TRANSLATIONS = {
     addServiceBtn: "Add Service",
     fieldServiceNameShort: "Service name",
     fieldServicePrice: "Price",
+    fieldServiceDuration: "Duration",
+    durationMinutesLabel: (m) => (m < 60 ? `${m} min` : m === 60 ? "1 hr" : `${Math.floor(m / 60)}h ${m % 60 || ""}${m % 60 ? "m" : ""}`.trim()),
     selectServiceType: "Select service",
     serviceNames: {
       "Muayene": "Consultation",
@@ -1179,7 +1183,7 @@ const TRANSLATIONS = {
     tagline: "Le passeport numérique de votre animal",
     navPassport: "Passeport",
     navVaccines: "Carnet de Vaccination",
-    navVets: "Vétérinaire",
+    navVets: "Santé & Soins",
     addNewDogItem: "Ajouter un chien",
     addNewCatItem: "Ajouter un chat",
     noDogsTitle: "Aucun animal ajouté",
@@ -1311,7 +1315,7 @@ const TRANSLATIONS = {
     statusOverdue: "EN RETARD",
     statusSoon: "BIENTÔT",
     statusCurrent: "À JOUR",
-    vetTabTitle: "Attribution Vétérinaire",
+    vetTabTitle: "Attribution",
     vetTabSubtitle: (dogName) => `Assignez un vétérinaire principal et secondaire à ${dogName} parmi les vétérinaires de la plateforme.`,
     platformVetsLabel: "Vétérinaires de la Plateforme",
     makePrimaryBtn: "Définir Principal",
@@ -1496,6 +1500,8 @@ const TRANSLATIONS = {
     addServiceBtn: "Ajouter un Service",
     fieldServiceNameShort: "Nom du service",
     fieldServicePrice: "Prix",
+    fieldServiceDuration: "Durée",
+    durationMinutesLabel: (m) => (m < 60 ? `${m} min` : m === 60 ? "1 h" : `${Math.floor(m / 60)}h${m % 60 || ""}`.trim()),
     selectServiceType: "Choisir un service",
     serviceNames: {
       "Muayene": "Consultation",
@@ -1716,7 +1722,7 @@ const TRANSLATIONS = {
     tagline: "Der digitale Pass Ihres Haustiers",
     navPassport: "Reisepass",
     navVaccines: "Impfausweis",
-    navVets: "Tierarzt",
+    navVets: "Gesundheit & Pflege",
     addNewDogItem: "Neuen Hund hinzufügen",
     addNewCatItem: "Neue Katze hinzufügen",
     noDogsTitle: "Noch kein Haustier hinzugefügt",
@@ -1848,7 +1854,7 @@ const TRANSLATIONS = {
     statusOverdue: "ÜBERFÄLLIG",
     statusSoon: "BALD FÄLLIG",
     statusCurrent: "AKTUELL",
-    vetTabTitle: "Tierarztzuweisung",
+    vetTabTitle: "Zuweisung",
     vetTabSubtitle: (dogName) => `Weisen Sie ${dogName} einen primären und sekundären Tierarzt aus der Plattform zu.`,
     platformVetsLabel: "Plattform-Tierärzte",
     makePrimaryBtn: "Als Primär Festlegen",
@@ -2033,6 +2039,8 @@ const TRANSLATIONS = {
     addServiceBtn: "Dienstleistung Hinzufügen",
     fieldServiceNameShort: "Name der Dienstleistung",
     fieldServicePrice: "Preis",
+    fieldServiceDuration: "Dauer",
+    durationMinutesLabel: (m) => (m < 60 ? `${m} Min` : m === 60 ? "1 Std" : `${Math.floor(m / 60)}Std ${m % 60 || ""}${m % 60 ? "Min" : ""}`.trim()),
     selectServiceType: "Dienstleistung wählen",
     serviceNames: {
       "Muayene": "Beratung",
@@ -2253,7 +2261,7 @@ const TRANSLATIONS = {
     tagline: "El pasaporte digital de tu mascota",
     navPassport: "Pasaporte",
     navVaccines: "Cartilla de Vacunas",
-    navVets: "Veterinario",
+    navVets: "Salud & Cuidado",
     addNewDogItem: "Añadir nuevo perro",
     addNewCatItem: "Añadir nuevo gato",
     noDogsTitle: "Aún no se ha añadido ninguna mascota",
@@ -2387,7 +2395,7 @@ const TRANSLATIONS = {
     statusOverdue: "ATRASADA",
     statusSoon: "PRÓXIMA",
     statusCurrent: "AL DÍA",
-    vetTabTitle: "Asignación de Veterinario",
+    vetTabTitle: "Asignación",
     vetTabSubtitle: (dogName) => `Asigna un veterinario principal y secundario a ${dogName} de entre los veterinarios de la plataforma.`,
     platformVetsLabel: "Veterinarios de la Plataforma",
     makePrimaryBtn: "Hacer Principal",
@@ -2572,6 +2580,8 @@ const TRANSLATIONS = {
     addServiceBtn: "Añadir Servicio",
     fieldServiceNameShort: "Nombre del servicio",
     fieldServicePrice: "Precio",
+    fieldServiceDuration: "Duración",
+    durationMinutesLabel: (m) => (m < 60 ? `${m} min` : m === 60 ? "1 h" : `${Math.floor(m / 60)}h ${m % 60 || ""}${m % 60 ? "min" : ""}`.trim()),
     selectServiceType: "Seleccionar servicio",
     serviceNames: {
       "Muayene": "Consulta",
@@ -4945,10 +4955,10 @@ function BookAppointmentModal({ dog, session, onClose, onBooked }) {
   const { t } = useI18n();
   const [myVets, setMyVets] = useState(undefined);
   const [selectedVet, setSelectedVet] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
   const [bookDate, setBookDate] = useState(todayISO());
   const [slots, setSlots] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [note, setNote] = useState("");
   const [booking, setBooking] = useState(false);
   const [bookMsg, setBookMsg] = useState("");
 
@@ -4982,23 +4992,23 @@ function BookAppointmentModal({ dog, session, onClose, onBooked }) {
 
   const loadSlots = useCallback(
     async (date) => {
-      if (!selectedVet) return;
+      if (!selectedVet || !selectedService) return;
       setSlots(null);
       setSelectedSlot(null);
       const res = await fetch("/api/vet-availability-slots", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vetId: selectedVet.id, date }),
+        body: JSON.stringify({ vetId: selectedVet.id, date, durationMinutes: selectedService.duration }),
       });
       const data = await res.json();
       setSlots(data.slots || []);
     },
-    [selectedVet]
+    [selectedVet, selectedService]
   );
 
   useEffect(() => {
-    if (selectedVet) loadSlots(bookDate);
-  }, [selectedVet, bookDate, loadSlots]);
+    if (selectedVet && selectedService) loadSlots(bookDate);
+  }, [selectedVet, selectedService, bookDate, loadSlots]);
 
   const confirmBooking = async () => {
     setBooking(true);
@@ -5007,7 +5017,14 @@ function BookAppointmentModal({ dog, session, onClose, onBooked }) {
       const res = await fetch("/api/book-appointment", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ vetId: selectedVet.id, dogId: dog.id, date: bookDate, time: selectedSlot, note }),
+        body: JSON.stringify({
+          vetId: selectedVet.id,
+          dogId: dog.id,
+          date: bookDate,
+          time: selectedSlot,
+          note: selectedService.name,
+          durationMinutes: selectedService.duration,
+        }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -5078,45 +5095,62 @@ function BookAppointmentModal({ dog, session, onClose, onBooked }) {
               <p className="text-[13px] text-[#5b6d63]">
                 {t.bookApptBtn}: <span className="font-semibold text-[#1B3A2F]">{selectedVet.clinic_name}</span>
               </p>
-              <Field label={t.selectDateLabel}>
-                <input
-                  type="date"
-                  min={todayISO()}
+              <Field label={t.colService}>
+                <select
                   className={inputCls}
-                  value={bookDate}
-                  onChange={(e) => setBookDate(e.target.value)}
-                />
+                  value={selectedService?.id || ""}
+                  onChange={(e) => {
+                    const s = (selectedVet.services || []).find((sv) => sv.id === e.target.value);
+                    setSelectedService(s ? { id: s.id, name: s.name, duration: s.duration || 30 } : null);
+                  }}
+                >
+                  <option value="">{t.selectServiceType}</option>
+                  {(selectedVet.services || []).map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {(t.serviceNames?.[s.name] || t.groomerSpecialtyNames?.[s.name] || s.name) +
+                        (s.duration ? ` · ${t.durationMinutesLabel(s.duration)}` : "")}
+                    </option>
+                  ))}
+                </select>
               </Field>
 
-              {slots === null ? (
-                <p className="text-[13px] text-[#5b6d63]">{t.loadingSlotsText}</p>
-              ) : slots.length === 0 ? (
-                <p className="text-[13px] text-[#5b6d63]">{t.noSlotsAvailable}</p>
-              ) : (
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.selectTimeLabel}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {slots.map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setSelectedSlot(s)}
-                        className={`text-[12.5px] font-mono rounded-md px-2.5 py-1.5 border transition ${
-                          selectedSlot === s
-                            ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
-                            : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {selectedService && (
+                <>
+                  <Field label={t.selectDateLabel}>
+                    <input
+                      type="date"
+                      min={todayISO()}
+                      className={inputCls}
+                      value={bookDate}
+                      onChange={(e) => setBookDate(e.target.value)}
+                    />
+                  </Field>
 
-              {selectedSlot && (
-                <Field label={t.apptNoteLabel}>
-                  <input className={inputCls} value={note} onChange={(e) => setNote(e.target.value)} />
-                </Field>
+                  {slots === null ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.loadingSlotsText}</p>
+                  ) : slots.length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noSlotsAvailable}</p>
+                  ) : (
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.selectTimeLabel}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {slots.map((s) => (
+                          <button
+                            key={s}
+                            onClick={() => setSelectedSlot(s)}
+                            className={`text-[12.5px] font-mono rounded-md px-2.5 py-1.5 border transition ${
+                              selectedSlot === s
+                                ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                                : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
+                            }`}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}
@@ -5478,28 +5512,32 @@ function VetDetailModal({ vet, dog, session, onClose }) {
   const locale = LANGS.find((l) => l.code === lang)?.locale;
   const specialties = Array.isArray(vet.specialty) ? vet.specialty : vet.specialty ? [vet.specialty] : [];
   const [showBooking, setShowBooking] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
   const [bookDate, setBookDate] = useState(todayISO());
   const [slots, setSlots] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [note, setNote] = useState("");
   const [booking, setBooking] = useState(false);
   const [bookMsg, setBookMsg] = useState("");
 
-  const loadSlots = useCallback(async (date) => {
-    setSlots(null);
-    setSelectedSlot(null);
-    const res = await fetch("/api/vet-availability-slots", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ vetId: vet.id, date }),
-    });
-    const data = await res.json();
-    setSlots(data.slots || []);
-  }, [vet.id]);
+  const loadSlots = useCallback(
+    async (date) => {
+      if (!selectedService) return;
+      setSlots(null);
+      setSelectedSlot(null);
+      const res = await fetch("/api/vet-availability-slots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ vetId: vet.id, date, durationMinutes: selectedService.duration }),
+      });
+      const data = await res.json();
+      setSlots(data.slots || []);
+    },
+    [vet.id, selectedService]
+  );
 
   useEffect(() => {
-    if (showBooking) loadSlots(bookDate);
-  }, [showBooking, bookDate, loadSlots]);
+    if (showBooking && selectedService) loadSlots(bookDate);
+  }, [showBooking, bookDate, selectedService, loadSlots]);
 
   const confirmBooking = async () => {
     setBooking(true);
@@ -5508,13 +5546,19 @@ function VetDetailModal({ vet, dog, session, onClose }) {
       const res = await fetch("/api/book-appointment", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ vetId: vet.id, dogId: dog.id, date: bookDate, time: selectedSlot, note }),
+        body: JSON.stringify({
+          vetId: vet.id,
+          dogId: dog.id,
+          date: bookDate,
+          time: selectedSlot,
+          note: selectedService.name,
+          durationMinutes: selectedService.duration,
+        }),
       });
       const data = await res.json();
       if (res.ok) {
         setBookMsg(t.bookingSuccessMsg);
         setSelectedSlot(null);
-        setNote("");
         loadSlots(bookDate);
       } else if (data.error === "SLOT_TAKEN") {
         setBookMsg(t.slotTakenErrorMsg);
@@ -5615,46 +5659,68 @@ function VetDetailModal({ vet, dog, session, onClose }) {
             </PrimaryButton>
           ) : (
             <div className="rounded-md border border-[#C9A227]/40 bg-[#FBF8EE] p-3.5 space-y-2.5">
-              <Field label={t.selectDateLabel}>
-                <input
-                  type="date"
-                  min={todayISO()}
+              <Field label={t.colService}>
+                <select
                   className={inputCls}
-                  value={bookDate}
-                  onChange={(e) => setBookDate(e.target.value)}
-                />
+                  value={selectedService?.id || ""}
+                  onChange={(e) => {
+                    const s = (vet.services || []).find((sv) => sv.id === e.target.value);
+                    setSelectedService(s ? { id: s.id, name: s.name, duration: s.duration || 30 } : null);
+                  }}
+                >
+                  <option value="">{t.selectServiceType}</option>
+                  {(vet.services || []).map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {(t.serviceNames?.[s.name] || t.groomerSpecialtyNames?.[s.name] || s.name) +
+                        (s.duration ? ` · ${t.durationMinutesLabel(s.duration)}` : "")}
+                    </option>
+                  ))}
+                </select>
               </Field>
 
-              {slots === null ? (
-                <p className="text-[13px] text-[#5b6d63]">{t.loadingSlotsText}</p>
-              ) : slots.length === 0 ? (
-                <p className="text-[13px] text-[#5b6d63]">{t.noSlotsAvailable}</p>
-              ) : (
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.selectTimeLabel}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {slots.map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setSelectedSlot(s)}
-                        className={`text-[12.5px] font-mono rounded-md px-2.5 py-1.5 border transition ${
-                          selectedSlot === s
-                            ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
-                            : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              {selectedService && (
+                <Field label={t.selectDateLabel}>
+                  <input
+                    type="date"
+                    min={todayISO()}
+                    className={inputCls}
+                    value={bookDate}
+                    onChange={(e) => setBookDate(e.target.value)}
+                  />
+                </Field>
+              )}
+
+              {selectedService && (
+                <>
+                  {slots === null ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.loadingSlotsText}</p>
+                  ) : slots.length === 0 ? (
+                    <p className="text-[13px] text-[#5b6d63]">{t.noSlotsAvailable}</p>
+                  ) : (
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold mb-1.5">{t.selectTimeLabel}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {slots.map((s) => (
+                          <button
+                            key={s}
+                            onClick={() => setSelectedSlot(s)}
+                            className={`text-[12.5px] font-mono rounded-md px-2.5 py-1.5 border transition ${
+                              selectedSlot === s
+                                ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                                : "border-[#d8cfb4] text-[#3c473f] hover:border-[#1B3A2F]/40"
+                            }`}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
 
               {selectedSlot && (
                 <>
-                  <Field label={t.apptNoteLabel}>
-                    <input className={inputCls} value={note} onChange={(e) => setNote(e.target.value)} />
-                  </Field>
                   <PrimaryButton disabled={booking} onClick={confirmBooking} icon={Check}>
                     {t.confirmBookingBtn}
                   </PrimaryButton>
@@ -7209,6 +7275,12 @@ function AppointmentDetailModal({ appt, session, onClose, onUpdated }) {
   const [msg, setMsg] = useState("");
 
   const isOnApp = !!appt.dog_id;
+  const Row = ({ label, value }) => (
+    <div className="flex items-baseline justify-between gap-4 py-1.5 border-b border-dotted border-[#d8cfb4]">
+      <span className="text-[11px] uppercase tracking-[0.08em] text-[#5b6d63] font-semibold shrink-0">{label}</span>
+      <span className="text-right text-[13.5px] text-[#1f2a24]">{value || "—"}</span>
+    </div>
+  );
   const statusCfg = {
     scheduled: { label: t.apptStatusBooked, cls: "bg-[#C9A227] text-white" },
     done: { label: t.apptStatusCompleted, cls: "bg-[#1B3A2F] text-[#F7F3E8]" },
@@ -7395,7 +7467,7 @@ function VetPortal({ session }) {
   const [requests, setRequests] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [newDoctor, setNewDoctor] = useState({ name: "", title: "" });
-  const [newService, setNewService] = useState({ name: "", price: "", currency: "EUR" });
+  const [newService, setNewService] = useState({ name: "", price: "", currency: "EUR", duration: 30 });
   const [clinicForm, setClinicForm] = useState(null);
   const tradeDocRef = useRef(null);
   const logoRef = useRef(null);
@@ -7573,7 +7645,7 @@ function VetPortal({ session }) {
     if (!newService.name.trim()) return;
     const services = [...(vet.services || []), { id: uid(), ...newService }];
     await supabase.from("vets").update({ services }).eq("id", vetId);
-    setNewService({ name: "", price: "", currency: "EUR" });
+    setNewService({ name: "", price: "", currency: "EUR", duration: 30 });
     load();
   };
 
@@ -8102,8 +8174,9 @@ function VetPortal({ session }) {
                     (vet.services || []).map((s) => (
                       <div key={s.id} className="flex items-center justify-between text-[13px] px-3 py-2 rounded-md bg-white/50">
                         <span>
-                          {t.serviceNames?.[s.name] || s.name}{" "}
+                          {t.serviceNames?.[s.name] || t.groomerSpecialtyNames?.[s.name] || s.name}{" "}
                           {s.price && <span className="text-[#8d8560]">· {s.price} {s.currency || "EUR"}</span>}
+                          {s.duration && <span className="text-[#8d8560]"> · {t.durationMinutesLabel(s.duration)}</span>}
                         </span>
                         <button onClick={() => removeService(s.id)} className="text-[#a08a5a] hover:text-[#a63d40] p-1">
                           <Trash2 size={13} />
@@ -8119,9 +8192,9 @@ function VetPortal({ session }) {
                     onChange={(e) => setNewService((f) => ({ ...f, name: e.target.value }))}
                   >
                     <option value="">{t.selectServiceType}</option>
-                    {VET_SERVICE_KEYS.map((s) => (
+                    {(vet?.business_type === "groomer" ? GROOMER_SPECIALTY_KEYS : VET_SERVICE_KEYS).map((s) => (
                       <option key={s} value={s}>
-                        {t.serviceNames?.[s] || s}
+                        {vet?.business_type === "groomer" ? t.groomerSpecialtyNames?.[s] || s : t.serviceNames?.[s] || s}
                       </option>
                     ))}
                   </select>
@@ -8149,6 +8222,19 @@ function VetPortal({ session }) {
                       <Plus size={16} />
                     </button>
                   </div>
+                  <Field label={t.fieldServiceDuration}>
+                    <select
+                      className={inputCls}
+                      value={newService.duration}
+                      onChange={(e) => setNewService((f) => ({ ...f, duration: Number(e.target.value) }))}
+                    >
+                      {[15, 30, 45, 60, 90, 120, 150, 180].map((d) => (
+                        <option key={d} value={d}>
+                          {t.durationMinutesLabel(d)}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
                 </div>
               </div>
             </div>

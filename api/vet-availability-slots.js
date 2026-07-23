@@ -7,7 +7,7 @@ import { createClient } from "@supabase/supabase-js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { vetId, date } = req.body || {};
+  const { vetId, date, durationMinutes } = req.body || {};
   if (!vetId || !date) return res.status(400).json({ error: "Missing vetId or date" });
 
   const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
@@ -19,7 +19,8 @@ export default async function handler(req, res) {
     .single();
   if (vetError || !vetRow) return res.status(404).json({ error: "Vet not found" });
 
-  const slotMinutes = vetRow.slot_minutes || 30;
+  const slotMinutes = vetRow.slot_minutes || 30; // saatlerin kaç dakikada bir teklif edileceği
+  const serviceDuration = durationMinutes || slotMinutes; // seçilen hizmetin gerçek süresi
   const dayOfWeek = new Date(`${date}T00:00:00`).getDay(); // 0=Pazar ... 6=Cumartesi
   const blocks = (vetRow.availability || []).filter((b) => b.day === dayOfWeek);
 
@@ -63,10 +64,11 @@ export default async function handler(req, res) {
   for (const block of blocks) {
     let start = toMinutes(block.start);
     const end = toMinutes(block.end);
-    while (start + slotMinutes <= end) {
+    // Seçilen hizmet, bloğun bitişini aşmayacak şekilde başlayabilmeli
+    while (start + serviceDuration <= end) {
       const hhmm = toHHMM(start);
       const isPast = isToday && start <= nowMinutes;
-      if (!isOverlapping(start, start + slotMinutes) && !isPast) slots.push(hhmm);
+      if (!isOverlapping(start, start + serviceDuration) && !isPast) slots.push(hhmm);
       start += slotMinutes;
     }
   }
