@@ -372,6 +372,9 @@ const TRANSLATIONS = {
     verifyBtn: "Doğrula",
     verifiedLabel: "Doğrulandı",
     notVerifiedLabel: "İnceleniyor",
+    businessBoxTitle: "İşletme misiniz?",
+    businessBoxDesc: "Veteriner kliniğinizi ya da kuaför/bakım işletmenizi Paw Wallet'a taşıyın.",
+    applyNowBtn: "Başvuru Yap",
     activityLogsTitle: "Kullanıcı Hareket Kayıtları",
     fieldFilterByEmail: "E-postaya göre filtrele",
     filterBtn: "Filtrele",
@@ -949,6 +952,9 @@ const TRANSLATIONS = {
     verifyBtn: "Verify",
     verifiedLabel: "Verified",
     notVerifiedLabel: "Under Review",
+    businessBoxTitle: "Are you a business?",
+    businessBoxDesc: "Bring your vet clinic or grooming/care business to Paw Wallet.",
+    applyNowBtn: "Apply Now",
     activityLogsTitle: "User Activity Logs",
     fieldFilterByEmail: "Filter by email",
     filterBtn: "Filter",
@@ -1529,6 +1535,9 @@ const TRANSLATIONS = {
     verifyBtn: "Vérifier",
     verifiedLabel: "Vérifié",
     notVerifiedLabel: "En Cours d'Examen",
+    businessBoxTitle: "Vous êtes une entreprise ?",
+    businessBoxDesc: "Rejoignez Paw Wallet avec votre clinique vétérinaire ou votre salon de toilettage.",
+    applyNowBtn: "Postuler",
     activityLogsTitle: "Journaux d'Activité",
     fieldFilterByEmail: "Filtrer par e-mail",
     filterBtn: "Filtrer",
@@ -2086,6 +2095,9 @@ const TRANSLATIONS = {
     verifyBtn: "Verifizieren",
     verifiedLabel: "Verifiziert",
     notVerifiedLabel: "In Prüfung",
+    businessBoxTitle: "Sind Sie ein Unternehmen?",
+    businessBoxDesc: "Bringen Sie Ihre Tierarztpraxis oder Ihr Pflege-/Hundesalon-Unternehmen zu Paw Wallet.",
+    applyNowBtn: "Jetzt Bewerben",
     activityLogsTitle: "Aktivitätsprotokolle",
     fieldFilterByEmail: "Nach E-Mail filtern",
     filterBtn: "Filtern",
@@ -2645,6 +2657,9 @@ const TRANSLATIONS = {
     verifyBtn: "Verificar",
     verifiedLabel: "Verificado",
     notVerifiedLabel: "En Revisión",
+    businessBoxTitle: "¿Eres un negocio?",
+    businessBoxDesc: "Trae tu clínica veterinaria o tu negocio de peluquería/cuidado a Paw Wallet.",
+    applyNowBtn: "Solicitar Ahora",
     activityLogsTitle: "Registros de Actividad",
     fieldFilterByEmail: "Filtrar por correo",
     filterBtn: "Filtrar",
@@ -6232,19 +6247,8 @@ function EmptyState({ icon: Icon, text }) {
 /*  Landing page & authentication                                      */
 /* ------------------------------------------------------------------ */
 
-function AuthModal({ mode, onClose, onSwitchMode }) {
+function RequestAccessModal({ onClose }) {
   const { t } = useI18n();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [sentTo, setSentTo] = useState("");
-  const [forgotMode, setForgotMode] = useState(false);
-  const [resetSentTo, setResetSentTo] = useState("");
-  const [requestAccessMode, setRequestAccessMode] = useState(false);
   const [reqForm, setReqForm] = useState({
     businessName: "",
     businessType: "vet",
@@ -6277,6 +6281,99 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
     }
     setReqSubmitting(false);
   };
+
+  if (reqSent) {
+    return (
+      <Modal title={t.requestAccessTitle} onClose={onClose}>
+        <p className="text-[14px] text-[#3c473f] leading-relaxed">{t.requestAccessSentDesc}</p>
+        <div className="mt-6 flex justify-end">
+          <GhostButton onClick={onClose}>{t.backToForm}</GhostButton>
+        </div>
+      </Modal>
+    );
+  }
+
+  return (
+    <Modal title={t.requestAccessTitle} onClose={onClose}>
+      <div className="space-y-3.5">
+        <p className="text-[13.5px] text-[#5b6d63]">{t.requestAccessDesc}</p>
+        <Field label={t.fieldBusinessType}>
+          <div className="flex gap-2">
+            {Object.entries(t.businessTypeNames).map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setReqForm((f) => ({ ...f, businessType: key }))}
+                className={`flex-1 rounded-md border px-3 py-2 text-[13px] font-semibold transition ${
+                  reqForm.businessType === key
+                    ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
+                    : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </Field>
+        <Field label={t.fieldClinicName}>
+          <input
+            className={inputCls}
+            value={reqForm.businessName}
+            onChange={(e) => setReqForm((f) => ({ ...f, businessName: e.target.value }))}
+          />
+        </Field>
+        <Field label={t.fieldEmail}>
+          <input
+            type="email"
+            className={inputCls}
+            value={reqForm.email}
+            onChange={(e) => setReqForm((f) => ({ ...f, email: e.target.value }))}
+          />
+        </Field>
+        <CountryCityPicker
+          t={t}
+          countryLabel={t.fieldVetCountry}
+          cityLabel={t.fieldVetCity}
+          country={reqForm.country}
+          city={reqForm.city}
+          onCountryChange={(v) => setReqForm((f) => ({ ...f, country: v }))}
+          onCityChange={(v) => setReqForm((f) => ({ ...f, city: v }))}
+        />
+        <PhoneField
+          label={t.fieldClinicPhone}
+          code={reqForm.phoneCode}
+          number={reqForm.phoneNumber}
+          onCodeChange={(v) => setReqForm((f) => ({ ...f, phoneCode: v }))}
+          onNumberChange={(v) => setReqForm((f) => ({ ...f, phoneNumber: v }))}
+        />
+        {reqError && <p className="text-[13px] text-[#a63d40]">{reqError}</p>}
+        <PrimaryButton onClick={submitAccessRequest} full icon={reqSubmitting ? Loader2 : Check}>
+          {t.submitRequestBtn}
+        </PrimaryButton>
+        <button
+          onClick={onClose}
+          className="w-full text-center text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 mt-1"
+        >
+          {t.backToForm}
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function AuthModal({ mode, onClose, onSwitchMode }) {
+  const { t } = useI18n();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [sentTo, setSentTo] = useState("");
+  const [forgotMode, setForgotMode] = useState(false);
+  const [resetSentTo, setResetSentTo] = useState("");
+  const [requestAccessMode, setRequestAccessMode] = useState(false);
 
   const submit = async () => {
     setError("");
@@ -6343,82 +6440,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
   }
 
   if (requestAccessMode) {
-    if (reqSent) {
-      return (
-        <Modal title={t.requestAccessTitle} onClose={onClose}>
-          <p className="text-[14px] text-[#3c473f] leading-relaxed">{t.requestAccessSentDesc}</p>
-          <div className="mt-6 flex justify-end">
-            <GhostButton onClick={onClose}>{t.backToForm}</GhostButton>
-          </div>
-        </Modal>
-      );
-    }
-    return (
-      <Modal title={t.requestAccessTitle} onClose={onClose}>
-        <div className="space-y-3.5">
-          <p className="text-[13.5px] text-[#5b6d63]">{t.requestAccessDesc}</p>
-          <Field label={t.fieldBusinessType}>
-            <div className="flex gap-2">
-              {Object.entries(t.businessTypeNames).map(([key, label]) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setReqForm((f) => ({ ...f, businessType: key }))}
-                  className={`flex-1 rounded-md border px-3 py-2 text-[13px] font-semibold transition ${
-                    reqForm.businessType === key
-                      ? "bg-[#1B3A2F] border-[#1B3A2F] text-[#F7F3E8]"
-                      : "border-[#d8cfb4] text-[#5b6d63] hover:border-[#1B3A2F]/40"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </Field>
-          <Field label={t.fieldClinicName}>
-            <input
-              className={inputCls}
-              value={reqForm.businessName}
-              onChange={(e) => setReqForm((f) => ({ ...f, businessName: e.target.value }))}
-            />
-          </Field>
-          <Field label={t.fieldEmail}>
-            <input
-              type="email"
-              className={inputCls}
-              value={reqForm.email}
-              onChange={(e) => setReqForm((f) => ({ ...f, email: e.target.value }))}
-            />
-          </Field>
-          <CountryCityPicker
-            t={t}
-            countryLabel={t.fieldVetCountry}
-            cityLabel={t.fieldVetCity}
-            country={reqForm.country}
-            city={reqForm.city}
-            onCountryChange={(v) => setReqForm((f) => ({ ...f, country: v }))}
-            onCityChange={(v) => setReqForm((f) => ({ ...f, city: v }))}
-          />
-          <PhoneField
-            label={t.fieldClinicPhone}
-            code={reqForm.phoneCode}
-            number={reqForm.phoneNumber}
-            onCodeChange={(v) => setReqForm((f) => ({ ...f, phoneCode: v }))}
-            onNumberChange={(v) => setReqForm((f) => ({ ...f, phoneNumber: v }))}
-          />
-          {reqError && <p className="text-[13px] text-[#a63d40]">{reqError}</p>}
-          <PrimaryButton onClick={submitAccessRequest} full icon={reqSubmitting ? Loader2 : Check}>
-            {t.submitRequestBtn}
-          </PrimaryButton>
-          <button
-            onClick={() => setRequestAccessMode(false)}
-            className="w-full text-center text-[12.5px] text-[#5b6d63] hover:text-[#1B3A2F] underline underline-offset-2 mt-1"
-          >
-            {t.backToForm}
-          </button>
-        </div>
-      </Modal>
-    );
+    return <RequestAccessModal onClose={() => setRequestAccessMode(false)} />;
   }
 
   if (forgotMode) {
@@ -6520,6 +6542,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
 function LandingPage() {
   const { t } = useI18n();
   const [authMode, setAuthMode] = useState(null); // null | "signup" | "login"
+  const [showRequestAccess, setShowRequestAccess] = useState(false);
 
   return (
     <div className="min-h-screen w-full bg-[#EFE9D6] font-body flex flex-col" style={{ colorScheme: "light" }}>
@@ -6556,9 +6579,18 @@ function LandingPage() {
           </PrimaryButton>
           <GhostButton onClick={() => setAuthMode("login")}>{t.signIn}</GhostButton>
         </div>
+
+        <div className="w-full max-w-md rounded-xl border border-[#C9A227]/50 bg-[#FBF8EE] px-6 py-5 mt-4">
+          <p className="font-display text-[17px] text-[#1B3A2F] mb-1">{t.businessBoxTitle}</p>
+          <p className="text-[13px] text-[#5b6d63] mb-3">{t.businessBoxDesc}</p>
+          <PrimaryButton onClick={() => setShowRequestAccess(true)} icon={Building2}>
+            {t.applyNowBtn}
+          </PrimaryButton>
+        </div>
       </div>
 
       {authMode && <AuthModal mode={authMode} onClose={() => setAuthMode(null)} onSwitchMode={setAuthMode} />}
+      {showRequestAccess && <RequestAccessModal onClose={() => setShowRequestAccess(false)} />}
     </div>
   );
 }
